@@ -1,0 +1,11 @@
+{
+  "name": "hl",
+  "version": "0.1.0",
+  "description": "Harville Labs engineering standards: reusable skills (ship a change, fix a bug, self-review, ADRs, docs, dependencies, services, AGENTS.md) and review subagents.",
+  "author": {
+    "name": "Harville Labs"
+  },
+  "homepage": "https://github.com/Harville-Labs/agents",
+  "repository": "https://github.com/Harville-Labs/agents",
+  "keywords": ["standards", "workflow", "review"]
+}

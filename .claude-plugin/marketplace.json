@@ -1,0 +1,15 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "harville-labs",
+  "description": "Harville Labs' shared agent standards and skills",
+  "owner": {
+    "name": "Harville Labs"
+  },
+  "plugins": [
+    {
+      "name": "hl",
+      "description": "Harville Labs engineering standards: reusable skills and review subagents.",
+      "source": "./"
+    }
+  ]
+}
