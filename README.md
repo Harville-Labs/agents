@@ -18,6 +18,7 @@ Project files live in their repositories, not here, so they change in the same P
 |---|---|---|
 | [switchback](https://github.com/Harville-Labs/switchback) | [AGENTS.md](https://github.com/Harville-Labs/switchback/blob/main/AGENTS.md), [apps/site/AGENTS.md](https://github.com/Harville-Labs/switchback/blob/main/apps/site/AGENTS.md) | Bun, TypeScript, Ink, VS Code, SvelteKit + Postgres |
 | [website](https://github.com/Harville-Labs/website) | [AGENTS.md](https://github.com/Harville-Labs/website/blob/main/AGENTS.md) | SvelteKit, plain CSS, Go worker, Kubernetes |
+| [Primer](https://github.com/Harville-Labs/Primer) | [AGENTS.md](https://github.com/Harville-Labs/Primer/blob/main/AGENTS.md) | Python + uv, SvelteKit + Sivir UI, Postgres, Helm |
 | homelab | Owns cluster config for both; not yet covered | Flux, Kustomize, SOPS |
 
 ## Install

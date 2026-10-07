@@ -14,7 +14,7 @@ failed=0
 
 for file in $(git ls-files -- \
   '*.ts' '*.tsx' '*.js' '*.mjs' '*.svelte' '*.css' '*.py' '*.go' '*.sh' \
-  ':!:*.d.ts' ':!:*.gen.*' ':!:*_pb.go' ':!:*.pb.go'); do
+  ':!:*.d.ts' ':!:*.gen.*' ':!:*_pb.go' ':!:*.pb.go' ':!:**/generated/**'); do
   if [ -f "$ignore" ] && grep -qxF "$file" "$ignore"; then continue; fi
   lines=$(wc -l <"$file")
   if [ "$lines" -gt "$max" ]; then

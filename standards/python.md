@@ -19,13 +19,13 @@ Applies to every Python codebase: services, scripts, notebooks that get committe
 - Dependencies live in `pyproject.toml`. Commit `uv.lock`; never edit it by hand.
 - No `requirements.txt`, `setup.py`, `setup.cfg`, Poetry, Pipenv, or conda files. If one exists, migrate it to `pyproject.toml` in its own PR.
 - **Ruff** formats and lints (`uv run ruff format`, `uv run ruff check`), configured in `pyproject.toml` with `line-length = 100`. No Black, isort, or flake8.
-- **Type checking** with pyright in strict mode is part of the check command.
+- **Type checking** with Astral's `ty` (`uv run ty check`) is part of the check command. No mypy or Pyright.
 - **Tests** with pytest.
 
 The check command is:
 
 ```sh
-uv sync --locked && uv run ruff format --check && uv run ruff check && uv run pyright && uv run pytest
+uv sync --locked && uv run ruff format --check && uv run ruff check && uv run ty check && uv run pytest
 ```
 
 ## Style
