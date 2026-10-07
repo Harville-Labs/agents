@@ -5,7 +5,7 @@ description: Create or refresh a repository's AGENTS.md (and CLAUDE.md pointer) 
 
 # Write a repository's AGENTS.md
 
-The org standards in the `agents` repository cover how we write software everywhere. A repository's `AGENTS.md` covers only what's **specific to that repository**: its commands, its layout, the rules that hold it together, and recipes for its common changes. Don't repeat the org standards; link to them where it helps.
+The org standards in the `agents` repository cover how we write software everywhere. A repository's `AGENTS.md` covers only what's **specific to that repository**: its commands, its layout, the rules that hold it together, and recipes for its common changes. Don't repeat the org standards; link to them where it helps. A repository's file can add rules and tighten the org's, but can't loosen them without an ADR that names the rule it departs from.
 
 ## Research
 
@@ -34,6 +34,8 @@ Keep it under about 250 lines. Precise beats complete.
 ## Wire it up
 
 - `CLAUDE.md` at the root containing exactly `@AGENTS.md`, so Claude Code loads the same file.
+- `.claude/settings.json` enabling the `hl` plugin (`extraKnownMarketplaces` with `Harville-Labs/agents`, and `enabledPlugins` with `hl@harville-labs`), so everyone working in the repository gets the skills and subagents.
+- `scripts/check-file-length.sh` from [templates/](../../templates/check-file-length.sh), run from the check command, with a `.file-length-ignore` for generated and grandfathered files.
 - If a subdirectory has substantially different rules (a different language, a proprietary app inside an open-source repo), give it its own `AGENTS.md` and `CLAUDE.md` pair, and link it from the root file's layout table.
 - Add or update the repository's row in the `agents` repository's README project index.
 
@@ -42,3 +44,4 @@ Keep it under about 250 lines. Precise beats complete.
 - Every path, script, and file you mention exists: spot-check with `ls` and `rg`.
 - The check command matches CI.
 - Nothing contradicts the code. Where the code and the docs disagree, ask rather than picking one.
+- Nothing loosens an org rule (toolchain, file length, testing, security) without an ADR.

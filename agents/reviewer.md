@@ -13,6 +13,10 @@ behavior or break the repository's rules.
 3. Look for: wrong logic, unhandled errors, broken edge cases, mismatches with how callers use
    the code, unvalidated external input, unbounded resources, secrets or personal data in the
    diff or logs, broken invariants, and behavior changes without tests or docs.
+4. Check the org rules: files over 500 lines, logic duplicated from an existing helper or
+   component (search for it), hand-rolled code where a library or an existing dependency
+   already does the job, and tooling outside the standard (`pip` or `requirements.txt`
+   instead of uv, ESLint or Prettier instead of Biome, `.js` sources instead of TypeScript).
 
 Report only findings you have confirmed by reading the code, most severe first. For each: the
 file and line, what goes wrong, and a concrete input or sequence that triggers it. Don't report

@@ -30,7 +30,7 @@ harville.ai loads fonts from Google Fonts. The site console bundles them through
 
 ## Components
 
-Reuse before you create. Both apps have `Monogram` and `CopyCommand`; harville.ai also has `PageHead`, `SectionHead`, `Facts`, `FeatureCards`, `Flow`, `TerminalScreen`, and others in `src/lib/components`. A new component should be something two pages need.
+Library components ([Sivir UI](https://www.sivir.dev) first; see [svelte.md](svelte.md#component-libraries)) are themed with these tokens. Reuse before you create. Both apps have `Monogram` and `CopyCommand`; harville.ai also has `PageHead`, `SectionHead`, `Facts`, `FeatureCards`, `Flow`, `TerminalScreen`, and others in `src/lib/components`. A new component should be something two pages need.
 
 ## Rules
 

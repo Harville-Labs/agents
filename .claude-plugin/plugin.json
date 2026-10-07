@@ -1,6 +1,6 @@
 {
   "name": "hl",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Harville Labs engineering standards: reusable skills (ship a change, fix a bug, self-review, ADRs, docs, dependencies, services, AGENTS.md) and review subagents.",
   "author": {
     "name": "Harville Labs"

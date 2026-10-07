@@ -31,6 +31,10 @@ Go through each list. Fix what you find, then rerun the full check command.
 
 - [ ] Only the requested change. No drive-by renames, reformatting, or refactors.
 - [ ] Reads like the code around it: naming, structure, comment density.
+- [ ] No file you touched is over 500 lines ([standards/code.md](../../standards/code.md)).
+- [ ] No duplicated logic: you searched for an existing helper or component before writing one, and nothing you wrote repeats logic that already exists.
+- [ ] Nothing hand-rolled that a well-maintained library already does (parsing, validation, dates, auth, accessible widgets).
+- [ ] The repository's toolchain is the standard one: TypeScript, Vite, and Biome for web; uv and Ruff for Python. No `pip`, `requirements.txt`, ESLint, Prettier, or `.js` sources slipped in.
 - [ ] Comments say why, not what. No leftover debug output, commented-out code, or TODOs without an issue number.
 - [ ] No new dependency without a reason in the PR ([add-dependency](../add-dependency/SKILL.md)).
 - [ ] Generated files were regenerated, not edited.

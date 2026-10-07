@@ -1,6 +1,6 @@
 # Harville Labs engineering standards
 
-Rules for AI coding agents (Claude Code, Switchback, Codex, Cursor, and others) and the people reviewing their work, in every Harville Labs repository. Each repository also has its own `AGENTS.md` with its commands, layout, and invariants. **Where a repository's file and this one disagree, the repository wins.** It knows its own constraints.
+Rules for AI coding agents (Claude Code, Switchback, Codex, Cursor, and others) and the people reviewing their work, in every Harville Labs repository. Each repository also has its own `AGENTS.md` with its commands, layout, and invariants. **A repository's file adds to these rules and can tighten them. It can't loosen them** unless an ADR in that repository says which rule it departs from and why. If you find a conflict with no ADR, follow these rules and point out the conflict.
 
 Details for specific stacks and topics live in [standards/](standards/). Reusable workflows live in [skills/](skills/).
 
@@ -12,18 +12,29 @@ Details for specific stacks and topics live in [standards/](standards/). Reusabl
 4. **Report honestly.** Say what you changed, what you ran, and what you didn't verify. A failing test is reported as failing, with its output. Never describe a change as tested when it wasn't.
 5. **Ask before anything hard to undo or outward-facing:** pushing, merging, publishing, deploying, deleting branches or data, sending messages, changing CI secrets or cluster state. Don't commit or push unless you were asked to.
 
+## Toolchains
+
+These are the standard, not a default. A new project uses them. An existing project that doesn't yet is migrated in its own PR, never as a side effect of another change.
+
+- **Web**: TypeScript only (no hand-written `.js`), built with Vite (SvelteKit for apps), formatted and linted with Biome, styled with Tailwind. No ESLint, Prettier, webpack, Create React App, or plain-CSS stylesheets and `<style>` blocks for things Tailwind can do. See [standards/typescript.md](standards/typescript.md).
+- **Python**: uv for everything: Python versions, virtual environments, dependencies, lockfile, and running commands. Never `pip install`, `requirements.txt`, Poetry, Pipenv, or conda. Ruff formats and lints. See [standards/python.md](standards/python.md).
+- **Go**: for small sandboxed services. See [standards/go.md](standards/go.md).
+
 ## Code
 
+- **Files stay under 500 lines**, tests included. When a file would pass that, split it by responsibility before adding more. Generated files and lockfiles don't count. See [standards/code.md](standards/code.md).
+- **One copy of each piece of logic.** Before writing a helper, search for an existing one. When you'd write the same logic a second time, extract it and make both places call it. Duplicated validation, formatting, and business rules drift apart and become bugs.
 - **Comments explain why**: a constraint, an invariant, a tradeoff, a link to the issue or ADR that forced the choice. Don't narrate what the next line does. Doc comments on exported functions say what the caller needs to know, not how it's implemented.
 - **Errors are specific and actionable.** Say what was wrong and how to fix it: `DATABASE_URL must be a postgres:// URL. For local development, \`bun run db:up\` starts one.` Never swallow an error without a comment saying why that's safe.
 - **Validate at the boundary, trust inside it.** Config files, environment variables, request bodies, protocol messages, tool inputs, and model output get parsed with a schema (Zod in TypeScript, explicit parsing in Go) where they enter. Internal code takes the typed result and doesn't re-check it.
 - **Read the environment in one place.** Configuration is loaded and validated at startup (or in one config module) and passed down. Don't scatter `process.env` or `os.Getenv` through the code.
-- **Prefer boring, well-maintained libraries** over home-grown versions of parsers, protocol SDKs, crypto, auth, date handling, or anything with a long tail of edge cases. Every runtime dependency ships to users, so justify new ones in the PR. When you deliberately hand-roll something, write down why in the repository's `AGENTS.md`. See [skills/add-dependency](skills/add-dependency/SKILL.md).
+- **Use libraries; don't hand-roll.** Use a well-maintained library over a home-grown version of parsers, protocol SDKs, crypto, auth, date handling, validation, accessible UI widgets (dialogs, menus, comboboxes), or anything with a long tail of edge cases. Every runtime dependency ships to users, so justify new ones in the PR. When you deliberately hand-roll something, write down why in the repository's `AGENTS.md`. See [skills/add-dependency](skills/add-dependency/SKILL.md).
 - **Small, pure cores.** Keep decisions (routing, validation, pricing, layout math) as pure functions that take data and return data. Do I/O at the edges. Pure code is what you can test exhaustively.
-- **No dead code, no speculative abstraction.** Don't add options, interfaces, or layers for a second caller that doesn't exist yet. Delete code you replace; git remembers it.
+- **Build UIs from components.** Use a popular component library, preferably [Sivir UI](https://www.sivir.dev), before writing your own. A piece of markup used twice is a component. Reuse the repository's components before making new ones. See [standards/svelte.md](standards/svelte.md).
+- **No dead code, no speculative abstraction.** Don't add options, interfaces, or layers for a caller that doesn't exist yet. Delete code you replace; git remembers it.
 - **Generated files are generated.** Never hand-edit lockfiles, migrations, generated schemas, or CI-written deploy pins. Change the source and rerun the generator.
 
-Stack-specific rules: [TypeScript](standards/typescript.md), [Svelte and SvelteKit](standards/svelte.md), [Go](standards/go.md).
+Stack-specific rules: [TypeScript](standards/typescript.md), [Svelte and SvelteKit](standards/svelte.md), [Python](standards/python.md), [Go](standards/go.md).
 
 ## Tests
 

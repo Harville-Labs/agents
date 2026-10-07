@@ -6,11 +6,11 @@ Shared engineering standards, skills, and subagents for every Harville Labs repo
 - **[standards/](standards/)**: the detail behind them, by topic.
 - **[skills/](skills/)**: reusable workflows, in Claude Code skill format.
 - **[agents/](agents/)**: subagents, compatible with Claude Code and Switchback (`.claude/agents/*.md` format).
-- **[templates/](templates/)**: starting points for a new repository's `AGENTS.md`, PR template, ADR, Biome config, and `.editorconfig`.
+- **[templates/](templates/)**: starting points for a new repository's `AGENTS.md`, PR template, ADR, Biome config, `.editorconfig`, and file-length check.
 
 ## How it fits together
 
-Each repository keeps its own `AGENTS.md` (with a `CLAUDE.md` containing `@AGENTS.md`) for what's specific to it: commands, layout, invariants, and recipes. This repository holds everything that's the same everywhere. When the two disagree, the repository's file wins.
+Each repository keeps its own `AGENTS.md` (with a `CLAUDE.md` containing `@AGENTS.md`) for what's specific to it: commands, layout, invariants, and recipes. This repository holds everything that's the same everywhere. A repository's file can add rules and tighten these, but loosens one only with an ADR saying why.
 
 Project files live in their repositories, not here, so they change in the same PR as the code they describe.
 

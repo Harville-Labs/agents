@@ -1,6 +1,6 @@
 # AGENTS.md
 
-Guide for AI coding agents and the humans reviewing their work in this repository. Harville Labs' org-wide standards ([Harville-Labs/agents](https://github.com/Harville-Labs/agents)) apply too; where they disagree, this file wins.
+Guide for AI coding agents and the humans reviewing their work in this repository. Harville Labs' org-wide standards ([Harville-Labs/agents](https://github.com/Harville-Labs/agents/blob/main/AGENTS.md)) apply too. This file adds to them and can tighten them; it departs from one only where an ADR in `docs/adr/` says so.
 
 ## What this repo is
 
