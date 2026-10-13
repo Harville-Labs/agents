@@ -19,6 +19,7 @@ These are the standard, not a default. A new project uses them. An existing proj
 - **Web**: TypeScript only (no hand-written `.js`), built with Vite (SvelteKit for apps), formatted and linted with Biome, styled with Tailwind. No ESLint, Prettier, webpack, Create React App, or plain-CSS stylesheets and `<style>` blocks for things Tailwind can do. See [standards/typescript.md](standards/typescript.md).
 - **Python**: uv for everything: Python versions, virtual environments, dependencies, lockfile, and running commands. Never `pip install`, `requirements.txt`, Poetry, Pipenv, or conda. Ruff formats and lints. See [standards/python.md](standards/python.md).
 - **Go**: for small sandboxed services. See [standards/go.md](standards/go.md).
+- **Rust**: native applications and libraries. See [standards/rust.md](standards/rust.md).
 
 ## Code
 

@@ -21,6 +21,8 @@ Project files live in their repositories, not here, so they change in the same P
 | [Primer](https://github.com/Harville-Labs/Primer) | [AGENTS.md](https://github.com/Harville-Labs/Primer/blob/main/AGENTS.md) | Python + uv, SvelteKit + Sivir UI, Postgres, Helm |
 | homelab | Owns cluster config for both; not yet covered | Flux, Kustomize, SOPS |
 
+Shared language standards: [TypeScript](standards/typescript.md), [Python](standards/python.md), [Go](standards/go.md), and [Rust](standards/rust.md).
+
 ## Install
 
 **Standards** (Claude Code and Codex): clone this repository and run
