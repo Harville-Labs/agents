@@ -29,7 +29,8 @@ Go through each list. Fix what you find, then rerun the full check command.
 
 ## Scope and style
 
-- [ ] Only the requested change. No drive-by renames, reformatting, or refactors.
+- [ ] The feature is only what was requested. No drive-by renames or restructuring.
+- [ ] Existing problems you ran into (lint warnings, failing tests, bugs) are fixed in their own commits and listed in your report, or named with the reason you left them.
 - [ ] Reads like the code around it: naming, structure, comment density.
 - [ ] No file you touched is over 500 lines ([standards/code.md](../../standards/code.md)).
 - [ ] No duplicated logic: you searched for an existing helper or component before writing one, and nothing you wrote repeats logic that already exists.

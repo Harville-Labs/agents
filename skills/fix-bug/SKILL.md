@@ -24,7 +24,7 @@ Write a test that fails for the reason in the report, named for the correct beha
 ## 4. Fix
 
 - Fix the cause, not the symptom. A `try/catch`, a null check, or a retry that hides the bad state is not a fix unless the bad state is genuinely expected, and then a comment says why.
-- Keep the diff small. Unrelated cleanup goes in another PR.
+- Keep the fix's diff small. Other problems you run into get fixed in their own commits, not mixed into this one.
 - If the fix changes behavior someone could depend on, note it in the changelog.
 
 ## 5. Prove it
