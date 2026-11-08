@@ -10,7 +10,7 @@ Details for specific stacks and topics live in [standards/](standards/). Reusabl
 2. **Do what was asked, and fix what you trip over.** Keep the feature to its stated scope: don't rename things, restructure neighbors, or add features nobody requested. But don't leave problems you run into behind, even ones that were there before you: a lint warning, a failing or flaky test, a bug, a broken doc link. Fix each in its own commit (`style: fix existing SwiftLint warnings`, `fix(sync): ...`) so it can be reviewed and reverted apart from your change, and list them in your report. If a fix is too big or risky to make in passing (a redesign, a data migration, a behavior users depend on), don't make it; say what you found and why you left it.
 3. **Prove it works.** Run the repository's full check command before saying you're done, and fix what it reports. If you can't run something (no database, no model server, no network), say exactly what you didn't run.
 4. **Report honestly.** Say what you changed, what you ran, and what you didn't verify. A failing test is reported as failing, with its output. Never describe a change as tested when it wasn't.
-5. **Ask before anything hard to undo or outward-facing:** pushing, merging, publishing, deploying, deleting branches or data, sending messages, changing CI secrets or cluster state. Don't commit or push unless you were asked to.
+5. **Ask before changing branches or doing anything outward-facing:** pushing, merging, publishing, deploying, deleting branches or data, sending messages, changing CI secrets or cluster state. During development, commit coherent changes incrementally on the branch that is already checked out; don't push without asking.
 
 ## Toolchains
 

@@ -8,7 +8,11 @@ Non-trivial work starts from a GitHub issue. Issues carry an `area:` label, a pr
 
 `<type>/<issue>-<slug>` from `main`: `feat/58-escalation-ladder`, `fix/31-ollama-timeout`, `docs/12-routing-table`. Without an issue, drop the number: `fix/openrouter-reasoning`.
 
+During a task, work on the branch that is already checked out. Ask before switching branches. If the current branch is not the intended branch, explain that before proceeding with branch-dependent work.
+
 ## Commits
+
+Commit coherent feature or fix increments as they are ready, rather than waiting until all work is finished. Keep each commit focused and leave the work on the current branch. Ask before pushing; a commit does not authorize a push.
 
 [Conventional Commits](https://www.conventionalcommits.org):
 
