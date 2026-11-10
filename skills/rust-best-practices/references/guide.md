@@ -32,7 +32,7 @@ Applies to Rust workspaces and applications. The repository's `AGENTS.md` owns p
 
 - Use traits when they express a real shared capability, enable a useful test seam, or define a public extension point. Don't introduce a trait for a single implementation just to make code look abstract.
 - Prefer static dispatch and concrete types inside a crate. Use `dyn Trait` at boundaries that benefit from runtime substitution. Keep generic bounds as narrow as possible.
-- Use standard library types first. Before adding a dependency, search for an existing workspace dependency and follow the org [dependency review](../skills/add-dependency/SKILL.md). Check maintenance, license, transitive cost, and whether the dependency is needed at runtime.
+- Use standard library types first. Before adding a dependency, search for an existing workspace dependency and follow the org [dependency review](../../add-dependency/SKILL.md). Check maintenance, license, transitive cost, and whether the dependency is needed at runtime.
 - Use established crates for parsing, serialization, CLI argument handling, and other edge-case-heavy tasks. Don't write a custom parser or protocol implementation without a documented reason.
 
 ## Async and I/O

@@ -1,0 +1,13 @@
+{
+  "name": "hl",
+  "private": true,
+  "type": "module",
+  "main": "opencode/plugin.ts",
+  "scripts": {
+    "typecheck": "tsc --noEmit --strict --module esnext --target esnext --moduleResolution bundler --types bun-types --skipLibCheck opencode/plugin.ts"
+  },
+  "devDependencies": {
+    "bun-types": "latest",
+    "typescript": "latest"
+  }
+}

@@ -1,6 +1,6 @@
 # Code structure
 
-Applies to every language. Stack-specific rules are in [typescript.md](typescript.md), [svelte.md](svelte.md), [python.md](python.md), and [go.md](go.md).
+Applies to every language. Stack-specific rules are in the typescript, svelte, python, go, and rust best-practices skills.
 
 ## File length
 
@@ -11,7 +11,7 @@ Applies to every language. Stack-specific rules are in [typescript.md](typescrip
 - Don't touch an existing long file only to split it as part of an unrelated change. Split it in its own PR, or when you next make a substantial change to it.
 - Generated files, lockfiles, fixtures, and data files don't count.
 
-Enforce it in CI with [templates/check-file-length.sh](../templates/check-file-length.sh). Copy it to `scripts/`, run it from the check command, and list generated files and grandfathered long files in `.file-length-ignore`. Remove a file from that list when it's split. Never add a new one.
+Enforce it in CI with [templates/check-file-length.sh](../../../templates/check-file-length.sh). Copy it to `scripts/`, run it from the check command, and list generated files and grandfathered long files in `.file-length-ignore`. Remove a file from that list when it's split. Never add a new one.
 
 ## Duplication
 
@@ -27,8 +27,8 @@ Enforce it in CI with [templates/check-file-length.sh](../templates/check-file-l
 
 Use a well-maintained library for anything with a long tail of edge cases: parsing (dates, URLs, CSV, YAML, Markdown), validation, HTTP clients and retries, auth, crypto, protocol SDKs, CLI argument parsing, accessible UI widgets, and image or media handling. A library that thousands of projects use has already hit the bugs you would hit.
 
-Hand-roll only small, well-understood code where a library would add more than it removes, and record each such choice in the repository's `AGENTS.md` with the reason. [skills/add-dependency](../skills/add-dependency/SKILL.md) covers how to choose and justify a package.
+Hand-roll only small, well-understood code where a library would add more than it removes, and record each such choice in the repository's `AGENTS.md` with the reason. [add-dependency](../../add-dependency/SKILL.md) covers how to choose and justify a package.
 
 ## Components
 
-On the web, UI is built from components. See [svelte.md](svelte.md#components).
+On the web, UI is built from components. See the **svelte-best-practices** skill.

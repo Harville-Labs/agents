@@ -1,6 +1,6 @@
 ---
 name: write-agents-md
-description: Create or refresh a repository's AGENTS.md (and CLAUDE.md pointer) so AI agents can work in it safely. Use when a Harville Labs repository has no AGENTS.md, when its commands, layout, or invariants have changed, or when asked to "document this repo for agents".
+description: Create or refresh a repository's AGENTS.md (and CLAUDE.md pointer) so AI agents can work in it safely. Use when a repository has no AGENTS.md, when its commands, layout, or invariants have changed, or when asked to "document this repo for agents".
 ---
 
 # Write a repository's AGENTS.md
@@ -34,7 +34,7 @@ Keep it under about 250 lines. Precise beats complete.
 ## Wire it up
 
 - `CLAUDE.md` at the root containing exactly `@AGENTS.md`, so Claude Code loads the same file.
-- `.claude/settings.json` enabling the `hl` plugin (`extraKnownMarketplaces` with `Harville-Labs/agents`, and `enabledPlugins` with `hl@harville-labs`), so everyone working in the repository gets the skills and subagents.
+- Project settings that enable this plugin for each harness the team uses (for Claude Code, `extraKnownMarketplaces` and `enabledPlugins` in `.claude/settings.json`), so everyone working in the repository gets the skills and subagents.
 - `scripts/check-file-length.sh` from [templates/](../../templates/check-file-length.sh), run from the check command, with a `.file-length-ignore` for generated and grandfathered files.
 - If a subdirectory has substantially different rules (a different language, a proprietary app inside an open-source repo), give it its own `AGENTS.md` and `CLAUDE.md` pair, and link it from the root file's layout table.
 - Add or update the repository's row in the `agents` repository's README project index.

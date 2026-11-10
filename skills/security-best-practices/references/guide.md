@@ -3,8 +3,8 @@
 ## Secrets
 
 - Never commit secrets, `.env` files, private keys, tokens, real usage ledgers, or customer data. `.gitignore` and `.dockerignore` both exclude `.env`.
-- Production secrets live in the homelab repository, SOPS-encrypted, and reach pods as Kubernetes Secrets. Application repositories reference them by name only.
-- Development defaults (a dev `BETTER_AUTH_SECRET`, the `switchback:switchback` Postgres user) are allowed only when the app refuses to start with them in production.
+- Production secrets live encrypted in the infrastructure repository or a secrets manager, and reach pods as Kubernetes Secrets. Application repositories reference them by name only.
+- Development defaults (a dev auth secret, a local database password) are allowed only when the app refuses to start with them in production.
 - If you find a committed secret, stop and tell a human. Rotating it matters more than deleting the line.
 
 ## Input
@@ -24,7 +24,7 @@
 
 ## Privacy
 
-- No third-party analytics, trackers, or ads on anything Harville Labs publishes.
+- No third-party analytics, trackers, or ads on anything you publish.
 - Store only what the feature needs. Write down what's stored and for how long, in user-facing docs, and enforce the retention in code.
 - Memory-only state is preferred for anything ephemeral (jobs, rate limits).
 - Telemetry is anonymous, documented, and honors `DO_NOT_TRACK`.
@@ -32,7 +32,7 @@
 ## Network isolation
 
 - Services that process untrusted input get a NetworkPolicy with no egress unless they need it.
-- Traffic that must not come from the homelab's address (third-party downloads) goes through a VPN sidecar with a firewall that blocks fallback, and the pod isn't ready until the tunnel is.
+- Traffic that must not come from the cluster's own address goes through a tunnel sidecar with a firewall that blocks fallback, and the pod isn't ready until the tunnel is.
 - Workers sit behind the shared Ingress with its rate limits; never expose a worker Service directly.
 
 ## Containers
@@ -41,4 +41,4 @@ Run as a non-root user with a fixed UID. Multi-stage builds; the runtime image c
 
 ## Dependencies
 
-Each runtime dependency is attack surface that ships to users. Prefer small, maintained, widely used packages; check the license is compatible; pin versions in the lockfile. Auth, crypto, and session handling always come from an established library (Better Auth), never home-grown.
+Each runtime dependency is attack surface that ships to users. Prefer small, maintained, widely used packages; check the license is compatible; pin versions in the lockfile. Auth, crypto, and session handling always come from an established library, never home-grown.

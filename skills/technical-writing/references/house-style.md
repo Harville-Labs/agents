@@ -10,7 +10,7 @@ Applies to docs, READMEs, comments, error messages, commit messages, PR descript
 - **Active voice, present tense.** "The router escalates", not "the request will be escalated by the router."
 - **Second person for instructions.** "Run `bun run check`." Not "the user should run" or "we recommend running."
 - **Contractions are fine.** "Don't", "it's", "won't" read naturally.
-- **Honest limits.** State what something doesn't do as plainly as what it does (see the non-goals in harville.ai's utilities design).
+- **Honest limits.** State what something doesn't do as plainly as what it does.
 
 ## Structure
 
@@ -33,10 +33,10 @@ What went wrong, with the offending value, and how to fix it:
 
 > `models.local references unknown provider "olama"`
 
-> `DATABASE_URL must be a postgres:// URL. For local development, \`bun run db:up\` starts one (see docs/sites.md).`
+> `DATABASE_URL must be a postgres:// URL. For local development, \`bun run db:up\` starts one.`
 
 Errors shown to the public use friendly, stable messages mapped from error codes, and never leak internal output.
 
 ## Product copy
 
-Harville Labs copy describes what the thing does for the reader, in their words. Name the product correctly (Switchback, formerly Harness). The company is "Harville Labs" in prose and "Harville Labs, LLC" only in legal text.
+Copy describes what the thing does for the reader, in their words. Name products and companies exactly as they name themselves, and use the legal entity name only in legal text.

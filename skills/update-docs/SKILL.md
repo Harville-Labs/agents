@@ -1,6 +1,6 @@
 ---
 name: update-docs
-description: Find and update every doc a change affects - README, docs/, config reference, changelog, AGENTS.md, examples - in Harville Labs style. Use whenever a change adds or alters behavior, config, CLI flags, env vars, routes, or APIs, or when asked to write or fix documentation.
+description: Find and update every doc a change affects - README, docs/, config reference, changelog, AGENTS.md, examples - in plain house style. Use whenever a change adds or alters behavior, config, CLI flags, env vars, routes, or APIs, or when asked to write or fix documentation.
 ---
 
 # Update docs
@@ -31,7 +31,7 @@ Then check this list:
 
 ## Write it
 
-Follow [standards/writing.md](../../standards/writing.md):
+Follow the **technical-writing** skill's house style ([house-style.md](../technical-writing/references/house-style.md)):
 
 - Lead with what the reader needs: the command, the key, the default.
 - Specific, plain, no hype. State limits as plainly as features.

@@ -1,6 +1,6 @@
 #!/bin/sh
-# Checks the repo's structure: skill and subagent frontmatter, JSON manifests,
-# and that every relative Markdown link points at a file that exists.
+# Checks skill and subagent frontmatter, JSON manifests, the TypeScript, and
+# that every relative Markdown link points at a file that exists.
 set -eu
 
 cd "$(dirname "$0")/.."
@@ -30,7 +30,7 @@ for file in agents/*.md; do
   [ -n "$(frontmatter "$file" description)" ] || fail "$file: frontmatter needs a description"
 done
 
-for file in .claude-plugin/*.json; do
+for file in .claude-plugin/*.json .codex-plugin/*.json hooks/*.json package.json; do
   python3 -m json.tool "$file" >/dev/null 2>&1 || fail "$file is not valid JSON"
 done
 
@@ -41,6 +41,12 @@ for file in $(git ls-files --cached --others --exclude-standard '*.md'); do
     [ -e "$base/$target" ] || fail "$file: broken link to $target"
   done
 done
+
+# The OpenCode plugin and the go skill's scripts are TypeScript run by Bun.
+bun install --frozen-lockfile >/dev/null || fail "bun install failed at the repo root"
+bun run --silent typecheck || fail "opencode/plugin.ts does not typecheck"
+(cd skills/go/scripts && bun install --frozen-lockfile >/dev/null && bun run --silent typecheck && bun run --silent test) ||
+  fail "skills/go/scripts: typecheck or tests failed"
 
 [ "$failed" = 0 ] && echo "ok"
 exit "$failed"

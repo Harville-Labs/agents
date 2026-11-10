@@ -1,6 +1,6 @@
 ---
 name: self-review
-description: Review your own diff against Harville Labs standards before reporting work as done or opening a PR. Use after finishing an implementation, before committing, or when asked to "review", "double-check", or "look over" changes.
+description: Review your own diff against the repository's standards before reporting work as done or opening a PR. Use after finishing an implementation, before committing, or when asked to "review", "double-check", or "look over" changes.
 ---
 
 # Self-review
@@ -32,7 +32,7 @@ Go through each list. Fix what you find, then rerun the full check command.
 - [ ] The feature is only what was requested. No drive-by renames or restructuring.
 - [ ] Existing problems you ran into (lint warnings, failing tests, bugs) are fixed in their own commits and listed in your report, or named with the reason you left them.
 - [ ] Reads like the code around it: naming, structure, comment density.
-- [ ] No file you touched is over 500 lines ([standards/code.md](../../standards/code.md)).
+- [ ] No file you touched is over 500 lines (the **code-best-practices** skill).
 - [ ] No duplicated logic: you searched for an existing helper or component before writing one, and nothing you wrote repeats logic that already exists.
 - [ ] Nothing hand-rolled that a well-maintained library already does (parsing, validation, dates, auth, accessible widgets).
 - [ ] The repository's toolchain is the standard one: TypeScript, Vite, and Biome for web; uv and Ruff for Python. No `pip`, `requirements.txt`, ESLint, Prettier, or `.js` sources slipped in.
@@ -49,7 +49,7 @@ Go through each list. Fix what you find, then rerun the full check command.
 ## Docs
 
 - [ ] Docs, config reference, and changelog updated for anything user-visible ([update-docs](../update-docs/SKILL.md)).
-- [ ] Error messages and copy follow [standards/writing.md](../../standards/writing.md).
+- [ ] Error messages and copy follow the **technical-writing** skill's house style.
 
 ## Report
 

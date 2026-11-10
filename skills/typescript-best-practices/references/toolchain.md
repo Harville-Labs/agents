@@ -6,9 +6,9 @@ Applies to every TypeScript codebase: Bun monorepos, SvelteKit apps, scripts.
 
 - **TypeScript, Vite, Biome.** Every web project is TypeScript, builds with Vite (through SvelteKit for apps), and formats and lints with Biome. No hand-written `.js` files except config a tool requires in JavaScript. No ESLint, Prettier, webpack, Rollup or esbuild configs of our own, Parcel, or Create React App. Libraries and CLIs that don't need a bundler compile with `tsc` or `bun build`.
 
-- **Runtime.** New projects use Bun (1.4+) with workspaces for monorepos, as Switchback does ([ADR 0002](https://github.com/Harville-Labs/switchback/blob/main/docs/adr/0002-bun-typescript-monorepo.md)). Existing Node projects stay on Node until someone records a reason to move. Don't switch a repository's package manager or runtime as a side effect of another change.
+- **Runtime.** New projects use Bun (1.4+) with workspaces for monorepos. Existing Node projects stay on Node until someone records a reason to move. Don't switch a repository's package manager or runtime as a side effect of another change.
 - **Lockfiles.** Commit the lockfile. Install with the frozen flag in CI and Docker (`bun install --frozen-lockfile`, `npm ci`).
-- **Biome** formats and lints. Start from [templates/biome.json](../templates/biome.json): single quotes, 2-space indent, 100 columns, recommended rules, organize imports. Run the repository's `format` script instead of formatting by hand, and don't fight the formatter with ignore comments.
+- **Biome** formats and lints. Start from [templates/biome.json](../../../templates/biome.json): single quotes, 2-space indent, 100 columns, recommended rules, organize imports. Run the repository's `format` script instead of formatting by hand, and don't fight the formatter with ignore comments.
 - **Type checking** is part of the check command (`tsc -p .`, or `svelte-check` for SvelteKit). A green build with type errors is not green.
 
 ## Compiler settings
@@ -32,4 +32,4 @@ Zod at every boundary: config files, environment, HTTP and JSON-RPC params, tool
 
 ## Tests
 
-`bun:test` in Bun projects, `node:test` with `--experimental-strip-types` in Node projects. Colocate tests as `*.test.ts` next to the code. See [testing.md](testing.md).
+`bun:test` in Bun projects, `node:test` with `--experimental-strip-types` in Node projects. Colocate tests as `*.test.ts` next to the code. See the **testing-best-practices** skill.

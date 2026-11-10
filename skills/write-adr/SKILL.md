@@ -13,7 +13,7 @@ description: Write an architecture decision record in docs/adr/. Use when a chan
 
 ## Steps
 
-1. List existing records: `ls docs/adr/`. Read `docs/adr/README.md` and the one or two closest to your topic. If the repository has no `docs/adr/`, create it with a `README.md` index like Switchback's.
+1. List existing records: `ls docs/adr/`. Read `docs/adr/README.md` and the one or two closest to your topic. If the repository has no `docs/adr/`, create it with a `README.md` that indexes every record.
 2. Take the next number, zero-padded to four digits. Name the file `NNNN-short-kebab-title.md`.
 3. Copy the format of the most recent record in that repository. If there is none, use [templates/adr.md](../../templates/adr.md).
 4. Write it:

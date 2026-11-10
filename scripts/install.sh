@@ -1,12 +1,12 @@
 #!/bin/sh
-# Makes the org standards (AGENTS.md) part of every agent session on this machine.
+# Makes the standards in AGENTS.md part of every agent session on this machine.
 #
 #   Claude Code: adds an import of this repo's AGENTS.md to ~/.claude/CLAUDE.md
 #   Codex:       copies AGENTS.md into ~/.codex/AGENTS.md (Codex has no imports)
 #
 # Both edits live between marker lines, so rerunning replaces them and nothing
-# else in those files is touched. Skills and subagents install as a Claude Code
-# plugin instead (see README), because they link back into standards/.
+# else in those files is touched. Skills and subagents install as a plugin
+# instead (see README).
 #
 # Usage: scripts/install.sh [--dry-run] [--uninstall]
 set -eu
@@ -56,17 +56,15 @@ if [ "$uninstall" = 1 ]; then
   exit 0
 fi
 
-write_block "$HOME/.claude/CLAUDE.md" "# Harville Labs standards
+write_block "$HOME/.claude/CLAUDE.md" "# Engineering standards
 @$repo/AGENTS.md"
 
 # Codex can't import, so it gets a copy with links made absolute. Rerun after pulling.
-codex_body=$(sed "s#](standards/#]($repo/standards/#g; s#](skills/#]($repo/skills/#g" "$repo/AGENTS.md")
+codex_body=$(sed "s#](skills/#]($repo/skills/#g" "$repo/AGENTS.md")
 write_block "$HOME/.codex/AGENTS.md" "$codex_body"
 
 cat <<EOF
 
-Standards installed. For skills and subagents, in Claude Code run:
-
-  /plugin marketplace add Harville-Labs/agents
-  /plugin install hl@harville-labs
+Standards installed. For skills and subagents, install the plugin for your
+harness; the README has the commands.
 EOF

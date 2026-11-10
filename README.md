@@ -1,69 +1,82 @@
-# Harville Labs agents
+# hl agents
 
-Shared engineering standards, skills, and subagents for every Harville Labs repository. One source of truth for how AI coding agents (and the people working with them) write software here.
+Engineering standards, skills, and subagents for AI coding agents and the people who work with them. They run the same way in Claude Code, OpenCode, and Codex.
 
-- **[AGENTS.md](AGENTS.md)**: the org-wide rules. Short enough to load into every session.
-- **[standards/](standards/)**: the detail behind them, by topic.
-- **[skills/](skills/)**: reusable workflows, in Claude Code skill format.
-- **[agents/](agents/)**: subagents, compatible with Claude Code and Switchback (`.claude/agents/*.md` format).
+- **[AGENTS.md](AGENTS.md)**: the rules. Short enough to load into every session.
+- **[skills/](skills/)**: the **go** router and its playbooks, the engineering principles, the `*-best-practices` standards, and review and writing workflows.
+- **[agents/](agents/)**: subagents (`worker`, `reviewer`, `verifier`, `comment-auditor`).
 - **[templates/](templates/)**: starting points for a new repository's `AGENTS.md`, PR template, ADR, Biome config, `.editorconfig`, and file-length check.
+
+The workflow skills take extreme inspiration from poteto mode (see [NOTICE](NOTICE)).
 
 ## How it fits together
 
-Each repository keeps its own `AGENTS.md` (with a `CLAUDE.md` containing `@AGENTS.md`) for what's specific to it: commands, layout, invariants, and recipes. This repository holds everything that's the same everywhere. A repository's file can add rules and tighten these, but loosens one only with an ADR saying why.
+Each repository keeps its own `AGENTS.md` for what's specific to it: commands, layout, invariants, and recipes. This repository holds what's the same everywhere. A repository's file can add rules and tighten these, and loosens one only with an ADR that says why.
 
-Project files live in their repositories, not here, so they change in the same PR as the code they describe.
-
-| Repository | Agent guide | Stack |
-|---|---|---|
-| [switchback](https://github.com/Harville-Labs/switchback) | [AGENTS.md](https://github.com/Harville-Labs/switchback/blob/main/AGENTS.md), [apps/site/AGENTS.md](https://github.com/Harville-Labs/switchback/blob/main/apps/site/AGENTS.md) | Bun, TypeScript, Ink, VS Code, SvelteKit + Postgres |
-| [website](https://github.com/Harville-Labs/website) | [AGENTS.md](https://github.com/Harville-Labs/website/blob/main/AGENTS.md) | SvelteKit, plain CSS, Go worker, Kubernetes |
-| [Primer](https://github.com/Harville-Labs/Primer) | [AGENTS.md](https://github.com/Harville-Labs/Primer/blob/main/AGENTS.md) | Python + uv, SvelteKit + Sivir UI, Postgres, Helm |
-| homelab | Owns cluster config for both; not yet covered | Flux, Kustomize, SOPS |
-
-Shared language standards: [TypeScript](standards/typescript.md), [Python](standards/python.md), [Go](standards/go.md), and [Rust](standards/rust.md).
+For nontrivial work, start with **go**. It matches the task to a playbook (feature, bug fix, refactor, perf, PR, babysit, and more), copies the playbook's steps into the todo list, and runs the other skills as the steps need them.
 
 ## Install
 
-**Standards** (Claude Code and Codex): clone this repository and run
+**Plugin** (skills, subagents, and a session reminder to use **go**):
 
-```sh
-scripts/install.sh            # --dry-run to preview, --uninstall to remove
-```
-
-It adds an import of this `AGENTS.md` to `~/.claude/CLAUDE.md` and a copy to `~/.codex/AGENTS.md`, between marker lines it manages, so every session on your machine starts with the org standards. Claude Code reads the import live, so `git pull` is enough to update it; rerun the script to refresh the Codex copy.
-
-**Skills and subagents** (Claude Code): install this repository as a plugin.
+Claude Code:
 
 ```
 /plugin marketplace add Harville-Labs/agents
 /plugin install hl@harville-labs
 ```
 
-Skills then appear as `hl:ship-change`, `hl:fix-bug`, and so on. To make them available to everyone who works in a repository, add the marketplace and plugin to that repository's `.claude/settings.json` (`extraKnownMarketplaces` and `enabledPlugins`).
+OpenCode:
 
-**Switchback** reads Claude Code's agent format, so the files in `agents/` work in a project's `.claude/agents/` as-is.
+```sh
+opencode plugin add "hl@git+https://github.com/Harville-Labs/agents.git"
+```
+
+Codex:
+
+```sh
+codex plugin marketplace add Harville-Labs/agents
+codex plugin add hl@harville-labs
+```
+
+Then run **setup-models** (`/hl:setup-models`, `/setup-models`, or `$setup-models`) to map the model sizes (nano, small, medium, large, and the review panel) to models you have. Skills never name a model; each person picks their own.
+
+**Standards** (optional): to load [AGENTS.md](AGENTS.md) into every session on your machine, clone this repository and run
+
+```sh
+scripts/install.sh            # --dry-run to preview, --uninstall to remove
+```
+
+It adds an import of `AGENTS.md` to `~/.claude/CLAUDE.md` and a copy to `~/.codex/AGENTS.md`, between marker lines it manages. Claude Code reads the import live, so `git pull` updates it; rerun the script to refresh the Codex copy. For OpenCode, add the file's path to `instructions` in your `opencode.json`.
 
 ## Skills
 
+Type a skill as `/hl:<name>` in Claude Code, `/<name>` in OpenCode, or `$<name>` in Codex. `/hl:help` answers questions about any of them.
+
 | Skill | Use it to |
 |---|---|
-| [ship-change](skills/ship-change/SKILL.md) | Go from issue to pull request: branch, test, implement, docs, check, commit, PR |
-| [fix-bug](skills/fix-bug/SKILL.md) | Reproduce with a failing test, find the root cause, fix, prove it |
-| [self-review](skills/self-review/SKILL.md) | Review your own diff against the standards before calling it done |
-| [update-docs](skills/update-docs/SKILL.md) | Find and update every doc a change affects |
-| [write-adr](skills/write-adr/SKILL.md) | Record a decision or an invariant change in `docs/adr/` |
-| [add-dependency](skills/add-dependency/SKILL.md) | Decide whether a package earns its place, and justify it |
-| [add-service](skills/add-service/SKILL.md) | Add a container image, `deploy/k8s` manifests, and the homelab handoff |
-| [write-agents-md](skills/write-agents-md/SKILL.md) | Create or refresh a repository's `AGENTS.md` |
+| [go](skills/go/SKILL.md) | Do any nontrivial task with rigor: picks a playbook and runs it |
+| [help](skills/help/SKILL.md) | Find the right skill, playbook, or principle, and get set up |
+| [setup-models](skills/setup-models/SKILL.md) | Map the model sizes to your models and set a reasoning budget |
+| [typescript](skills/typescript-best-practices/SKILL.md), [python](skills/python-best-practices/SKILL.md), [go](skills/go-best-practices/SKILL.md), [rust](skills/rust-best-practices/SKILL.md), [svelte](skills/svelte-best-practices/SKILL.md) `-best-practices` | Apply a language's toolchain and rules |
+| [code](skills/code-best-practices/SKILL.md), [testing](skills/testing-best-practices/SKILL.md), [security](skills/security-best-practices/SKILL.md), [git](skills/git-best-practices/SKILL.md), [deploy](skills/deploy-best-practices/SKILL.md) `-best-practices` | Apply the cross-language rules for each topic |
+| [how](skills/how/SKILL.md), [why](skills/why/SKILL.md), [teach](skills/teach/SKILL.md) | Learn how code works, why it's shaped that way, or both in plain words |
+| [architect](skills/architect/SKILL.md), [arena](skills/arena/SKILL.md), [swarm](skills/swarm/SKILL.md) | Settle a design, merge several attempts, or run parallel checks |
+| [interrogate](skills/interrogate/SKILL.md), [blast-radius](skills/blast-radius/SKILL.md), [self-review](skills/self-review/SKILL.md) | Review a diff with other models, find breakage outside it, or check it yourself |
+| [deslop](skills/deslop/SKILL.md), [no-comments](skills/no-comments/SKILL.md), [unslop](skills/unslop/SKILL.md) | Clean AI slop out of code, comments, or prose |
+| [control-cli](skills/control-cli/SKILL.md), [control-ui](skills/control-ui/SKILL.md) | Drive a CLI, TUI, or browser UI the way a user does, and capture proof |
+| [create-verification-skill](skills/create-verification-skill/SKILL.md), [create-formal-verification-skill](skills/create-formal-verification-skill/SKILL.md) | Give agents a scripted or formal way to prove behavior |
+| [technical-writing](skills/technical-writing/SKILL.md), [update-docs](skills/update-docs/SKILL.md), [write-adr](skills/write-adr/SKILL.md), [write-agents-md](skills/write-agents-md/SKILL.md) | Write docs, decisions, and agent guides to a standard |
+| [add-dependency](skills/add-dependency/SKILL.md), [add-service](skills/add-service/SKILL.md) | Justify a package, or add a container image, deploy manifests, and the infrastructure handoff |
+| [reflect](skills/reflect/SKILL.md), [correct](skills/correct/SKILL.md), [automate-me](skills/automate-me/SKILL.md) | Turn lessons and habits into skill edits |
 
-Subagents: [reviewer](agents/reviewer.md) (finds confirmed bugs and invariant violations in the current diff) and [verifier](agents/verifier.md) (runs the full check and reports what passed).
+The `principle-*` skills are one rule each. **go** reads and cites them, and you can steer with their names ("apply prove it works"). `/hl:help` covers the rest (recall, ketchup, sharpen, statechart, and others).
 
 ## Changing this repository
 
-- Standards change by pull request, like code. Explain in the PR what prompted the change: a mistake an agent made, a review comment that keeps recurring, a new decision.
-- Keep [AGENTS.md](AGENTS.md) short; it loads into every session. Put detail in `standards/` and link to it.
-- A rule belongs here only if it applies to every repository. Anything specific to one goes in that repository's `AGENTS.md`.
-- Skills follow the Claude Code format: `skills/<name>/SKILL.md`, with `name` (matching the directory) and a `description` that says when to use it.
-- Bump `version` in [.claude-plugin/plugin.json](.claude-plugin/plugin.json) when skills or subagents change, so installed plugins update.
-- `scripts/check.sh` (also run in CI) validates skill and subagent frontmatter, the plugin manifests, and every relative link.
+- Change rules and skills by pull request, like code. Say in the PR what prompted the change: a mistake an agent made, a review comment that keeps recurring, a new decision.
+- Keep [AGENTS.md](AGENTS.md) short; it loads into every session. Put detail in a skill and link to it.
+- A rule belongs here only if it applies to every repository. Keep skills free of any one team's names, hosts, or infrastructure.
+- Skills use the `skills/<name>/SKILL.md` format, with `name` (matching the directory) and a `description` that says when to use it. Name harnesses in the order Claude Code, OpenCode, Codex, and give none a feature the others lack without saying why.
+- Bump `version` in [.claude-plugin/plugin.json](.claude-plugin/plugin.json) and [.codex-plugin/plugin.json](.codex-plugin/plugin.json) when skills or subagents change, so installed plugins update.
+- `scripts/check.sh` (also run in CI) validates skill and subagent frontmatter, the plugin manifests, the OpenCode plugin's types, and every relative link.

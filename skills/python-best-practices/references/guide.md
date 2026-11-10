@@ -49,8 +49,8 @@ COPY . .
 RUN uv sync --locked --no-dev
 ```
 
-Run as a non-root user with a fixed UID, as in [deploy.md](deploy.md).
+Run as a non-root user with a fixed UID, as in the **deploy-best-practices** skill.
 
 ## Tests
 
-`test_*.py` files beside the code or in `tests/`, following the repository's existing layout. Use fixtures and `tmp_path` instead of touching real files, and inject clients instead of hitting the network. See [testing.md](testing.md).
+`test_*.py` files beside the code or in `tests/`, following the repository's existing layout. Use fixtures and `tmp_path` instead of touching real files, and inject clients instead of hitting the network. See the **testing-best-practices** skill.

@@ -1,6 +1,6 @@
 # Go
 
-Go is for small, sandboxed services where a single static binary and a tiny image matter, like harville.ai's utility worker.
+Go is for small, sandboxed services where a single static binary and a tiny image matter, such as a worker that converts untrusted files.
 
 ## Toolchain
 

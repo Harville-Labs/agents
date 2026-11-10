@@ -1,0 +1,18 @@
+{
+  "name": "hl",
+  "version": "0.3.0",
+  "description": "Engineering standards and workflow skills for AI coding agents: the go router and playbooks, engineering principles, best-practices standards, and review subagents.",
+  "author": {
+    "name": "Harville Labs"
+  },
+  "homepage": "https://github.com/Harville-Labs/agents",
+  "repository": "https://github.com/Harville-Labs/agents",
+  "license": "MIT",
+  "skills": "./skills/",
+  "hooks": {},
+  "interface": {
+    "displayName": "hl",
+    "shortDescription": "The go router, playbooks, and engineering principles",
+    "category": "Developer Tools"
+  }
+}

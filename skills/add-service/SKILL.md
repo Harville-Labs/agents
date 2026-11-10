@@ -1,11 +1,11 @@
 ---
 name: add-service
-description: Add a new deployable service (web app or worker) to a Harville Labs repository - Dockerfile, health endpoint, image workflow, deploy/k8s manifests, and the homelab handoff. Use when creating a new container image, a new Kubernetes Deployment, or wiring an app into GitOps.
+description: Add a new deployable service (web app or worker) to a repository - Dockerfile, health endpoint, image workflow, deploy/k8s manifests, and the infrastructure handoff. Use when creating a new container image, a new Kubernetes Deployment, or wiring an app into GitOps.
 ---
 
 # Add a deployable service
 
-Read [standards/deploy.md](../../standards/deploy.md) first. The application repository owns the image and `deploy/k8s`; the homelab repository owns namespace, Ingress, Secrets, and databases.
+Apply the **deploy-best-practices** skill first. The application repository owns the image and `deploy/k8s`; the infrastructure repository owns namespace, Ingress, Secrets, and databases.
 
 ## 1. The service
 
@@ -23,11 +23,11 @@ Read [standards/deploy.md](../../standards/deploy.md) first. The application rep
 
 ## 3. Image workflow
 
-`.github/workflows/<name>-image.yml`, following the existing one in the repository:
+`.github/workflows/<name>-image.yml` (or the GitLab CI equivalent), following the existing one in the repository:
 
 - Trigger on push to `main` (with `paths` filters in a monorepo) and `workflow_dispatch`; `paths-ignore` the kustomization file the bot writes.
 - `permissions: { contents: write, packages: write }` and a `concurrency` group without cancel-in-progress.
-- Push `ghcr.io/harville-labs/<name>:main` and `:sha-${{ github.sha }}`.
+- Push `<registry>/<owner>/<name>:main` and `:sha-${{ github.sha }}`.
 - Rewrite `newTag` in the kustomization to `sha-<sha>`, commit as `github-actions[bot]`, `git pull --rebase`, push.
 
 ## 4. Manifests
@@ -36,18 +36,18 @@ In `deploy/k8s/` (or `deploy/k8s/<name>/` in a monorepo):
 
 - `deployment.yaml`: resources, readiness and liveness on `/healthz`, `securityContext` (non-root, no privilege escalation, read-only root filesystem where possible), size-limited `emptyDir` for scratch.
 - `service.yaml`: ClusterIP only.
-- A NetworkPolicy if the pod handles untrusted input. Default to `egress: []`; ingress only from Traefik.
-- `kustomization.yaml` listing the resources and an `images:` entry with `newTag`. A comment at the top says which homelab path applies it. No `namespace:`.
+- A NetworkPolicy if the pod handles untrusted input. Default to `egress: []`; ingress only from the Ingress controller.
+- `kustomization.yaml` listing the resources and an `images:` entry with `newTag`. A comment at the top says which infrastructure path applies it. No `namespace:`.
 - Verify: `kubectl kustomize deploy/k8s`.
 
-## 5. Homelab handoff
+## 5. Infrastructure handoff
 
-You can't finish this part from the application repository. In the PR, list what the homelab repository needs:
+You can't finish this part from the application repository. In the PR, list what the infrastructure repository needs:
 
-- Flux Kustomization pointing at `https://github.com/Harville-Labs/<repo>.git`, path `deploy/k8s[/<name>]`.
-- Namespace, Ingress host and TLS, Traefik middleware (rate limits, real client IP).
-- Secrets (SOPS-encrypted), by name and key, matching what the Deployment references.
-- Database (CloudNativePG) and backups, if any.
+- A GitOps source and Kustomization pointing at this repository, path `deploy/k8s[/<name>]`.
+- Namespace, Ingress host and TLS, rate limits and real client IP.
+- Secrets (encrypted at rest, for example with SOPS), by name and key, matching what the Deployment references.
+- Database and backups, if any.
 
 ## 6. Docs
 

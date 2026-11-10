@@ -17,7 +17,7 @@ Every runtime dependency ships to users and is attack surface we maintain. Equal
 
 - **Maintenance**: releases in the last year, issues answered, more than one maintainer for anything security-relevant.
 - **Size**: install size and transitive dependencies (`bunx npm-why`, `go mod graph`). A small package with 200 transitive dependencies is not small.
-- **License**: MIT, Apache-2.0, BSD, ISC are fine. Anything copyleft (GPL, AGPL, LGPL) or unusual needs a human decision. In Switchback, update third-party notices (`bun scripts/third-party-notices.ts`; a test checks them).
+- **License**: MIT, Apache-2.0, BSD, ISC are fine. Anything copyleft (GPL, AGPL, LGPL) or unusual needs a human decision. If the repository keeps third-party notices, regenerate them.
 - **Fit**: does it do the thing we need without forcing its model on us (framing, global state, its own logger)?
 - **Security**: known advisories (`bun audit` / `npm audit`, `govulncheck`).
 
@@ -25,7 +25,7 @@ Every runtime dependency ships to users and is attack surface we maintain. Equal
 
 - Runtime vs dev dependency: get it right. In SvelteKit apps that bundle everything, dev is usual.
 - Install with the repository's package manager so the lockfile updates; commit the lockfile.
-- Pin to a caret range in `package.json` unless the repository pins exactly (Better Auth is pinned exactly in the Switchback site because its schema generator must match).
+- Pin to a caret range in `package.json` unless the repository pins exactly (pin exactly when a generator or schema must match the library version).
 
 ## Justify it
 
