@@ -8,7 +8,7 @@ Engineering standards, skills, and subagents for AI coding agents and the people
 - **[site/](site/)**: an interactive guide to how it all works, built with Vite and published to GitHub Pages.
 - **[templates/](templates/)**: starting points for a new repository's `AGENTS.md`, PR template, ADR, Biome config, `.editorconfig`, and file-length check.
 
-The **go** router, its playbooks, the principles, and most of the workflow skills take extreme inspiration from Lauren Tan's (poteto) [pstack and poteto mode](https://github.com/cursor/plugins/tree/main/pstack), with help from Michael Denyer's [Claude Code port](https://github.com/michael-denyer/pstack-claude). Thank you, Lauren. It is some of the most careful thinking about working with coding agents we have seen, and this collection would not exist without it. See [NOTICE](NOTICE) for the license.
+The **go** router, its playbooks, the principles, and most of the workflow skills take extreme inspiration from Lauren Tan's (poteto) [pstack and poteto mode](https://github.com/cursor/plugins/tree/main/pstack), with help from Michael Denyer's [Claude Code port](https://github.com/michael-denyer/pstack-claude). These tools are major advancements in the way developers work with agents. See [NOTICE](NOTICE) for the license.
 
 ## How it fits together
 

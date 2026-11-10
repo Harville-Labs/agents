@@ -1,0 +1,28 @@
+@import "@fontsource/geist-sans/400.css";
+@import "@fontsource/geist-sans/500.css";
+@import "@fontsource/geist-sans/600.css";
+@import "@fontsource/geist-mono/400.css";
+@import "@fontsource/geist-mono/500.css";
+@import "@sivir-ui/svelte/ui.css";
+@source "./";
+
+/* sivir's tokens with two changes: Geist type and a black and white primary.
+   Green stays only as sivir's success color for a right quiz answer. */
+@theme {
+  --font-sans: "Geist Sans", system-ui, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, monospace;
+}
+
+:root {
+  --color-primary: hsl(0 0% 9%);
+  --color-on-primary: hsl(0 0% 100%);
+  --color-ring: hsl(0 0% 9% / 0.25);
+  --color-accent-tint: var(--color-secondary);
+}
+
+.dark {
+  --color-primary: hsl(0 0% 96%);
+  --color-on-primary: hsl(0 0% 5%);
+  --color-ring: hsl(0 0% 96% / 0.3);
+  --color-background: hsl(0 0% 3%);
+}

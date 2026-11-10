@@ -229,3 +229,28 @@ export const commands: [string, string][] = [
   ['catchup', 'Catch up on what happened while you were away.'],
   ['reflect', 'Turn a lesson from the session into a skill change.'],
 ];
+
+export const flow: [string, string][] = [
+  ['Restate', 'Says your goal and the smallest change that meets it, before touching code.'],
+  ['Route', 'Matches the task to a playbook and copies its steps into todos.'],
+  [
+    'Understand',
+    'Runs how over the subsystem, and architect when code crosses a function boundary.',
+  ],
+  ['Delegate', 'Hands code to worker subagents on a model size, not a model name.'],
+  [
+    'Prove',
+    'Runs the real thing with control-cli or control-ui. A green unit test alone is not proof.',
+  ],
+  ['Clean', 'deslop before commit, no-comments before review.'],
+  ['Open a PR', 'Small ordered commits, a Why section, and docs in the same change.'],
+  ['Babysit, ship', 'Drives review and CI to green, then lands only what was verified.'],
+];
+
+export const sizes: [string, string, string][] = [
+  ['nano', 'Trivial edits, read-only explorers, tool checks', 'Your fastest, cheapest model'],
+  ['small', 'Swarm workers and routine code', 'A fast code model'],
+  ['medium', 'Code delegates in feature, bug fix, refactoring, perf', 'A strong code model'],
+  ['large', 'The hardest changes, judgment, prose', 'Your strongest model'],
+  ['panel', 'arena, architect, and interrogate runners', 'Two or more, from different families'],
+];

@@ -1,14 +1,10 @@
 {
+  "extends": "$app/tsconfig",
   "compilerOptions": {
-    "target": "es2022",
-    "module": "esnext",
-    "moduleResolution": "bundler",
-    "lib": ["es2022", "dom", "dom.iterable"],
     "strict": true,
-    "noEmit": true,
     "allowImportingTsExtensions": true,
     "skipLibCheck": true,
-    "types": ["vite/client"]
+    "verbatimModuleSyntax": true
   },
   "include": ["src", "vite.config.ts"]
 }

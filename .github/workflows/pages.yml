@@ -30,12 +30,10 @@ jobs:
       - if: github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@v4
         with:
-          path: site/dist
+          path: site/build
 
-  # The free plan has no Pages for private repositories, so deploy only once the
-  # repository is public. The build job still checks the site on every change.
   deploy:
-    if: github.event_name != 'pull_request' && !github.event.repository.private
+    if: github.event_name != 'pull_request'
     needs: build
     runs-on: ubuntu-latest
     permissions:
