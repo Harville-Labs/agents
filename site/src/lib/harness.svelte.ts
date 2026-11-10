@@ -6,7 +6,7 @@ export const harnesses: { value: Harness; label: string }[] = [
   { value: 'cx', label: 'codex' },
 ];
 
-const prefixes: Record<Harness, string> = { cc: '/hl:', oc: '/', cx: '$' };
+const prefixes: Record<Harness, string> = { cc: '/hl:', oc: '@', cx: '$' };
 
 export const installs: Record<Harness, string> = {
   cc: '/plugin marketplace add Harville-Labs/agents\n/plugin install hl@harville-labs',

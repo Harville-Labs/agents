@@ -40,7 +40,7 @@ codex plugin marketplace add Harville-Labs/agents
 codex plugin add hl@harville-labs
 ```
 
-Then run **setup-models** (`/hl:setup-models`, `/setup-models`, or `$setup-models`) to map the model sizes (nano, small, medium, large, and the review panel) to models you have. Skills never name a model; each person picks their own.
+Then run **setup-models** (`/hl:setup-models` in Claude Code, `@setup-models` in OpenCode, or `$setup-models` in Codex) to map the model sizes (nano, small, medium, large, and the review panel) to models you have. Skills never name a model; each person picks their own.
 
 **Standards** (optional): to load [AGENTS.md](AGENTS.md) into every session on your machine, clone this repository and run
 
@@ -52,7 +52,7 @@ It adds an import of `AGENTS.md` to `~/.claude/CLAUDE.md` and a copy to `~/.code
 
 ## Skills
 
-Type a skill as `/hl:<name>` in Claude Code, `/<name>` in OpenCode, or `$<name>` in Codex. `/hl:help` answers questions about any of them.
+Type a skill as `/hl:<name>` in Claude Code, `@<name>` in OpenCode, or `$<name>` in Codex. The **help** skill answers questions about any of them.
 
 | Skill | Use it to |
 |---|---|
