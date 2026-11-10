@@ -10,13 +10,12 @@
       content="A guide to the hl plugin for Claude Code, OpenCode, and Codex: engineering standards, workflow skills, and review subagents, built on Lauren Tan's (poteto) pstack."
     />
     <script>
-      // sivir themes with a .dark class. Set it before first paint so dark readers see no flash.
       const dark = matchMedia('(prefers-color-scheme: dark)');
       const sync = () => document.documentElement.classList.toggle('dark', dark.matches);
       sync();
       dark.addEventListener('change', sync);
     </script>
-    <link rel="sitemap" type="application/xml" href="sitemap.xml" />
+    <link rel="sitemap" type="application/xml" href="%sveltekit.assets%/sitemap.xml" />
     %sveltekit.head%
   </head>
   <body class="bg-background font-sans text-foreground antialiased" data-sveltekit-preload-data="hover">
