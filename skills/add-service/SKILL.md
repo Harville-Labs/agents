@@ -27,8 +27,8 @@ Apply the **deploy-best-practices** skill first. The application repository owns
 
 - Trigger on push to `main` (with `paths` filters in a monorepo) and `workflow_dispatch`; `paths-ignore` the kustomization file the bot writes.
 - `permissions: { contents: write, packages: write }` and a `concurrency` group without cancel-in-progress.
-- Push `<registry>/<owner>/<name>:main` and `:sha-${{ github.sha }}`.
-- Rewrite `newTag` in the kustomization to `sha-<sha>`, commit as `github-actions[bot]`, `git pull --rebase`, push.
+- Push `<registry>/<owner>/<name>:main` and `:sha-<sha>`, where `<sha>` is `${{ github.sha }}` on GitHub or `$CI_COMMIT_SHA` on GitLab.
+- Rewrite `newTag` in the kustomization to `sha-<sha>`, commit as the CI bot (`github-actions[bot]`, or the project access token's bot user on GitLab), `git pull --rebase`, push.
 
 ## 4. Manifests
 

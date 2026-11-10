@@ -2,7 +2,15 @@
 
 ## Issues
 
-Non-trivial work starts from a GitHub issue. Issues carry an `area:` label, a priority (`P0` blocks release, `P1` important, `P2` nice to have), and a `type:` label (`feature`, `bug`, `chore`). Use the repository's issue templates when it has them.
+Non-trivial work starts from an issue. Every issue carries an area, a priority, and a type label:
+
+| | GitHub | GitLab |
+|---|---|---|
+| Area | `area:router` | `area::router` |
+| Priority | `P0` blocks release, `P1` important, `P2` nice to have | `priority::0`, `priority::1`, `priority::2`, with the same meanings |
+| Type | `type:feature`, `type:bug`, `type:chore` | `type::feature`, `type::bug`, `type::chore` |
+
+GitLab's `::` makes a scoped label, so an issue holds one priority at a time. Use these in place of GitHub's names on GitLab, not alongside them. Use the repository's issue templates when it has them: `.github/ISSUE_TEMPLATE/` on GitHub, `.gitlab/issue_templates/` on GitLab. The **go** skill's `references/forges.md` has the commands.
 
 ## Branches
 
@@ -29,13 +37,15 @@ Commit coherent feature or fix increments as they are ready, rather than waiting
 
 ## Pull requests
 
-Use the repository's template. Every PR has:
+A GitLab merge request (MR) follows every rule here. `Closes #<n>` closes the issue on both forges. Use the repository's template: `.github/pull_request_template.md` on GitHub, `.gitlab/merge_request_templates/Default.md` on GitLab. Every PR has:
 
 - **What and why**, with `Closes #<issue>`.
 - **How it was tested**: the commands you ran and what you checked by hand. Not "tests pass". Say which tests, and what you looked at.
 - A checklist covering the full check command, docs, changelog, and ADRs. [templates/pull_request_template.md](../../../templates/pull_request_template.md) is the default.
 
 Keep PRs to one logical change. A refactor that a feature needs goes in its own PR first.
+
+Review findings go in a thread on the diff line, so the author can answer and resolve each one: a review on GitHub, a discussion with a `position` on GitLab. A top-level comment is for the summary only.
 
 CI must be green before review. Squash-merge; the squash title becomes the changelog line, so edit it to read well.
 
@@ -49,4 +59,4 @@ SemVer. Before 1.0, minor versions may break config or protocol, and the changel
 
 ## Ownership
 
-Every repository has `.github/CODEOWNERS` (or GitLab's `CODEOWNERS`) naming who reviews each path.
+Every repository has a `CODEOWNERS` file naming who reviews each path: `.github/CODEOWNERS` on GitHub, `.gitlab/CODEOWNERS` on GitLab.

@@ -26,7 +26,7 @@ Load the external bot configuration supplied by the automation. If the config, r
 - State inspection may confirm an observation. It must not inject or force the symptom.
 - No confirmed repro means no authored fix.
 - Existing pull requests or commits switch the run to verify mode. Do not author over them.
-- Use `github.com` pull request links.
+- Use the forge's full pull request or merge request links.
 - Keep captures, recordings, logs, and tokens out of source control.
 - Use `principle-guard-the-context-window` for delegated analysis.
 - Apply `principle-sequence-verifiable-units`, `principle-fix-root-causes`, and `principle-prove-it-works` through repro, fix, and verification.
@@ -290,7 +290,7 @@ Only after before-and-after proof:
 - Create small ordered commits when the repository workflow allows it.
 - Open a draft pull request. Never merge or deploy from this workflow.
 - Link the configured tracker issue using the tracker's supported pull request syntax.
-- Use the configured public URL form, normally `https://github.com/{owner}/{repo}/pull/{number}`.
+- Use the configured public URL form, normally `https://github.com/{owner}/{repo}/pull/{number}` or `https://gitlab.com/{group}/{project}/-/merge_requests/{number}`.
 - Include the repro steps, root cause, test result, before and after evidence, and blast-radius checks.
 - Run the pull request text and all Slack updates through `unslop` skill.
 
