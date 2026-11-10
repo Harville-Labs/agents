@@ -71,7 +71,7 @@ Type a skill as `/hl:<name>` in Claude Code, `/<name>` in OpenCode, or `$<name>`
 | [add-dependency](skills/add-dependency/SKILL.md), [add-service](skills/add-service/SKILL.md) | Justify a package, or add a container image, deploy manifests, and the infrastructure handoff |
 | [reflect](skills/reflect/SKILL.md), [correct](skills/correct/SKILL.md), [automate-me](skills/automate-me/SKILL.md) | Turn lessons and habits into skill edits |
 
-The `principle-*` skills are one rule each. **go** reads and cites them, and you can steer with their names ("apply prove it works"). `/hl:help` covers the rest (recall, ketchup, sharpen, statechart, and others).
+The `principle-*` skills are one rule each. **go** reads and cites them, and you can steer with their names ("apply prove it works"). `/hl:help` covers the rest (recall, catchup, sharpen, statechart, and others).
 
 ## Changing this repository
 

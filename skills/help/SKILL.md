@@ -71,8 +71,8 @@ The default answer is **go**, which runs most of the others when its steps need 
 | Know why code is shaped this way, or where a number came from | [`why`](../why/SKILL.md) |
 | Understand a change or subsystem, explained plainly | [`teach`](../teach/SKILL.md) |
 | Catch up on their own recent work on a topic | [`recall`](../recall/SKILL.md) |
-| Catch up on what changed in this chat since their last message, with every item waiting on them listed | [`ketchup`](../ketchup/SKILL.md) |
-| Catch up like `ketchup`, in a short subtitled video of slides | [`ketchup-video`](../ketchup-video/SKILL.md) |
+| Catch up on what changed in this chat since their last message, with every item waiting on them listed | [`catchup`](../catchup/SKILL.md) |
+| Catch up like `catchup`, in a short subtitled video of slides | [`catchup-video`](../catchup-video/SKILL.md) |
 | Know what a small diff could break outside itself | [`blast-radius`](../blast-radius/SKILL.md) |
 | Settle types and module shape before code that crosses a function boundary | [`architect`](../architect/SKILL.md) |
 | Get several attempts at one brief, merged into the best one | [`arena`](../arena/SKILL.md) |
@@ -87,7 +87,6 @@ The default answer is **go**, which runs most of the others when its steps need 
 | Drive a browser, Electron, or web UI the way a user does, and capture proof | [`control-ui`](../control-ui/SKILL.md) |
 | Clean AI tells out of prose | [`unslop`](../unslop/SKILL.md) |
 | Write docs, an RFC, a README, a PR description, or a commit message to a standard | [`technical-writing`](../technical-writing/SKILL.md) |
-| Hear the last reply again in plain words | [`bro`](../bro/SKILL.md) |
 | Give agents a scripted way to drive the app and prove behavior | [`create-verification-skill`](../create-verification-skill/SKILL.md) |
 | Bring a verification skill and its feature map back in line with the app | [`maintain-verification-skill`](../maintain-verification-skill/SKILL.md) |
 | Formally verify a race, invariant, or other property that tests rarely reach | [`create-formal-verification-skill`](../create-formal-verification-skill/SKILL.md) |
@@ -112,7 +111,7 @@ Close calls:
 - `architect` implements right after it settles the design. Add "with checkpoint" to review the design before it writes code.
 - `interrogate` reviews the diff. `blast-radius` looks for breakage outside the diff and proves the one fact that makes the change safe.
 - `deslop` cleans code. `unslop` cleans prose.
-- `recall` rebuilds context across recent chats. `ketchup` covers only this chat since the user's last message. Resuming one specific chat or branch is the Session pickup playbook.
+- `recall` rebuilds context across recent chats. `catchup` covers only this chat since the user's last message. Resuming one specific chat or branch is the Session pickup playbook.
 - `figure-it-out` designs one rigorous run. The Orchestrate playbook runs a program that spans days and many PRs. The Autonomous run playbook drives one task to a finish condition.
 
 ## Playbooks and principles

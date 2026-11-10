@@ -226,7 +226,6 @@ export const commands: [string, string][] = [
   ['interrogate', 'Have other models attack a diff or design.'],
   ['deslop', 'Clean agent slop out of a diff before committing.'],
   ['unslop', 'Clean slop out of prose.'],
-  ['ketchup', 'Catch up on what happened while you were away.'],
-  ['bro', 'Restate the last message without jargon.'],
+  ['catchup', 'Catch up on what happened while you were away.'],
   ['reflect', 'Turn a lesson from the session into a skill change.'],
 ];
