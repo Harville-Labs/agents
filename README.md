@@ -48,7 +48,7 @@ Then run **setup-models** (`/hl:setup-models`, `/setup-models`, or `$setup-model
 scripts/install.sh            # --dry-run to preview, --uninstall to remove
 ```
 
-It adds an import of `AGENTS.md` to `~/.claude/CLAUDE.md` and a copy to `~/.codex/AGENTS.md`, between marker lines it manages. Claude Code reads the import live, so `git pull` updates it; rerun the script to refresh the Codex copy. For OpenCode, add the file's path to `instructions` in your `opencode.json`.
+It adds an import of `AGENTS.md` to `~/.claude/CLAUDE.md` and a copy to `~/.codex/AGENTS.md`, between marker lines it manages. Claude Code reads the import live, so `git pull` updates it; rerun the script to refresh the Codex copy. For OpenCode, add this file's absolute path to `instructions` in your `opencode.json` and install the plugin above. The instructions file supplies the standards; the plugin supplies **go**, its playbooks, and the subagents.
 
 ## Skills
 

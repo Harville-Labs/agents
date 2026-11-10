@@ -4,7 +4,7 @@
 
 | Change | Test |
 |---|---|
-| Bug fix | A test that reproduces the bug and fails before the fix |
+| Bug fix | A focused failing-before test when there is a clear, cheap local path; otherwise the closest executable regression check |
 | New behavior | Tests for the normal path and each documented edge or error case |
 | Pure decision logic (routing, validation, math) | Exhaustive unit tests, including which rule wins when several apply |
 | Protocol or API change | A round-trip test through the real server and client |
