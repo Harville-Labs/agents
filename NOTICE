@@ -1,9 +1,12 @@
-hl agents
+Harville Labs engineering standards
 
 The go skill, its playbooks and scripts, the principle-* skills, and most of the
 workflow skills and subagents in this repository are adapted from pstack
-("poteto mode") and its Claude Code port. They were rewritten for Claude Code,
-OpenCode, and Codex, and changed throughout. The original notice follows.
+("poteto mode") by Lauren Tan, https://github.com/cursor/plugins/tree/main/pstack,
+and its Claude Code port by Michael Denyer,
+https://github.com/michael-denyer/pstack-claude. They were rewritten for
+Claude Code, OpenCode, and Codex, and changed throughout. The original notice
+follows.
 
 ------------------------------------------------------------------------------
 

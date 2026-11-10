@@ -1,13 +1,14 @@
-# hl agents
+# Harville Labs engineering standards
 
 Engineering standards, skills, and subagents for AI coding agents and the people who work with them. They run the same way in Claude Code, OpenCode, and Codex.
 
 - **[AGENTS.md](AGENTS.md)**: the rules. Short enough to load into every session.
 - **[skills/](skills/)**: the **go** router and its playbooks, the engineering principles, the `*-best-practices` standards, and review and writing workflows.
 - **[agents/](agents/)**: subagents (`worker`, `reviewer`, `verifier`, `comment-auditor`).
+- **[site/](site/)**: an interactive guide to how it all works, built with Vite and published to GitHub Pages.
 - **[templates/](templates/)**: starting points for a new repository's `AGENTS.md`, PR template, ADR, Biome config, `.editorconfig`, and file-length check.
 
-The workflow skills take extreme inspiration from poteto mode (see [NOTICE](NOTICE)).
+The **go** router, its playbooks, the principles, and most of the workflow skills take extreme inspiration from Lauren Tan's (poteto) [pstack and poteto mode](https://github.com/cursor/plugins/tree/main/pstack), with help from Michael Denyer's [Claude Code port](https://github.com/michael-denyer/pstack-claude). Thank you, Lauren. It is some of the most careful thinking about working with coding agents we have seen, and this collection would not exist without it. See [NOTICE](NOTICE) for the license.
 
 ## How it fits together
 
