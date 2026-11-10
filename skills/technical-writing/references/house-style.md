@@ -21,11 +21,7 @@ Applies to docs, READMEs, comments, error messages, commit messages, PR descript
 
 ## Code comments
 
-Explain why: the constraint, the invariant, the bug it prevents, the ADR or issue behind it. A comment that restates the code gets deleted.
-
-```ts
-// Appending changes the cache prefix, so never reorder existing tools.
-```
+Most code gets no comment. Keep one only for a non-obvious reason the code can't show and you can't change: a license header, behavior forced by a dependency, platform, or protocol, a public API contract, or a link to the issue behind a constraint. A surprise in your own code is a reason to rename, extract, or reshape it, not to explain it. Narration, banners, commented-out code, and comments that excuse a workaround get deleted. The **no-comments** skill enforces this before review.
 
 ## Error messages
 

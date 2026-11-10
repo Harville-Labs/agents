@@ -3,7 +3,6 @@ import { join } from 'node:path';
 import { parse } from 'yaml';
 import { repo } from '../repo.ts';
 
-// The build runs from site/, so the plugin's files sit one level up.
 const root = join(process.cwd(), '..');
 const raw = (path: string) =>
   `${repo.replace('github.com', 'raw.githubusercontent.com')}/main/${path}`;
@@ -34,7 +33,6 @@ const sorted = (dir: string, pick: (f: string) => string | undefined) =>
     .filter((p): p is string => p !== undefined)
     .map(read);
 
-/** Every skill, playbook, and agent, read from the repository at build time. */
 export function catalog() {
   const skills = sorted('skills', (d) => `skills/${d}/SKILL.md`);
   return {

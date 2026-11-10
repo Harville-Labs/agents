@@ -14,8 +14,7 @@ const pstack = 'https://github.com/cursor/plugins/tree/main/pstack';
 const link =
   'text-foreground underline decoration-border-strong underline-offset-4 hover:decoration-foreground';
 
-// Both controls follow the shared harness and write back to it. ToggleGroup clears its value
-// when the active item is clicked again; a harness must stay picked, so that snaps back.
+// ToggleGroup clears its value when the active item is clicked again; keep the last pick.
 let choice = $derived<string | string[] | undefined>(harness.current);
 let tab = $derived<string>(harness.current);
 $effect(() => {

@@ -26,7 +26,6 @@ function saved(): Harness {
   }
 }
 
-/** The harness the reader picked. Every command on the page is spelled for it. */
 export const harness = $state({ current: saved() });
 
 export function pick(h: Harness) {
