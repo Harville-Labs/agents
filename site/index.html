@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <title>Harville Labs engineering standards</title>
+    <meta
+      name="description"
+      content="How the Harville Labs engineering standards, skills, and subagents work in Claude Code, OpenCode, and Codex."
+    />
+    <script type="module" src="/src/main.ts"></script>
+  </head>
+  <body class="bg-paper px-4 pt-12 pb-24 font-sans text-[16px] leading-relaxed text-ink antialiased sm:px-6">
+    <div class="mx-auto max-w-[760px] space-y-16 [&_h2]:flex [&_h2]:items-baseline [&_h2]:gap-3 [&_h2]:text-[1.7rem] [&_h2]:leading-tight [&_h2]:font-bold [&_h2>span]:font-mono [&_h2>span]:text-base [&_h2>span]:font-normal [&_h2>span]:text-mark">
+      <header id="top" class="space-y-5 border-b-2 border-ink pb-8">
+        <p class="font-mono text-sm text-dim">hl / guide</p>
+        <h1 class="text-4xl leading-[1.1] font-bold sm:text-5xl">Harville Labs engineering standards</h1>
+        <p class="max-w-[60ch] text-lg text-dim">
+          One set of engineering rules, workflow skills, and review subagents that behaves the same in Claude
+          Code, OpenCode, and Codex. This page shows how it works, which playbook fits which task, and the
+          principles behind each decision.
+        </p>
+        <div class="flex flex-wrap items-center gap-3">
+          <span class="text-sm text-dim">Commands for</span>
+          <fieldset class="inline-flex overflow-hidden rounded-sm border border-ink">
+            <legend class="sr-only">Harness</legend>
+            <button type="button" data-h="cc" class="cursor-pointer px-3 py-1.5 text-sm aria-pressed:bg-ink aria-pressed:text-paper">Claude Code</button>
+            <button type="button" data-h="oc" class="cursor-pointer border-l border-ink px-3 py-1.5 text-sm aria-pressed:bg-ink aria-pressed:text-paper">OpenCode</button>
+            <button type="button" data-h="cx" class="cursor-pointer border-l border-ink px-3 py-1.5 text-sm aria-pressed:bg-ink aria-pressed:text-paper">Codex</button>
+          </fieldset>
+        </div>
+      </header>
+
+      <section class="space-y-4">
+        <h2><span>01</span>Three layers, each loaded when needed</h2>
+        <p>
+          <strong>AGENTS.md</strong> holds the rules every session follows: read before you write, fix what you
+          trip over, prove it works, report honestly, and keep moving until something is irreversible. It is
+          short on purpose, because it loads into every session.
+        </p>
+        <p>
+          <strong>Skills</strong> hold the detail. The <code class="font-mono text-[0.9em]">*-best-practices</code>
+          skills load when a task touches a language or topic. Workflow skills such as deslop or interrogate run
+          when a step calls for them.
+        </p>
+        <p>
+          <strong>go</strong> ties it together. Hand it a task and it picks a playbook, copies the steps into the
+          todo list, and calls the other skills at the right moment.
+        </p>
+      </section>
+    </div>
+
+    <div class="mx-auto mt-16 max-w-[1040px] space-y-16 [&_h2]:flex [&_h2]:items-baseline [&_h2]:gap-3 [&_h2]:text-[1.7rem] [&_h2]:leading-tight [&_h2]:font-bold [&_h2>span]:font-mono [&_h2>span]:text-base [&_h2>span]:font-normal [&_h2>span]:text-mark">
+      <section class="space-y-6">
+        <h2 class="max-w-[760px]"><span>02</span>What happens when you run go</h2>
+        <ol class="grid grid-cols-[repeat(auto-fit,minmax(170px,1fr))] border-t border-l border-rule">
+          <li class="space-y-1 border-r border-b border-rule bg-card p-4"><p class="font-mono text-xs text-mark">1</p><p class="font-bold">Restate</p><p class="text-sm text-dim">Says your goal and the smallest change that meets it, before touching code.</p></li>
+          <li class="space-y-1 border-r border-b border-rule bg-card p-4"><p class="font-mono text-xs text-mark">2</p><p class="font-bold">Route</p><p class="text-sm text-dim">Matches the task to a playbook and copies its steps into todos.</p></li>
+          <li class="space-y-1 border-r border-b border-rule bg-card p-4"><p class="font-mono text-xs text-mark">3</p><p class="font-bold">Understand</p><p class="text-sm text-dim">Runs how over the subsystem, and architect when code crosses a function boundary.</p></li>
+          <li class="space-y-1 border-r border-b border-rule bg-card p-4"><p class="font-mono text-xs text-mark">4</p><p class="font-bold">Delegate</p><p class="text-sm text-dim">Hands code to worker subagents on a model size, not a model name.</p></li>
+          <li class="space-y-1 border-r border-b border-rule bg-card p-4"><p class="font-mono text-xs text-mark">5</p><p class="font-bold">Prove</p><p class="text-sm text-dim">Runs the real thing with control-cli or control-ui. A green unit test alone is not proof.</p></li>
+          <li class="space-y-1 border-r border-b border-rule bg-card p-4"><p class="font-mono text-xs text-mark">6</p><p class="font-bold">Clean</p><p class="text-sm text-dim">deslop before commit, no-comments before review.</p></li>
+          <li class="space-y-1 border-r border-b border-rule bg-card p-4"><p class="font-mono text-xs text-mark">7</p><p class="font-bold">Open a PR</p><p class="text-sm text-dim">Small ordered commits, a Why section, and docs in the same change.</p></li>
+          <li class="space-y-1 border-r border-b border-rule bg-card p-4"><p class="font-mono text-xs text-mark">8</p><p class="font-bold">Babysit, ship</p><p class="text-sm text-dim">Drives review and CI to green, then lands only what was verified.</p></li>
+        </ol>
+      </section>
+
+      <section class="space-y-6">
+        <div class="max-w-[760px] space-y-3">
+          <h2><span>03</span>Which playbook fits?</h2>
+          <p class="text-dim">
+            Pick what you are trying to do. You never name the playbook yourself; go picks it from how you
+            describe the task. Knowing the map helps you phrase the request.
+          </p>
+        </div>
+        <div class="grid gap-4 md:grid-cols-[260px_minmax(0,1fr)]">
+          <fieldset id="tasks" class="grid content-start gap-1.5"></fieldset>
+          <div id="playbook" class="min-w-0 space-y-4 rounded-sm border border-rule bg-card p-6" aria-live="polite"></div>
+        </div>
+        <p id="other" class="max-w-[760px] text-sm text-dim"></p>
+      </section>
+    </div>
+
+    <div class="mx-auto mt-16 max-w-[760px] space-y-16 [&_h2]:flex [&_h2]:items-baseline [&_h2]:gap-3 [&_h2]:text-[1.7rem] [&_h2]:leading-tight [&_h2]:font-bold [&_h2>span]:font-mono [&_h2>span]:text-base [&_h2>span]:font-normal [&_h2>span]:text-mark">
+      <section class="space-y-5">
+        <h2><span>04</span>The principles</h2>
+        <p>
+          Each principle is its own small skill. go reads the ones that apply and names them in its reply, along
+          with the choice each one changed. You can steer with them too: "apply subtract before you add". Test
+          yourself on when each one fires.
+        </p>
+        <div class="space-y-4 rounded-sm border border-rule bg-card p-6">
+          <div class="flex justify-between font-mono text-sm text-dim"><span id="qcount"></span><span id="qscore"></span></div>
+          <p id="qtext" class="text-lg font-medium"></p>
+          <div id="qans" class="grid gap-2 sm:grid-cols-3"></div>
+          <p id="qfb" class="min-h-[1.6em] text-[15px]" aria-live="polite"></p>
+          <button id="qnext" type="button" class="cursor-pointer rounded-sm bg-ink px-4 py-2 text-sm font-medium text-paper"></button>
+        </div>
+        <details>
+          <summary class="cursor-pointer font-medium">All 24 principles, by group</summary>
+          <div id="principles" class="mt-5 grid gap-6 sm:grid-cols-2"></div>
+        </details>
+      </section>
+
+      <section class="space-y-5">
+        <h2><span>05</span>Sizes, not model names</h2>
+        <p>
+          No skill names a model. A skill asks for a size, and you map each size to a model you have by running
+          <code class="font-mono text-[0.9em]" data-cmd="setup-models"></code>. It writes
+          <code class="font-mono text-[0.9em]">~/.config/hl/models.md</code> with a section per harness. A
+          missing line, or <code class="font-mono text-[0.9em]">inherit</code>, runs on the session's own model.
+        </p>
+        <div class="overflow-x-auto rounded-sm border border-rule bg-card">
+          <table class="w-full text-left text-[15px]">
+            <thead class="font-mono text-xs text-dim">
+              <tr class="border-b border-rule"><th class="py-2.5 pr-4 pl-4 font-normal">size</th><th class="py-2.5 pr-4 font-normal">runs</th><th class="py-2.5 pr-4 font-normal">typical pick</th></tr>
+            </thead>
+            <tbody class="[&_td]:py-2.5 [&_td]:pr-4 [&_td]:align-top [&_td:first-child]:pl-4 [&_td:first-child]:font-mono [&_td:first-child]:text-mark [&_tr]:border-b [&_tr]:border-rule [&_tr:last-child]:border-0">
+              <tr><td>nano</td><td>Trivial edits, read-only explorers, tool checks</td><td>Your fastest, cheapest model</td></tr>
+              <tr><td>small</td><td>Swarm workers and routine code</td><td>A fast code model</td></tr>
+              <tr><td>medium</td><td>Code delegates in feature, bug fix, refactoring, perf</td><td>A strong code model</td></tr>
+              <tr><td>large</td><td>The hardest changes, judgment, prose</td><td>Your strongest model</td></tr>
+              <tr><td>panel</td><td>arena, architect, and interrogate runners</td><td>Two or more, from different families</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <pre class="overflow-x-auto rounded-sm border border-rule bg-card p-4 font-mono text-sm leading-6">budget: large
+
+## claude-code
+nano: &lt;model&gt;
+medium: &lt;model&gt;
+panel: &lt;model&gt;, &lt;model&gt;
+
+## opencode
+(same sizes)
+
+## codex
+(same sizes)</pre>
+        <p class="text-dim">
+          The panel matters. When two models from the same family agree, that is weaker evidence, and go says so.
+        </p>
+      </section>
+
+      <section class="space-y-5">
+        <h2><span>06</span>When it stops to ask</h2>
+        <div class="grid gap-3 sm:grid-cols-2">
+          <div class="space-y-2 rounded-sm border-l-4 border-go bg-go-soft p-4">
+            <h3 class="font-bold text-go">Goes ahead</h3>
+            <ul class="list-disc space-y-1 pl-5 text-[15px]">
+              <li>Commits, branches, pushes its own branches</li>
+              <li>Opens PRs and answers review threads</li>
+              <li>Reversible choices it can test instead of ask about</li>
+              <li>Fixes what it trips over, each in its own commit</li>
+            </ul>
+          </div>
+          <div class="space-y-2 rounded-sm border-l-4 border-mark bg-mark-soft p-4">
+            <h3 class="font-bold text-mark">Always pauses</h3>
+            <ul class="list-disc space-y-1 pl-5 text-[15px]">
+              <li>Force-push to a shared branch</li>
+              <li>Deploys</li>
+              <li>Deleting data</li>
+              <li>Messages to customers</li>
+            </ul>
+          </div>
+        </div>
+        <p>
+          Say "going to bed" or "run until done" and it keeps working, with a decision log from show-me-your-work
+          to review later. A repository's own AGENTS.md can add stop points.
+        </p>
+      </section>
+
+      <section class="space-y-5">
+        <h2><span>07</span>Skills you will type yourself</h2>
+        <p class="text-dim">go calls most skills for you. These are the ones worth knowing by name.</p>
+        <div class="overflow-x-auto rounded-sm border border-rule bg-card">
+          <table class="w-full text-left text-[15px]"><tbody id="commands"></tbody></table>
+        </div>
+      </section>
+
+      <section class="space-y-5">
+        <h2><span>08</span>Install</h2>
+        <pre id="install" class="overflow-x-auto rounded-sm border border-rule bg-card p-4 font-mono text-sm leading-6"></pre>
+        <p>
+          Then run <code class="font-mono text-[0.9em]" data-cmd="setup-models"></code>. To load the rules into
+          every session on your machine, clone the
+          <a class="underline decoration-mark underline-offset-2" href="https://github.com/Harville-Labs/agents">repository</a>
+          and run <code class="font-mono text-[0.9em]">scripts/install.sh</code>.
+        </p>
+      </section>
+
+      <section class="space-y-4 border-t-2 border-ink pt-8">
+        <h2><span>09</span>Thanks</h2>
+        <p>
+          go, its playbooks, the principles, and most of the workflow skills take extreme inspiration from Lauren
+          Tan's (poteto)
+          <a class="underline decoration-mark underline-offset-2" href="https://github.com/cursor/plugins/tree/main/pstack">pstack and poteto mode</a>,
+          with help from Michael Denyer's
+          <a class="underline decoration-mark underline-offset-2" href="https://github.com/michael-denyer/pstack-claude">Claude Code port</a>.
+          Thank you, Lauren. It is some of the most careful thinking about working with coding agents we have
+          seen, and this collection would not exist without it.
+        </p>
+      </section>
+    </div>
+  </body>
+</html>

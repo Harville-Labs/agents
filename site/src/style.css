@@ -1,0 +1,46 @@
+@import "tailwindcss";
+@import "@fontsource/ibm-plex-sans/400.css";
+@import "@fontsource/ibm-plex-sans/500.css";
+@import "@fontsource/ibm-plex-sans/700.css";
+@import "@fontsource/ibm-plex-mono/400.css";
+@import "@fontsource/ibm-plex-mono/500.css";
+
+/* Colors are variables so one set of utilities serves both themes. */
+:root {
+  --paper: #f3efe6;
+  --card: #fbf9f4;
+  --ink: #1d1b16;
+  --dim: #6b655a;
+  --rule: #d9d2c3;
+  --mark: #c2410c;
+  --mark-soft: #f6e1d3;
+  --go: #3f6b3a;
+  --go-soft: #e3ead9;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #15140f;
+    --card: #1d1c16;
+    --ink: #ebe6da;
+    --dim: #a29b8c;
+    --rule: #34312a;
+    --mark: #f08a4b;
+    --mark-soft: #3a2417;
+    --go: #9cc48f;
+    --go-soft: #1f2a1b;
+  }
+}
+
+@theme {
+  --font-sans: "IBM Plex Sans", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  --color-paper: var(--paper);
+  --color-card: var(--card);
+  --color-ink: var(--ink);
+  --color-dim: var(--dim);
+  --color-rule: var(--rule);
+  --color-mark: var(--mark);
+  --color-mark-soft: var(--mark-soft);
+  --color-go: var(--go);
+  --color-go-soft: var(--go-soft);
+}
