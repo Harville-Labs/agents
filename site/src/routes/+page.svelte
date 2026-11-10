@@ -31,11 +31,10 @@ const tabs = $derived(
 );
 </script>
 
-<a
-  href={repo}
-  class="absolute top-4 right-4 text-foreground-muted lowercase hover:text-foreground sm:top-6 sm:right-6"
-  >github</a
->
+<nav class="absolute top-4 right-4 flex gap-4 text-foreground-muted lowercase sm:top-6 sm:right-6">
+  <a href="guide/" class="hover:text-foreground">field guide</a>
+  <a href={repo} class="hover:text-foreground">github</a>
+</nav>
 
 <main
   class="mx-auto max-w-[680px] space-y-10 px-4 pt-16 pb-28 text-[15px] leading-relaxed lowercase sm:px-6 [&_button]:lowercase [&_code]:normal-case [&_pre]:normal-case"
