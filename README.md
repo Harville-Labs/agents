@@ -33,6 +33,22 @@ OpenCode:
 opencode plugin add "hl@git+https://github.com/Harville-Labs/agents.git"
 ```
 
+OpenCode keeps agent permissions in `opencode.jsonc`. Configure the plugin's `worker`, `reviewer`, `verifier`, or `comment-auditor` by ID under `agents`. For example, to ask before the worker pushes:
+
+```jsonc
+{
+  "agents": {
+    "worker": {
+      "permissions": [
+        { "action": "shell", "resource": "git push *", "effect": "ask" }
+      ]
+    }
+  }
+}
+```
+
+Put this in the project config for one repository or `~/.config/opencode/opencode.jsonc` for all projects. The plugin does not replace these permission rules. See [OpenCode's permission rules](https://opencode.ai/docs/permissions).
+
 Codex:
 
 ```sh

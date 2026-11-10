@@ -189,6 +189,11 @@ const tabs = $derived(
         <Code>opencode.json</Code>. the plugin provides the skills and subagents; the instructions file provides
         the rules.
       </p>
+      <p>
+        set permissions for <Code>worker</Code>, <Code>reviewer</Code>, <Code>verifier</Code>, or
+        <Code>comment-auditor</Code> under <Code>agents.&lt;id&gt;.permissions</Code> in
+        <Code>opencode.jsonc</Code>. each subagent uses its own rules.
+      </p>
     {:else}
       <p>run <Code>scripts/install.sh</Code> to load the rules.</p>
     {/if}
