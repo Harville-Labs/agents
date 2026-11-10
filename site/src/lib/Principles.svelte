@@ -1,6 +1,7 @@
 <script lang="ts">
 import { Accordion } from '@sivir-ui/svelte';
 import { principles } from './data.ts';
+import { quietLink, skillUrl } from './repo.ts';
 </script>
 
 <Accordion.Root type="multiple">
@@ -11,7 +12,11 @@ import { principles } from './data.ts';
         <dl class="space-y-2.5 pb-2">
           {#each list as [name, what] (name)}
             <div>
-              <dt><code class="font-mono text-[13px]">{name}</code></dt>
+              <dt>
+                <a class={quietLink} href={skillUrl(`principle-${name}`)}>
+                  <code class="font-mono text-[13px]">{name}</code>
+                </a>
+              </dt>
               <dd class="text-foreground-muted">{what}</dd>
             </div>
           {/each}

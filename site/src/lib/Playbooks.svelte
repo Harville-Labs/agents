@@ -2,6 +2,7 @@
 import { Badge, CodeBlock, ToggleGroup, Typography } from '@sivir-ui/svelte';
 import { otherPlaybooks, playbooks } from './data.ts';
 import { cmd } from './harness.svelte.ts';
+import { quietLink, skillUrl } from './repo.ts';
 
 // ToggleGroup clears its value when the active item is clicked again; keep the last pick.
 let chosen = $state<string | string[] | undefined>(playbooks[0].name);
@@ -41,7 +42,7 @@ $effect(() => {
       <div class="flex flex-wrap items-center gap-1.5">
         <span class="mr-1 text-foreground-muted">calls</span>
         {#each last.skills as s (s)}
-          <Badge variant="secondary">{s}</Badge>
+          <a class={quietLink} href={skillUrl(s)}><Badge variant="secondary">{s}</Badge></a>
         {/each}
       </div>
     {/if}

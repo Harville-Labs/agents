@@ -6,6 +6,7 @@ import { harness, harnesses, installs, isHarness, pick } from '../lib/harness.sv
 import Playbooks from '../lib/Playbooks.svelte';
 import Principles from '../lib/Principles.svelte';
 import Quiz from '../lib/Quiz.svelte';
+import { repo } from '../lib/repo.ts';
 import Section from '../lib/Section.svelte';
 
 const { InlineCode: Code } = Typography;
@@ -29,6 +30,12 @@ const tabs = $derived(
   harnesses.map((h) => ({ label: h.label, lang: 'bash', value: h.value, code: installs[h.value] })),
 );
 </script>
+
+<a
+  href={repo}
+  class="absolute top-4 right-4 text-foreground-muted lowercase hover:text-foreground sm:top-6 sm:right-6"
+  >github</a
+>
 
 <main
   class="mx-auto max-w-[680px] space-y-10 px-4 pt-16 pb-28 text-[15px] leading-relaxed lowercase sm:px-6 [&_button]:lowercase [&_code]:normal-case [&_pre]:normal-case"
@@ -173,7 +180,7 @@ const tabs = $derived(
     <CodeBlock {tabs} bind:value={tab} />
     <p>
       then run <Cmd name="setup-models" />. to load the rules into every session on your machine, clone the
-      <a class={link} href="https://github.com/Harville-Labs/agents">repository</a> and run
+      <a class={link} href={repo}>repository</a> and run
       <Code>scripts/install.sh</Code>.
     </p>
   </Section>
