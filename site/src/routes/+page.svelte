@@ -165,7 +165,9 @@ const tabs = $derived(
   </Section>
 
   <Section id="commands" title="skills you will type yourself">
-    <p class="text-foreground-muted">go calls most skills for you. these are the ones worth knowing by name.</p>
+    <p class="text-foreground-muted">go calls most skills for you. these are the ones worth knowing by name. the
+      <a class={link} href="guide/">field guide</a> covers every skill, playbook, and principle in depth.
+    </p>
     <dl class="divide-y divide-border">
       {#each commands as [name, what] (name)}
         <div class="grid gap-1 py-2.5 sm:grid-cols-[11rem_1fr] sm:gap-4">
