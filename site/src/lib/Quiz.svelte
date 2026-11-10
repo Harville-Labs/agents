@@ -42,7 +42,7 @@ const tone = (o: string) =>
     {#each s.options as o (o)}
       <Button
         variant="outline"
-        class="h-auto justify-start py-2 font-mono text-[13px] normal-case {tone(o)}"
+        class="h-auto min-w-0 justify-start py-2 text-left font-mono text-[13px] whitespace-normal normal-case {tone(o)}"
         onclick={() => answer(o)}
       >
         {o}
