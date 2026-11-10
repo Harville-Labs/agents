@@ -27,7 +27,7 @@ Record:
 - Pull request or commit URL
 - Build and environment inputs shared by both runs
 
-Use regular `github.com` pull request links.
+Use the forge's full pull request or merge request links.
 
 ## Measure the baseline
 

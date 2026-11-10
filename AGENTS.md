@@ -60,7 +60,7 @@ More in the [security-best-practices](skills/security-best-practices/SKILL.md) s
 
 ## Git and pull requests
 
-- Work from a GitHub issue when one exists. Branch as `<type>/<issue>-<slug>`, for example `fix/31-ollama-timeout`.
+- Work from a GitHub or GitLab issue when one exists. Branch as `<type>/<issue>-<slug>`, for example `fix/31-ollama-timeout`.
 - [Conventional Commits](https://www.conventionalcommits.org): `feat(router): add latency budget rule`. The scope is the package, app, or area. Imperative mood, no trailing period.
 - One logical change per PR. Link the issue (`Closes #31`) and fill in **How it was tested** with commands you actually ran.
 - Docs, changelog, and config reference change in the same PR as the behavior they describe.
