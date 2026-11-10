@@ -29,4 +29,5 @@ This applies to OpenCode v2. Read it once per session before the first tool call
 ## Paths
 
 - The plugin installs under `~/.cache/opencode/`. Never edit a skill there. Change it through a PR to the repository this plugin was installed from.
+- Set permissions for `worker`, `reviewer`, `verifier`, or `comment-auditor` under `agents.<id>.permissions` in a project or global `opencode.jsonc`. Use OpenCode v2's ordered rules with `action`, `resource`, and `effect`; the plugin preserves them when it registers each agent. Subagents use their own rules, not their parent's.
 - Sessions are stored in a database, not files. List them with `opencode session list`, and print one as JSON with `opencode export <sessionID>`. Read only this workspace's sessions.
