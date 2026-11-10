@@ -4,22 +4,24 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="color-scheme" content="light dark" />
-    <title>Harville Labs engineering standards</title>
+    <title>hl plugin</title>
     <meta
       name="description"
-      content="How the Harville Labs engineering standards, skills, and subagents work in Claude Code, OpenCode, and Codex."
+      content="A guide to the hl plugin for Claude Code, OpenCode, and Codex: engineering standards, workflow skills, and review subagents, built on Lauren Tan's (poteto) pstack."
     />
     <script type="module" src="/src/main.ts"></script>
   </head>
   <body class="bg-paper px-4 pt-12 pb-24 font-sans text-[16px] leading-relaxed text-ink antialiased sm:px-6">
     <div class="mx-auto max-w-[760px] space-y-16 [&_h2]:flex [&_h2]:items-baseline [&_h2]:gap-3 [&_h2]:text-[1.7rem] [&_h2]:leading-tight [&_h2]:font-bold [&_h2>span]:font-mono [&_h2>span]:text-base [&_h2>span]:font-normal [&_h2>span]:text-mark">
       <header id="top" class="space-y-5 border-b-2 border-ink pb-8">
-        <p class="font-mono text-sm text-dim">hl / guide</p>
-        <h1 class="text-4xl leading-[1.1] font-bold sm:text-5xl">Harville Labs engineering standards</h1>
+        <p class="font-mono text-sm text-dim">Harville Labs engineering standards</p>
+        <h1 class="text-4xl leading-[1.1] font-bold sm:text-5xl">hl plugin</h1>
         <p class="max-w-[60ch] text-lg text-dim">
           One set of engineering rules, workflow skills, and review subagents that behaves the same in Claude
-          Code, OpenCode, and Codex. This page shows how it works, which playbook fits which task, and the
-          principles behind each decision.
+          Code, OpenCode, and Codex. It is built on Lauren Tan's (poteto)
+          <a class="text-ink underline underline-offset-2" href="https://github.com/cursor/plugins/tree/main/pstack">pstack</a>.
+          This page shows how it works, which playbook fits which task, and the principles behind each
+          decision.
         </p>
         <div class="flex flex-wrap items-center gap-3">
           <span class="text-sm text-dim">Commands for</span>
@@ -184,7 +186,7 @@ panel: &lt;model&gt;, &lt;model&gt;
         <p>
           Then run <code class="font-mono text-[0.9em]" data-cmd="setup-models"></code>. To load the rules into
           every session on your machine, clone the
-          <a class="underline decoration-mark underline-offset-2" href="https://github.com/Harville-Labs/agents">repository</a>
+          <a class="underline underline-offset-2" href="https://github.com/Harville-Labs/agents">repository</a>
           and run <code class="font-mono text-[0.9em]">scripts/install.sh</code>.
         </p>
       </section>
@@ -194,9 +196,9 @@ panel: &lt;model&gt;, &lt;model&gt;
         <p>
           go, its playbooks, the principles, and most of the workflow skills take extreme inspiration from Lauren
           Tan's (poteto)
-          <a class="underline decoration-mark underline-offset-2" href="https://github.com/cursor/plugins/tree/main/pstack">pstack and poteto mode</a>,
+          <a class="underline underline-offset-2" href="https://github.com/cursor/plugins/tree/main/pstack">pstack and poteto mode</a>,
           with help from Michael Denyer's
-          <a class="underline decoration-mark underline-offset-2" href="https://github.com/michael-denyer/pstack-claude">Claude Code port</a>.
+          <a class="underline underline-offset-2" href="https://github.com/michael-denyer/pstack-claude">Claude Code port</a>.
           Thank you, Lauren. It is some of the most careful thinking about working with coding agents we have
           seen, and this collection would not exist without it.
         </p>
