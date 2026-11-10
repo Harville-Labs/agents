@@ -9,7 +9,7 @@ Apply the **test-behavior-not-implementation** and **prove-it-works** principle 
 
 | Rule | Summary |
 |------|---------|
-| Bug fix | A test that reproduces the bug and fails before the fix. |
+| Bug fix | A focused failing-before test when there is a clear, cheap local path. Otherwise use the closest executable regression check and explain why a new test was impractical. |
 | New behavior | The normal path plus each documented edge and error case. |
 | Pure decision logic | Exhaustive unit tests, including which rule wins when several apply. |
 | Protocol or API change | A round trip through the real server and client. |

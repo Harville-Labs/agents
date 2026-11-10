@@ -48,7 +48,7 @@ const tabs = $derived(
     </Typography.Text>
     <div class="flex flex-wrap items-center gap-3">
       <fieldset class="contents">
-      <legend class="float-left mr-3 text-foreground-muted">commands for</legend>
+      <legend class="float-left mr-3 text-foreground-muted">skills for</legend>
       <ToggleGroup.Root bind:value={choice}>
         {#each harnesses as h (h.value)}
           <ToggleGroup.Item value={h.value}>{h.label}</ToggleGroup.Item>
@@ -60,9 +60,9 @@ const tabs = $derived(
 
   <Section id="layers" title="three layers, each loaded when needed">
     <p>
-      <Code>AGENTS.md</Code> holds the rules every session follows: read before you write, fix what you trip
-      over, prove it works, report honestly, and keep moving until something is irreversible. it is short on
-      purpose, because it loads into every session.
+      <Code>AGENTS.md</Code> holds the rules every session follows: read before you write, keep the change
+      focused, prove it works, report honestly, and keep moving until something is irreversible. it is short
+      on purpose, because it loads into every session.
     </p>
     <p>
       skills hold the detail. the <Code>*-best-practices</Code> skills load when a task touches a language or
@@ -144,7 +144,7 @@ const tabs = $derived(
           <li>commits, branches, pushes its own branches</li>
           <li>opens prs and answers review threads</li>
           <li>reversible choices it can test instead of ask about</li>
-          <li>fixes what it trips over, each in its own commit</li>
+          <li>fixes problems that block verification or that its change caused</li>
         </ul>
       </div>
       <div class="space-y-2">
@@ -181,9 +181,17 @@ const tabs = $derived(
     <CodeBlock {tabs} bind:value={tab} />
     <p>
       then run <Cmd name="setup-models" />. to load the rules into every session on your machine, clone the
-      <a class={link} href={repo}>repository</a> and run
-      <Code>scripts/install.sh</Code>.
+      <a class={link} href={repo}>repository</a>.
     </p>
+    {#if harness.current === 'oc'}
+      <p>
+        add the repository's absolute <Code>AGENTS.md</Code> path to <Code>instructions</Code> in
+        <Code>opencode.json</Code>. the plugin provides the skills and subagents; the instructions file provides
+        the rules.
+      </p>
+    {:else}
+      <p>run <Code>scripts/install.sh</Code> to load the rules.</p>
+    {/if}
   </Section>
 
   <Section id="thanks" title="thanks">

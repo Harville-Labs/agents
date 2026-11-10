@@ -19,7 +19,7 @@ How the user types a skill depends on where they run:
 | Harness | Type a skill as | Example |
 |---|---|---|
 | Claude Code | `/hl:<name>` | `/hl:go fix the flaky login test` |
-| OpenCode | `/<name>`, or ask for it by name | `/go fix the flaky login test` |
+| OpenCode | `@<name>`, or ask for it by name | `@go fix the flaky login test` |
 | Codex | `$<name>` | `$go fix the flaky login test` |
 
 The recipes below use the Claude Code form. Translate them for the user's harness.

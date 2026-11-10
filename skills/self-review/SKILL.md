@@ -30,13 +30,13 @@ Go through each list. Fix what you find, then rerun the full check command.
 ## Scope and style
 
 - [ ] The feature is only what was requested. No drive-by renames or restructuring.
-- [ ] Existing problems you ran into (lint warnings, failing tests, bugs) are fixed in their own commits and listed in your report, or named with the reason you left them.
-- [ ] Reads like the code around it: naming, structure, comment density.
+- [ ] Existing problems that blocked verification or were caused by this change are fixed in separate commits. Unrelated problems are reported without widening the task.
+- [ ] Reads like the code around it: naming and structure. Needless comments are removed even when nearby code has them.
 - [ ] No file you touched is over 500 lines (the **code-best-practices** skill).
 - [ ] No duplicated logic: you searched for an existing helper or component before writing one, and nothing you wrote repeats logic that already exists.
 - [ ] Nothing hand-rolled that a well-maintained library already does (parsing, validation, dates, auth, accessible widgets).
 - [ ] The repository's toolchain is the standard one: TypeScript, Vite, and Biome for web; uv and Ruff for Python. No `pip`, `requirements.txt`, ESLint, Prettier, or `.js` sources slipped in.
-- [ ] Comments say why, not what. No leftover debug output, commented-out code, or TODOs without an issue number.
+- [ ] Comments are limited to non-obvious reasons the code cannot show. No leftover debug output, commented-out code, or TODOs without an issue number.
 - [ ] No new dependency without a reason in the PR ([add-dependency](../add-dependency/SKILL.md)).
 - [ ] Generated files were regenerated, not edited.
 

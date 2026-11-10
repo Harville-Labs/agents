@@ -40,7 +40,7 @@ codex plugin marketplace add Harville-Labs/agents
 codex plugin add hl@harville-labs
 ```
 
-Then run **setup-models** (`/hl:setup-models`, `/setup-models`, or `$setup-models`) to map the model sizes (nano, small, medium, large, and the review panel) to models you have. Skills never name a model; each person picks their own.
+Then run **setup-models** (`/hl:setup-models` in Claude Code, `@setup-models` in OpenCode, or `$setup-models` in Codex) to map the model sizes (nano, small, medium, large, and the review panel) to models you have. Skills never name a model; each person picks their own.
 
 **Standards** (optional): to load [AGENTS.md](AGENTS.md) into every session on your machine, clone this repository and run
 
@@ -48,11 +48,11 @@ Then run **setup-models** (`/hl:setup-models`, `/setup-models`, or `$setup-model
 scripts/install.sh            # --dry-run to preview, --uninstall to remove
 ```
 
-It adds an import of `AGENTS.md` to `~/.claude/CLAUDE.md` and a copy to `~/.codex/AGENTS.md`, between marker lines it manages. Claude Code reads the import live, so `git pull` updates it; rerun the script to refresh the Codex copy. For OpenCode, add the file's path to `instructions` in your `opencode.json`.
+It adds an import of `AGENTS.md` to `~/.claude/CLAUDE.md` and a copy to `~/.codex/AGENTS.md`, between marker lines it manages. Claude Code reads the import live, so `git pull` updates it; rerun the script to refresh the Codex copy. For OpenCode, add this file's absolute path to `instructions` in your `opencode.json` and install the plugin above. The instructions file supplies the standards; the plugin supplies **go**, its playbooks, and the subagents.
 
 ## Skills
 
-Type a skill as `/hl:<name>` in Claude Code, `/<name>` in OpenCode, or `$<name>` in Codex. `/hl:help` answers questions about any of them.
+Type a skill as `/hl:<name>` in Claude Code, `@<name>` in OpenCode, or `$<name>` in Codex. The **help** skill answers questions about any of them.
 
 | Skill | Use it to |
 |---|---|

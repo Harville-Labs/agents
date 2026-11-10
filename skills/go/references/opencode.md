@@ -8,7 +8,7 @@ This applies to OpenCode v2. Read it once per session before the first tool call
 |---|---|
 | Ask the user | The `question` tool. Subagents don't have it by default, so a subagent puts its question in its report. |
 | Track todos | `todowrite` when the session has it. Without it, keep the list in your reply and update it at each phase. |
-| Load a skill | The `skill` tool with the skill's id, such as `go`. |
+| Load a skill | The `skill` tool with the skill's id, such as `go`. Users mention skills as `@go`; `/go` names a command instead. |
 | Spawn a subagent | The `subagent` tool. See Subagents. |
 | Scheduler | OpenCode has none. Use a background subagent that watches the event and notifies you when it finishes. |
 | Open or view a PR | The forge CLI the playbook gives (`gh` or `glab`). |
