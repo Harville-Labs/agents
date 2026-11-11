@@ -32,6 +32,7 @@ const NOT_THE_AUTHORS_TO_FIX = new Set([
 	"not_approved",
 	"not_open",
 	"ci_still_running",
+	"ci_must_pass",
 	"merge_request_blocked",
 	"merge_time",
 ]);
@@ -156,15 +157,17 @@ export function parseJob(
 export function parseDownstream(
 	value: unknown,
 	path: string,
+	parentProject: string,
 ): string | null {
 	const downstream = record(value, path).downstream_pipeline;
 	if (downstream === null || downstream === undefined) return null;
 	const object = record(downstream, `${path}.downstream_pipeline`);
-	const projectId = number(
-		object.project_id,
-		`${path}.downstream_pipeline.project_id`,
-	);
-	return `projects/${projectId}/pipelines/${number(object.id, `${path}.downstream_pipeline.id`)}`;
+	const id = number(object.id, `${path}.downstream_pipeline.id`);
+	const project =
+		typeof object.project_id === "number"
+			? `projects/${object.project_id}`
+			: parentProject;
+	return `${project}/pipelines/${id}`;
 }
 
 function comment(note: Record<string, unknown>, path: string): T.ReviewComment {

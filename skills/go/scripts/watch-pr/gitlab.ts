@@ -93,6 +93,7 @@ export class GlabGitLabReader implements T.ForgeReader {
 			);
 		const checks = T.nonEmpty(
 			await this.pipelineChecks(
+				project(facts.context),
 				`${project(facts.context)}/pipelines/${head.id}`,
 				"",
 				new Set(),
@@ -103,6 +104,7 @@ export class GlabGitLabReader implements T.ForgeReader {
 		return { source: "gitlab-pipeline", checks };
 	}
 	private async pipelineChecks(
+		owner: string,
 		pipeline: string,
 		prefix: string,
 		seen: Set<string>,
@@ -121,11 +123,17 @@ export class GlabGitLabReader implements T.ForgeReader {
 			const path = `${pipeline} bridges[${index}]`;
 			const check = named(bridge, path);
 			checks.push(check);
-			const child = parseDownstream(bridge, path);
+			const child = parseDownstream(bridge, path, owner);
 			if (child === null || seen.has(child)) continue;
 			seen.add(child);
+			const childOwner = child.slice(0, child.lastIndexOf("/pipelines/"));
 			downstream.push(
-				...(await this.pipelineChecks(child, `${check.name} / `, seen)),
+				...(await this.pipelineChecks(
+					childOwner,
+					child,
+					`${check.name} / `,
+					seen,
+				)),
 			);
 		}
 		return [...checks, ...downstream];

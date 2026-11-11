@@ -348,7 +348,6 @@ describe("GitLab merge status gate", () => {
 			"status_checks_must_pass",
 			"jira_association_missing",
 			"title_regex",
-			"ci_must_pass",
 			"a_status_gitlab_adds_later",
 		])
 			expect(classifyPr(await gitlab(status))).toMatchObject({
@@ -357,13 +356,14 @@ describe("GitLab merge status gate", () => {
 			});
 	});
 
-	it("stays ready while only approvals, dependencies, or the merge time hold it", async () => {
+	it("stays ready while approvals, dependencies, the merge time, or pipeline status the checks already cover hold it", async () => {
 		for (const status of [
 			"mergeable",
 			"not_approved",
 			"merge_request_blocked",
 			"merge_time",
 			"ci_still_running",
+			"ci_must_pass",
 		])
 			expect(classifyPr(await gitlab(status)).kind).toBe("ready");
 	});
@@ -386,7 +386,7 @@ describe("GitLab merge status gate", () => {
 
 	it("waits on pending checks before judging the merge status", async () => {
 		expect(
-			classifyPr(await gitlab("ci_must_pass", [pendingCheck()])).kind,
+			classifyPr(await gitlab("need_rebase", [pendingCheck()])).kind,
 		).toBe("waiting");
 	});
 });

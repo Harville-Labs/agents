@@ -99,8 +99,6 @@ type StatusQueryBlocker = {
 };
 const GITLAB_STATUS_ACTION: Readonly<Record<string, string>> = {
 	need_rebase: "rebase the source branch with `glab mr rebase <n>`, then rearm",
-	ci_must_pass:
-		"the head pipeline has not passed; read it with `glab ci status --branch <source branch>`",
 	status_checks_must_pass:
 		"external status checks have not passed; read them with `glab api projects/:id/merge_requests/<n>/status_checks`",
 	commits_status: "the source branch has no commits; push the change",
