@@ -73,7 +73,7 @@ describe("GitLab merge request facts", () => {
 	});
 
 	it("treats a merge status GitLab is still computing as unknown", () => {
-		for (const status of ["checking", "unchecked", "approvals_syncing"])
+		for (const status of ["checking", "unchecked", "approvals_syncing", "preparing"])
 			expect(
 				parseMergeRequest(
 					mergeRequest({ detailed_merge_status: status }),

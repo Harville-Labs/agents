@@ -1,3 +1,4 @@
+import { blocksAuthor } from "./gitlab-parse.ts";
 import type { WatchClock } from "./poll.ts";
 import type * as T from "./types.ts";
 import { nonEmpty } from "./types.ts";
@@ -121,8 +122,11 @@ function gateReason(
 	if (row.kind === "merged") return null;
 	if (row.kind === "closed") return "closed-without-merge";
 	if (row.facts.isDraft && !allowDraft) return "draft-pr";
-	return row.facts.reviewDecision === "CHANGES_REQUESTED"
-		? "changes-requested"
+	if (row.facts.reviewDecision === "CHANGES_REQUESTED")
+		return "changes-requested";
+	const state = row.facts.mergeState;
+	return state.forge === "gitlab" && blocksAuthor(state.detailedMergeStatus)
+		? "forge-merge-status"
 		: null;
 }
 function gateBlocker(
@@ -131,11 +135,11 @@ function gateBlocker(
 ): T.MergeBlocker | null {
 	const reason = gateReason(row, allowDraft);
 	return reason === null ||
-		(reason === "draft-pr" &&
+		((reason === "draft-pr" || reason === "forge-merge-status") &&
 			row.kind === "open" &&
 			row.ci.kind === "ci-pending")
 		? null
-		: { kind: "merge-gate", pr: row.context, reason };
+		: { kind: "merge-gate", pr: row.context, reason, facts: row.facts };
 }
 function readyContribution(
 	row: T.PrSnapshot,

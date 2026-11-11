@@ -8,7 +8,7 @@ The forge follows the repository's remote: GitHub uses `gh`, GitLab uses `glab`.
 - `glab api --paginate` without `--output ndjson` can print several JSON arrays back to back. Pipe paginated output through `--output ndjson` and `jq -s`, never plain `jq`.
 - `-f` sends a string. `-F` converts `true`, `false`, numbers, and JSON. Use `-F` for booleans such as `resolved=true`.
 - `glab mr create`, `glab issue create`, and `glab mr merge` prompt for confirmation. Pass `--yes`.
-- `glab mr merge` turns auto-merge on by default. Pass `--auto-merge=false` to merge now.
+- `glab mr merge` turns auto-merge on by default. It merges once the pipeline passes, and on a project with merge trains it adds the merge request to the train. Keep the default and pass `--yes` so it does not prompt.
 - `@me` works in `glab mr list` and `glab issue list` filters. For `--assignee` on create and update, pass a username: `"$(glab api user | jq -r .username)"`. Prefix it with `+` on update to add rather than replace.
 - `/merge_requests` without a project defaults to `scope=created_by_me`. Add `scope=all` when you filter by reviewer or assignee.
 
@@ -25,7 +25,7 @@ The forge follows the repository's remote: GitHub uses `gh`, GitLab uses `glab`.
 | Read a failed job's log | `gh run view <run> --log-failed` | `glab ci trace <job-id>` |
 | Review queue | `gh search prs --review-requested=@me --state=open` | `glab mr list --reviewer=@me --not-draft` |
 | Approve | `gh pr review <pr> --approve` | `glab mr approve <mr>` |
-| Merge now, squashed | `gh pr merge <pr> --squash --match-head-commit <sha>` | `glab mr merge <mr> --squash --sha <sha> --auto-merge=false --yes` |
+| Merge, squashed | `gh pr merge <pr> --squash --match-head-commit <sha>` | `glab mr merge <mr> --squash --sha <sha> --yes` |
 
 ## Review threads
 

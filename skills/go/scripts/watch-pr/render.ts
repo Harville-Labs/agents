@@ -97,6 +97,32 @@ type StatusQueryBlocker = {
 	readonly failures: number;
 	readonly failure: { readonly detail: string };
 };
+const GITLAB_STATUS_ACTION: Readonly<Record<string, string>> = {
+	need_rebase: "rebase the source branch with `glab mr rebase <n>`, then rearm",
+	ci_must_pass:
+		"the head pipeline has not passed; read it with `glab ci status --branch <source branch>`",
+	status_checks_must_pass:
+		"external status checks have not passed; read them with `glab api projects/:id/merge_requests/<n>/status_checks`",
+	commits_status: "the source branch has no commits; push the change",
+	jira_association_missing:
+		"put the Jira issue key in the merge request title or description",
+	title_regex:
+		"rename the merge request to match the project's title pattern, which the merge widget shows",
+	security_policy_pipeline_check:
+		"a security policy needs a pipeline on the target branch; ask a maintainer to run one",
+	security_policy_violations:
+		"read the security policy findings in the merge widget, then fix them or get them approved",
+	locked_paths: "ask the lock owner to unlock the changed paths",
+	locked_lfs_files: "ask the lock owner to unlock the changed LFS files",
+};
+
+function gitlabStatusAction(status: string, mr: number): string {
+	return (
+		GITLAB_STATUS_ACTION[status] ??
+		`look up detailed_merge_status "${status}" in the GitLab merge requests API docs`
+	).replaceAll("<n>", String(mr));
+}
+
 function renderBlocker(
 	blocker: T.MergeBlocker | StatusQueryBlocker,
 	forge: T.Forge,
@@ -133,15 +159,21 @@ function renderBlocker(
 			].join("\n");
 		}
 		case "merge-gate": {
+			const state = blocker.facts.mergeState;
+			const status =
+				state.forge === "gitlab" ? state.detailedMergeStatus : null;
 			const action =
 				blocker.reason === "closed-without-merge"
 					? "restore or remove the closed PR from the queued stack"
 					: blocker.reason === "draft-pr"
 						? "mark the PR ready for review before waiting for the merge queue"
-						: "resolve the changes-requested review before waiting for the merge queue";
+						: blocker.reason === "changes-requested"
+							? "resolve the changes-requested review before waiting for the merge queue"
+							: gitlabStatusAction(status ?? "", blocker.pr.number);
 			return [
 				`BLOCKER: ${blocker.reason}`,
 				`pr=${blocker.pr.number}`,
+				...(status === null ? [] : [`detailed_merge_status=${status}`]),
 				`action=${action}`,
 			].join("\n");
 		}

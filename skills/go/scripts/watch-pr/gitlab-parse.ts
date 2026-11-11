@@ -16,7 +16,25 @@ const FACT_STATE = {
 	closed: "CLOSED",
 	locked: "CLOSED",
 } as const;
-const COMPUTING = new Set(["checking", "unchecked", "approvals_syncing"]);
+const COMPUTING = new Set([
+	"checking",
+	"unchecked",
+	"approvals_syncing",
+	"preparing",
+]);
+const NOT_THE_AUTHORS_TO_FIX = new Set([
+	...COMPUTING,
+	"mergeable",
+	"conflict",
+	"discussions_not_resolved",
+	"draft_status",
+	"requested_changes",
+	"not_approved",
+	"not_open",
+	"ci_still_running",
+	"merge_request_blocked",
+	"merge_time",
+]);
 const JOB_KIND: Readonly<
 	Record<string, Exclude<T.Check["kind"], "code-review-gate">>
 > = {
@@ -33,6 +51,9 @@ const JOB_KIND: Readonly<
 	scheduled: "pending",
 };
 const TOKEN_BOT = /^(project|group)_\d+_bot/;
+
+export const blocksAuthor = (detailedMergeStatus: string): boolean =>
+	!NOT_THE_AUTHORS_TO_FIX.has(detailedMergeStatus);
 
 export function parseNdjson(text: string, label: string): readonly unknown[] {
 	return text
@@ -110,7 +131,10 @@ export function parseOpenMergeRequests(
 	});
 }
 
-export function parseJob(value: unknown, path: string): T.Check {
+export function parseJob(
+	value: unknown,
+	path: string,
+): Exclude<T.Check, { readonly kind: "code-review-gate" }> {
 	const object = record(value, path);
 	const status = string(object.status, `${path}.status`);
 	const known = JOB_KIND[status] ?? "pending";
@@ -127,6 +151,20 @@ export function parseJob(value: unknown, path: string): T.Check {
 		link: typeof object.web_url === "string" ? object.web_url : "",
 		workflow: typeof object.stage === "string" ? object.stage : "",
 	};
+}
+
+export function parseDownstream(
+	value: unknown,
+	path: string,
+): string | null {
+	const downstream = record(value, path).downstream_pipeline;
+	if (downstream === null || downstream === undefined) return null;
+	const object = record(downstream, `${path}.downstream_pipeline`);
+	const projectId = number(
+		object.project_id,
+		`${path}.downstream_pipeline.project_id`,
+	);
+	return `projects/${projectId}/pipelines/${number(object.id, `${path}.downstream_pipeline.id`)}`;
 }
 
 function comment(note: Record<string, unknown>, path: string): T.ReviewComment {

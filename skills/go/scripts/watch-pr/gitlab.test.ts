@@ -35,7 +35,11 @@ case "$endpoint" in
   "${PROJECT}/merge_requests?state=opened&source_branch=feature") ${line(MR)} ;;
   "${PROJECT}/merge_requests?state=opened") ${line(MR)}; ${line({ ...MR, iid: 8, source_branch: "next", target_branch: "feature" })} ;;
   "${PROJECT}/pipelines/900/jobs") ${line({ name: "unit", status: "failed", stage: "test", allow_failure: false, web_url: "https://gitlab.example/j/1", failure_reason: "script_failure" })}; ${line({ name: "lint", status: "success", stage: "test", allow_failure: false, web_url: "https://gitlab.example/j/2" })} ;;
-  "${PROJECT}/pipelines/900/bridges") ${line({ name: "deploy-docs", status: "running", stage: "deploy", allow_failure: false, web_url: "https://gitlab.example/j/3" })} ;;
+  "${PROJECT}/pipelines/900/bridges") ${line({ name: "deploy-docs", status: "running", stage: "deploy", allow_failure: false, web_url: "https://gitlab.example/j/3", downstream_pipeline: null })}; ${line({ name: "child", status: "success", stage: "test", allow_failure: false, web_url: "https://gitlab.example/j/4", downstream_pipeline: { id: 901, project_id: 1, status: "failed" } })} ;;
+  "projects/1/pipelines/901/jobs") ${line({ name: "e2e", status: "failed", stage: "test", allow_failure: false, web_url: "https://gitlab.example/j/5" })} ;;
+  "projects/1/pipelines/901/bridges") ${line({ name: "grandchild", status: "success", stage: "test", allow_failure: false, web_url: "https://gitlab.example/j/6", downstream_pipeline: { id: 902, project_id: 2, status: "running" } })} ;;
+  "projects/2/pipelines/902/jobs") ${line({ name: "deploy", status: "running", stage: "deploy", allow_failure: false, web_url: "https://gitlab.example/j/7" })} ;;
+  "projects/2/pipelines/902/bridges") ;;
   "${PROJECT}/merge_requests/7/discussions") ${line({ id: "d1", notes: [{ system: false, resolvable: true, resolved: false, author: { username: "reviewer" }, body: "Fix this.", created_at: "2026-11-01T10:00:00Z", position: { new_path: "a.ts", new_line: 3 } }] })}; ${line({ id: "d2", notes: [{ system: false, resolvable: true, resolved: true, author: { username: "reviewer" }, body: "Done.", created_at: "2026-11-01T10:00:00Z", position: null }] })} ;;
   "${PROJECT}/merge_requests/7/pipelines") ${line({ id: 900, status: "failed" })}; ${line({ id: 850, status: "success" })} ;;
   *) echo "unknown endpoint: $endpoint" >&2; exit 3 ;;
@@ -87,7 +91,7 @@ describe("glab GitLab reader", () => {
 		]);
 	});
 
-	it("reads head pipeline jobs and bridges as checks", () => {
+	it("reads head pipeline jobs, bridges, and every downstream pipeline as checks", () => {
 		const result = read(`const context = await reader.currentPr(null);
 const facts = await reader.pullRequest(context);
 const checks = await reader.checks(facts);
@@ -98,6 +102,10 @@ console.log(JSON.stringify({ source: checks.source, checks: checks.checks.map((c
 				["unit", "failed"],
 				["lint", "passed"],
 				["deploy-docs", "pending"],
+				["child", "passed"],
+				["child / e2e", "failed"],
+				["child / grandchild", "passed"],
+				["child / grandchild / deploy", "pending"],
 			],
 		});
 	});

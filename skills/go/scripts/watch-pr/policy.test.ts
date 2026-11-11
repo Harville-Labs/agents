@@ -1,13 +1,17 @@
 import { describe, expect, it } from "bun:test";
 import { WatcherQueryError } from "./errors.ts";
 import { assessGitHubMerge, githubForge } from "./github.ts";
+import { gitlabMergeRead } from "./gitlab-parse.ts";
+import { renderPretty } from "./render.ts";
 import { runSimple } from "./poll.ts";
 import { runQueued } from "./queue.ts";
 import {
+	blockerVerdict,
 	classifyPr,
 	queryBackoffSeconds,
 	readSnapshot,
 	selectTierMajorStackDecision,
+	verdictFactory,
 } from "./policy.ts";
 import {
 	fakeReader,
@@ -314,5 +318,75 @@ describe("polling deadline sleeps", () => {
 		});
 		expect(result.kind).toBe("READY");
 		expect(sleeps).toEqual([60]);
+	});
+});
+
+describe("GitLab merge status gate", () => {
+	const gitlab = (status: string, checks = [passingCheck()]) =>
+		readSnapshot({
+			reader: {
+				...fakeReader({
+					facts: {
+						mergeState: {
+							forge: "gitlab",
+							detailedMergeStatus: status,
+							headPipeline: { id: 1, status: "success" },
+						},
+					},
+					fastPath: { kind: "checks", checks },
+				}),
+				mergeRead: async (facts: PullRequestFacts) => gitlabMergeRead(facts, []),
+			},
+			context: context(30),
+			pendingHistory: "omit",
+			allowDraft: false,
+		});
+
+	it("blocks on a status the author must fix, such as a required rebase", async () => {
+		for (const status of [
+			"need_rebase",
+			"status_checks_must_pass",
+			"jira_association_missing",
+			"title_regex",
+			"ci_must_pass",
+			"a_status_gitlab_adds_later",
+		])
+			expect(classifyPr(await gitlab(status))).toMatchObject({
+				kind: "blocker",
+				blocker: { kind: "merge-gate", reason: "forge-merge-status" },
+			});
+	});
+
+	it("stays ready while only approvals, dependencies, or the merge time hold it", async () => {
+		for (const status of [
+			"mergeable",
+			"not_approved",
+			"merge_request_blocked",
+			"merge_time",
+			"ci_still_running",
+		])
+			expect(classifyPr(await gitlab(status)).kind).toBe("ready");
+	});
+
+	it("tells the author how to clear the status", async () => {
+		const verdict = classifyPr(await gitlab("need_rebase"));
+		if (verdict.kind !== "blocker") throw new Error("expected a blocker");
+		const rendered = renderPretty(
+			blockerVerdict(
+				verdictFactory(
+					{ now: () => 0, observedAt: () => "2026-11-11T00:00:00.000Z", sleep: async () => {} },
+					"single",
+				),
+				verdict.blocker,
+			),
+			{ kind: "gitlab", host: "gitlab.example" },
+		);
+		expect(rendered).toContain("detailed_merge_status=need_rebase\naction=rebase the source branch with `glab mr rebase 30`");
+	});
+
+	it("waits on pending checks before judging the merge status", async () => {
+		expect(
+			classifyPr(await gitlab("ci_must_pass", [pendingCheck()])).kind,
+		).toBe("waiting");
 	});
 });

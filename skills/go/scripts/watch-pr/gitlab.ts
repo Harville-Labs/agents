@@ -4,6 +4,7 @@ import { buildReviewThreads } from "./github-parse.ts";
 import {
 	gitlabMergeRead,
 	parseDiscussions,
+	parseDownstream,
 	parseJob,
 	parseMergeRequest,
 	parseNdjson,
@@ -90,17 +91,44 @@ export class GlabGitLabReader implements T.ForgeReader {
 			throw new ChecksUnavailable(
 				`merge request !${facts.context.number} has no head pipeline yet`,
 			);
-		const pipeline = `${project(facts.context)}/pipelines/${head.id}`;
-		const jobs = [
-			...(await this.api(`${pipeline}/jobs`)),
-			...(await this.api(`${pipeline}/bridges`)),
-		];
 		const checks = T.nonEmpty(
-			jobs.map((job, index) => parseJob(job, `pipeline ${head.id} jobs[${index}]`)),
+			await this.pipelineChecks(
+				`${project(facts.context)}/pipelines/${head.id}`,
+				"",
+				new Set(),
+			),
 		);
 		if (checks === null)
 			throw new ChecksUnavailable(`pipeline ${head.id} has no jobs yet`);
 		return { source: "gitlab-pipeline", checks };
+	}
+	private async pipelineChecks(
+		pipeline: string,
+		prefix: string,
+		seen: Set<string>,
+	): Promise<T.Check[]> {
+		const jobs = await this.api(`${pipeline}/jobs`);
+		const bridges = await this.api(`${pipeline}/bridges`);
+		const named = (value: unknown, path: string): T.Check => {
+			const check = parseJob(value, path);
+			return { ...check, name: `${prefix}${check.name}` };
+		};
+		const checks = jobs.map((job, index) =>
+			named(job, `${pipeline} jobs[${index}]`),
+		);
+		const downstream: T.Check[] = [];
+		for (const [index, bridge] of bridges.entries()) {
+			const path = `${pipeline} bridges[${index}]`;
+			const check = named(bridge, path);
+			checks.push(check);
+			const child = parseDownstream(bridge, path);
+			if (child === null || seen.has(child)) continue;
+			seen.add(child);
+			downstream.push(
+				...(await this.pipelineChecks(child, `${check.name} / `, seen)),
+			);
+		}
+		return [...checks, ...downstream];
 	}
 	async reviewThreads(context: T.PrContext): Promise<readonly T.ReviewThread[]> {
 		return buildReviewThreads(

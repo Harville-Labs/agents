@@ -218,7 +218,8 @@ export interface MergedPr {
 export type MergeGateReason =
 	| "closed-without-merge"
 	| "draft-pr"
-	| "changes-requested";
+	| "changes-requested"
+	| "forge-merge-status";
 export type MergeBlocker =
 	| {
 			readonly kind: "merge-conflicts";
@@ -239,6 +240,7 @@ export type MergeBlocker =
 			readonly kind: "merge-gate";
 			readonly pr: PrContext;
 			readonly reason: MergeGateReason;
+			readonly facts: PullRequestFacts;
 	  };
 export type QueryFailure =
 	| {
