@@ -165,7 +165,7 @@ export const reference: GuideSection[] = [
         mono: true,
         body: [
           {
-            p: 'issue first with area, priority, and type labels (`P1` on GitHub, `priority::1` on GitLab), `<type>/<issue>-<slug>`, conventional commits, one change per PR, honest "how it was tested", findings in threads on the diff line, squash, changelog in the same PR, semver by tag.',
+            p: 'issue first with area, priority, and type labels (`P1` on GitHub, `priority::1` on GitLab), assigned to you, `<type>/<issue>-<slug>`, conventional commits, one change per PR, honest "how it was tested", findings in threads on the diff line, squash, changelog in the same PR, semver by tag.',
           },
         ],
         keys: 'git-best-practices',

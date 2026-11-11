@@ -9,7 +9,7 @@ The **go** skill's Opening a PR and Shipping playbooks run the full loop. These 
 
 | Rule | Summary |
 |------|---------|
-| Issue first | Nontrivial work starts from an issue labeled with area, priority, and type: `area:`, `P0`–`P2`, and `type:` on GitHub, scoped `area::`, `priority::0`–`priority::2`, and `type::` on GitLab. |
+| Issue first | Nontrivial work starts from an issue labeled with area, priority, and type: `area:`, `P0`–`P2`, and `type:` on GitHub, scoped `area::`, `priority::0`–`priority::2`, and `type::` on GitLab. Assign the issue and its PR to yourself. |
 | Branch names | `<type>/<issue>-<slug>` from `main`, or `<type>/<slug>` without an issue. |
 | Commit as you go | Commit coherent increments. Push your own branch and open or update its PR without asking. |
 | Ask only at the edge | Before a force-push to a shared branch, a push that deploys, or a release tag. |
