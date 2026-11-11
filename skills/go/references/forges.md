@@ -23,7 +23,7 @@ The forge follows the repository's remote: GitHub uses `gh`, GitLab uses `glab`.
 | Retarget | `gh pr edit <pr> --base <branch>` | `glab mr update <mr> --target-branch <branch>` |
 | Status, CI, threads, mergeability | `scripts/watch-pr/watch-pr --status-only` | the same command. It reads the forge from the remote. |
 | Read a failed job's log | `gh run view <run> --log-failed` | `glab ci trace <job-id>` |
-| Review queue | `gh search prs --review-requested=@me --state=open` | `glab mr list --reviewer=@me --not-draft` |
+| Review queue | `gh search prs --review-requested=@me --state=open --json url,title,repository,isDraft -- -author:@me` | `glab api --paginate --output ndjson "merge_requests?scope=all&state=opened&wip=no&reviewer_username=<you>&not[author_username]=<you>"` |
 | Approve | `gh pr review <pr> --approve` | `glab mr approve <mr>` |
 | Merge, squashed | `gh pr merge <pr> --squash --match-head-commit <sha>` | `glab mr merge <mr> --squash --sha <sha> --yes` |
 
@@ -69,6 +69,28 @@ On GitLab, a thread is a discussion with a `position`. Without one it lands on t
 ```
 
 Set `new_line` for an added line, `old_line` for a removed line, and both for an unchanged line. The watcher's thread `id` is the discussion id that the reply and resolve endpoints take. A reply body is `{"body": "<reply>"}`. To send several findings as one review, create each with `POST .../merge_requests/<mr>/draft_notes`, whose body names the text `note` instead of `body` and takes the same `position`, then publish them together with `POST .../merge_requests/<mr>/draft_notes/bulk_publish`.
+
+## Your last review
+
+The last head you reviewed is the SHA to diff from and the reason to skip a PR whose head hasn't moved. Outside the repository, replace `{owner}/{repo}` and `:id` as the pitfalls above describe.
+
+On GitHub, every review records the commit it was made on, approvals included:
+
+```sh
+gh api --paginate --slurp "repos/{owner}/{repo}/pulls/<pr>/reviews" \
+  | jq -r --arg me "$(gh api user --jq .login)" '[.[][] | select(.user.login == $me)] | last | .commit_id // empty'
+```
+
+On GitLab, a note doesn't record the head it saw, so take the time of your latest note and find the MR version that was current then. Approving the MR adds a system note in your name, so approvals count:
+
+```sh
+at=$(glab api --paginate --output ndjson "projects/:id/merge_requests/<mr>/notes" \
+  | jq -rs --arg me "<you>" '[.[] | select(.author.username == $me)] | max_by(.created_at) | .created_at // empty')
+glab api --paginate --output ndjson "projects/:id/merge_requests/<mr>/versions" \
+  | jq -rs --arg at "$at" '[.[] | select(.created_at <= $at)] | max_by(.created_at) | .head_commit_sha // empty'
+```
+
+Empty output means you haven't reviewed it. Compare the SHA with the current head: `gh pr view <pr> --json headRefOid` or the MR's `sha` from `glab api "projects/:id/merge_requests/<mr>"`.
 
 ## Labels
 
