@@ -13,7 +13,7 @@ export const start: GuideSection[] = [
           {
             table: [
               ['layer', 'count', 'what it is'],
-              ['go + playbooks', '1 + 23', 'the router and its step-by-step recipes'],
+              ['go + playbooks', '1 + 24', 'the router and its step-by-step recipes'],
               ['workflow skills', '41', 'procedures you can call directly or that go calls'],
               ['best practices', '10', 'rule tables per stack or topic'],
               ['principles', '25', 'the why, cited by go and the playbooks; never auto-invoked'],
@@ -243,6 +243,16 @@ export const start: GuideSection[] = [
           },
         ],
         keys: 'shipping playbook',
+      },
+      {
+        title: [['reviewing PRs', 'skills/go/playbooks/reviewing-prs.md']],
+        one: 'review the queue that waits on you.',
+        body: [
+          {
+            p: 'list the PRs or MRs where you are a requested reviewer, review each in a fresh subagent, confirm every finding, and post it in a thread on its diff line. approve only when told to.',
+          },
+        ],
+        keys: 'reviewing prs playbook review assigned',
       },
       {
         title: [
