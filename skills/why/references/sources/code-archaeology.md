@@ -41,11 +41,11 @@ Look for out-of-band docs:
 
 ```bash
 # ADRs often live in docs/adr/ or similar
-rg -l -i 'architecture.decision' --glob '*.md'
+rg -l -i 'architecture.decision' --glob '*.md' .
 
 # TODOs and FIXMEs near the target
 rg -n -C2 '(TODO|FIXME|HACK|XXX|NOTE)' <target_file>
 
 # Related tests
-rg -l '<symbol>' --glob '*test*'
+rg -l '<symbol>' --glob '*test*' .
 ```

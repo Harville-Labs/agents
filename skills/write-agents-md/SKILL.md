@@ -15,7 +15,7 @@ Don't write from memory. Read:
 - `package.json` scripts / `Makefile` / `go.mod`, the lint and type config, `Dockerfile`s, CI workflows. The check command must be what CI actually runs.
 - The directory layout, two levels deep, and a representative file from each area.
 - `git log --oneline -30` for commit conventions and recent direction.
-- Comments that state constraints (`rg -n 'never|must|don.t|invariant' --type ts --type go`).
+- Comments that state constraints (`rg -n 'never|must|don.t|invariant' --type ts --type go .`).
 
 ## Write
 
