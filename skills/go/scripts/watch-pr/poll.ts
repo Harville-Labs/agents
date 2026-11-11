@@ -17,7 +17,7 @@ export interface WatchClock {
 	sleep(seconds: number): Promise<void>;
 }
 export interface RunDependencies {
-	readonly reader: T.GitHubReader;
+	readonly reader: T.ForgeReader;
 	readonly clock: WatchClock;
 	readonly emit: (verdict: T.ProgressVerdict) => void;
 }

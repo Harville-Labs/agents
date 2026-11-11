@@ -1,52 +1,7 @@
-import { resolveChecks, resolveReviewThreads } from "./github.ts";
+import { blocksAuthor } from "./gitlab-parse.ts";
 import type { WatchClock } from "./poll.ts";
 import type * as T from "./types.ts";
 import { nonEmpty } from "./types.ts";
-export function assessGitHubMerge(args: {
-	readonly mergeStateStatus: T.MergeStateStatus;
-	readonly headRollupState: T.RollupState;
-}): T.GitHubMergeAssessment {
-	if (args.mergeStateStatus === "BLOCKED") {
-		if (args.headRollupState === "ERROR" || args.headRollupState === "FAILURE")
-			return {
-				kind: "refused",
-				mergeStateStatus: args.mergeStateStatus,
-				headRollupState: args.headRollupState,
-			};
-		return {
-			kind: "allowed",
-			basis: "rollup",
-			mergeStateStatus: args.mergeStateStatus,
-			headRollupState: args.headRollupState,
-		};
-	}
-	return {
-		kind: "allowed",
-		basis: "merge-state",
-		mergeStateStatus: args.mergeStateStatus,
-		headRollupState: args.headRollupState,
-	};
-}
-async function mergeAssessment(
-	reader: T.GitHubReader,
-	facts: T.PullRequestFacts,
-) {
-	const commits = await reader.commitRollups(facts.context);
-	const headRollupState =
-		facts.headRefOid === null
-			? null
-			: (commits.find((commit) => commit.oid === facts.headRefOid)?.state ??
-				null);
-	return {
-		hadPreviousPassingCi: commits.some(
-			(commit) => commit.oid !== facts.headRefOid && commit.state === "SUCCESS",
-		),
-		github: assessGitHubMerge({
-			mergeStateStatus: facts.mergeStateStatus,
-			headRollupState,
-		}),
-	};
-}
 const AUTOMATION_TOKENS = [
 	"bugbot",
 	"coderabbit",
@@ -55,7 +10,7 @@ const AUTOMATION_TOKENS = [
 	"review automation",
 ] as const;
 export async function readSnapshot(args: {
-	readonly reader: T.GitHubReader;
+	readonly reader: T.ForgeReader;
 	readonly context: T.PrContext;
 	readonly pendingHistory: "include" | "omit";
 	readonly allowDraft: boolean;
@@ -65,8 +20,8 @@ export async function readSnapshot(args: {
 		return { kind: "merged", context: args.context, facts };
 	if (facts.state === "CLOSED")
 		return { kind: "closed", context: args.context, facts };
-	const threads = await resolveReviewThreads(args.reader, args.context);
-	const checks = await resolveChecks(args.reader, args.context);
+	const threads = await args.reader.reviewThreads(args.context);
+	const checks = await args.reader.checks(facts);
 	const failed = nonEmpty(
 		checks.checks.filter(
 			(check): check is T.FailedCheck => check.kind === "failed",
@@ -88,11 +43,11 @@ export async function readSnapshot(args: {
 			hadPreviousPassingCi: false,
 		};
 	else {
-		const merge = await mergeAssessment(args.reader, facts);
+		const read = await args.reader.mergeRead(facts);
 		const base = {
 			source: checks.source,
 			all: checks.checks,
-			hadPreviousPassingCi: merge.hadPreviousPassingCi,
+			hadPreviousPassingCi: read.hadPreviousPassingCi,
 		};
 		if (failed !== null)
 			ci = {
@@ -100,15 +55,15 @@ export async function readSnapshot(args: {
 				kind: "ci-failing",
 				failed,
 				pending: pending ?? [],
-				github: merge.github,
+				merge: read.merge,
 			};
-		else if (merge.github.kind === "refused")
+		else if (read.merge.kind === "refused")
 			ci = {
 				...base,
-				kind: "ci-github-rejected",
+				kind: "ci-merge-refused",
 				failed: [],
 				pending: pending ?? [],
-				github: merge.github,
+				merge: read.merge,
 			};
 		else if (pending !== null)
 			ci = { ...base, kind: "ci-pending", failed: [], pending };
@@ -118,7 +73,7 @@ export async function readSnapshot(args: {
 				kind: "ci-clean",
 				failed: [],
 				pending: [],
-				github: merge.github,
+				merge: read.merge,
 			};
 	}
 	return {
@@ -136,11 +91,16 @@ export async function readSnapshot(args: {
 		),
 	};
 }
+export function hasConflicts(facts: T.PullRequestFacts): boolean {
+	if (facts.mergeable === "CONFLICTING") return true;
+	return (
+		facts.mergeState.forge === "github" &&
+		(facts.mergeState.status === "DIRTY" ||
+			facts.mergeState.status === "CONFLICTING")
+	);
+}
 const conflictBlocker = (row: T.PrSnapshot): T.MergeBlocker | null =>
-	row.kind === "open" &&
-	(row.facts.mergeable === "CONFLICTING" ||
-		row.facts.mergeStateStatus === "DIRTY" ||
-		row.facts.mergeStateStatus === "CONFLICTING")
+	row.kind === "open" && hasConflicts(row.facts)
 		? { kind: "merge-conflicts", pr: row.context, facts: row.facts }
 		: null;
 function threadBlocker(row: T.PrSnapshot): T.MergeBlocker | null {
@@ -152,7 +112,7 @@ function threadBlocker(row: T.PrSnapshot): T.MergeBlocker | null {
 }
 const ciBlocker = (row: T.PrSnapshot): T.MergeBlocker | null =>
 	row.kind === "open" &&
-	(row.ci.kind === "ci-failing" || row.ci.kind === "ci-github-rejected")
+	(row.ci.kind === "ci-failing" || row.ci.kind === "ci-merge-refused")
 		? { kind: "failing-checks", pr: row.context, ci: row.ci }
 		: null;
 function gateReason(
@@ -162,8 +122,11 @@ function gateReason(
 	if (row.kind === "merged") return null;
 	if (row.kind === "closed") return "closed-without-merge";
 	if (row.facts.isDraft && !allowDraft) return "draft-pr";
-	return row.facts.reviewDecision === "CHANGES_REQUESTED"
-		? "changes-requested"
+	if (row.facts.reviewDecision === "CHANGES_REQUESTED")
+		return "changes-requested";
+	const state = row.facts.mergeState;
+	return state.forge === "gitlab" && blocksAuthor(state.detailedMergeStatus)
+		? "forge-merge-status"
 		: null;
 }
 function gateBlocker(
@@ -172,11 +135,11 @@ function gateBlocker(
 ): T.MergeBlocker | null {
 	const reason = gateReason(row, allowDraft);
 	return reason === null ||
-		(reason === "draft-pr" &&
+		((reason === "draft-pr" || reason === "forge-merge-status") &&
 			row.kind === "open" &&
 			row.ci.kind === "ci-pending")
 		? null
-		: { kind: "merge-gate", pr: row.context, reason };
+		: { kind: "merge-gate", pr: row.context, reason, facts: row.facts };
 }
 function readyContribution(
 	row: T.PrSnapshot,
@@ -266,7 +229,7 @@ export const queryBackoffSeconds = (
 	failures: number,
 ): number => Math.min(Math.max(interval, 60) * 2 ** (failures - 1), 300);
 interface Envelope<M extends T.WatchMode> {
-	readonly schemaVersion: 1;
+	readonly schemaVersion: 2;
 	readonly sequence: number;
 	readonly observedAt: string;
 	readonly mode: M;
@@ -297,7 +260,7 @@ export function verdictFactory<M extends T.WatchMode>(
 		override?: T.WatchMode,
 	): Envelope<T.WatchMode> & P {
 		return {
-			schemaVersion: 1,
+			schemaVersion: 2,
 			sequence: (sequence += 1),
 			observedAt: clock.observedAt(),
 			mode: override ?? mode,

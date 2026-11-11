@@ -2,6 +2,7 @@ import type {
 	Check,
 	ChecksFastPath,
 	CommitRollup,
+	ForgeReader,
 	GitHubReader,
 	OpenPullRequest,
 	PrContext,
@@ -12,6 +13,7 @@ import type {
 	ReviewThreadPage,
 	RollupPage,
 } from "./types.ts";
+import { githubForge } from "./github.ts";
 import { parsePrNumber } from "./types.ts";
 
 export interface FakeReaderOptions {
@@ -65,7 +67,7 @@ export function failedCheck(name = "ci"): Check {
 
 export function fakeReader(
 	options: FakeReaderOptions = {},
-): GitHubReader & { readonly calls: readonly string[] } {
+): GitHubReader & ForgeReader & { readonly calls: readonly string[] } {
 	const calls: string[] = [];
 	const context = options.current ?? {
 		owner: "owner",
@@ -75,7 +77,7 @@ export function fakeReader(
 	const defaults: PullRequestFacts = {
 		context,
 		mergeable: "MERGEABLE",
-		mergeStateStatus: "CLEAN",
+		mergeState: { forge: "github", status: "CLEAN" },
 		reviewDecision: "APPROVED",
 		headRefOid: "head",
 		headRefName: "feature",
@@ -86,8 +88,7 @@ export function fakeReader(
 	};
 	let page = 0;
 	let threadPage = 0;
-	return {
-		calls,
+	const raw: GitHubReader = {
 		async originRepo() {
 			calls.push("originRepo");
 			return options.origin === undefined
@@ -128,4 +129,5 @@ export function fakeReader(
 			return options.commitRollups ?? [{ oid: "head", state: "SUCCESS" }];
 		},
 	};
+	return { ...raw, ...githubForge(raw), calls };
 }

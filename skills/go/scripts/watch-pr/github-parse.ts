@@ -1,64 +1,16 @@
 import { WatcherQueryError } from "./errors.ts";
+import {
+	at,
+	enumValue,
+	list,
+	missing,
+	nullableEnum,
+	optionalString,
+	record,
+	string,
+} from "./json.ts";
 import type * as T from "./types.ts";
 import { parsePrNumber } from "./types.ts";
-function raw(value: unknown): string {
-	try {
-		return JSON.stringify(value);
-	} catch {
-		return String(value);
-	}
-}
-export function missing(path: string, value?: unknown): never {
-	throw new WatcherQueryError({
-		kind: "missing-key",
-		retryable: true,
-		detail:
-			value === undefined
-				? `missing ${path}`
-				: `invalid ${path}: ${raw(value)}`,
-		...(value === undefined ? {} : { rawValue: raw(value) }),
-	});
-}
-function isRecord(value: unknown): value is Record<string, unknown> {
-	return typeof value === "object" && value !== null && !Array.isArray(value);
-}
-export function record(value: unknown, path: string): Record<string, unknown> {
-	if (!isRecord(value)) missing(path, value);
-	return value;
-}
-export function list(value: unknown, path: string): readonly unknown[] {
-	if (!Array.isArray(value)) missing(path, value);
-	return value;
-}
-export function at(value: unknown, path: readonly string[]): unknown {
-	let current = value;
-	for (const key of path) {
-		const object = record(current, path.join("."));
-		if (!(key in object)) missing(path.join("."));
-		current = object[key];
-	}
-	return current;
-}
-export function string(value: unknown, path: string): string {
-	if (typeof value !== "string") missing(path, value);
-	return value;
-}
-export const optionalString = (value: unknown, path: string): string | null =>
-	value === null ? null : string(value, path);
-function enumValue<const V extends readonly string[]>(
-	value: unknown,
-	values: V,
-	path: string,
-): V[number] {
-	if (typeof value === "string")
-		for (const candidate of values) if (candidate === value) return candidate;
-	return missing(path, value);
-}
-export const nullableEnum = <const V extends readonly string[]>(
-	value: unknown,
-	values: V,
-	path: string,
-): V[number] | null => (value === null ? null : enumValue(value, values, path));
 const MERGE_STATES = [
 	"BEHIND",
 	"BLOCKED",
@@ -91,34 +43,6 @@ const reviewDecision = (value: unknown): T.ReviewDecision =>
 		REVIEW_DECISIONS,
 		"pull request.reviewDecision",
 	);
-export function parseRemote(value: string): T.Repository | null {
-	let normalized = value.trim();
-	if (normalized.startsWith("git@github.com:"))
-		normalized = `https://github.com/${normalized.slice(15)}`;
-	if (normalized.startsWith("ssh://git@github.com/"))
-		normalized = `https://github.com/${normalized.slice(21)}`;
-	try {
-		const url = new URL(normalized);
-		const parts = url.pathname
-			.replace(/\.git$/, "")
-			.split("/")
-			.filter(Boolean);
-		if (
-			url.protocol !== "https:" ||
-			url.hostname !== "github.com" ||
-			url.port ||
-			url.username ||
-			url.password ||
-			url.search ||
-			url.hash ||
-			parts.length !== 2
-		)
-			return null;
-		return { owner: parts[0], repo: parts[1] };
-	} catch {
-		return null;
-	}
-}
 export function parsePrUrl(value: string): T.PrContext {
 	try {
 		const url = new URL(value);
@@ -333,11 +257,14 @@ export function parsePullRequest(
 			["MERGEABLE", "CONFLICTING", "UNKNOWN"] as const,
 			"pull request.mergeable",
 		),
-		mergeStateStatus: enumValue(
-			object.mergeStateStatus,
-			MERGE_STATES,
-			"pull request.mergeStateStatus",
-		),
+		mergeState: {
+			forge: "github",
+			status: enumValue(
+				object.mergeStateStatus,
+				MERGE_STATES,
+				"pull request.mergeStateStatus",
+			),
+		},
 		reviewDecision: reviewDecision(object.reviewDecision),
 		headRefOid: optionalString(object.headRefOid, "pull request.headRefOid"),
 		headRefName: string(object.headRefName, "pull request.headRefName"),

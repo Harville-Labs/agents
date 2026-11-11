@@ -1,23 +1,25 @@
-import { spawn } from "node:child_process";
+import { firstLine, parseJson, run, runJson } from "./command.ts";
 import type * as T from "./types.ts";
 import { nonEmpty, parsePrNumber } from "./types.ts";
-import { WatcherQueryError, ChecksUnavailable } from "./errors.ts";
+import { parseRemote } from "./remote.ts";
 import {
-	ROLLUP_STATES,
 	at,
-	buildReviewThreads,
 	list,
-	mapRollupNode,
 	missing,
 	nullableEnum,
 	optionalString,
+	record,
+	string,
+} from "./json.ts";
+import { WatcherQueryError, ChecksUnavailable } from "./errors.ts";
+import {
+	ROLLUP_STATES,
+	buildReviewThreads,
+	mapRollupNode,
 	parseFastCheck,
 	parsePrUrl,
 	parsePullRequest,
-	parseRemote,
 	parseReviewThreadPage,
-	record,
-	string,
 } from "./github-parse.ts";
 export const REVIEW_THREADS_QUERY =
 	"\nquery ReviewThreads($owner: String!, $repo: String!, $pr: Int!, $after: String) {\n  repository(owner: $owner, name: $repo) {\n    pullRequest(number: $pr) {\n      reviewThreads(first: 100, after: $after) {\n        pageInfo {\n          hasNextPage\n          endCursor\n        }\n        nodes {\n          id\n          isResolved\n          comments(first: 10) {\n            nodes {\n              body\n              createdAt\n              path\n              line\n              author { __typename login }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n";
@@ -26,55 +28,6 @@ export const PR_COMMIT_STATUS_QUERY =
 export const PR_CHECK_ROLLUP_QUERY =
 	"\nquery PrCheckRollup($owner: String!, $repo: String!, $pr: Int!, $after: String) {\n  repository(owner: $owner, name: $repo) {\n    pullRequest(number: $pr) {\n      commits(last: 1) {\n        nodes {\n          commit {\n            statusCheckRollup {\n              contexts(first: 100, after: $after) {\n                pageInfo {\n                  hasNextPage\n                  endCursor\n                }\n                nodes {\n                  __typename\n                  ... on CheckRun {\n                    name\n                    status\n                    conclusion\n                    detailsUrl\n                  }\n                  ... on StatusContext {\n                    context\n                    state\n                    targetUrl\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n";
 
-interface CommandResult {
-	readonly code: number;
-	readonly stdout: string;
-	readonly stderr: string;
-}
-const firstLine = (value: string): string =>
-	value.trim().split(/\r?\n/, 1)[0]?.slice(0, 240) ?? "";
-function run(argv: readonly [string, ...string[]]): Promise<CommandResult> {
-	return new Promise((resolve, reject) => {
-		const child = spawn(argv[0], argv.slice(1), {
-			stdio: ["ignore", "pipe", "pipe"],
-		});
-		let stdout = "";
-		let stderr = "";
-		child.stdout.setEncoding("utf8");
-		child.stderr.setEncoding("utf8");
-		child.stdout.on("data", (chunk: string) => {
-			stdout += chunk;
-		});
-		child.stderr.on("data", (chunk: string) => {
-			stderr += chunk;
-		});
-		child.on("error", reject);
-		child.on("close", (code) => resolve({ code: code ?? -1, stdout, stderr }));
-	});
-}
-function parseJson(text: string, label: string): unknown {
-	try {
-		return JSON.parse(text);
-	} catch (error) {
-		throw new WatcherQueryError({
-			kind: "json-parse",
-			retryable: true,
-			detail: `${label}: ${error instanceof Error ? error.message : String(error)}`,
-		});
-	}
-}
-async function runJson(argv: readonly [string, ...string[]]): Promise<unknown> {
-	const result = await run(argv);
-	if (result.code !== 0)
-		throw new WatcherQueryError({
-			kind: "command-exit",
-			retryable: true,
-			code: result.code,
-			detail:
-				firstLine(result.stderr) || `${argv.join(" ")} exited ${result.code}`,
-		});
-	return parseJson(result.stdout, argv.join(" "));
-}
 function graphqlArgs(
 	query: string,
 	context: T.PrContext,
@@ -97,7 +50,11 @@ function graphqlArgs(
 export class GhGitHubReader implements T.GitHubReader {
 	async originRepo(): Promise<T.Repository | null> {
 		const result = await run(["git", "remote", "get-url", "origin"]);
-		return result.code === 0 ? parseRemote(result.stdout) : null;
+		if (result.code !== 0) return null;
+		const remote = parseRemote(result.stdout);
+		return remote?.host === "github.com"
+			? { owner: remote.owner, repo: remote.repo }
+			: null;
 	}
 	async currentPr(pr: T.PrNumber | null): Promise<T.PrContext> {
 		const argv: [string, ...string[]] = ["gh", "pr", "view"];
@@ -288,7 +245,7 @@ export async function resolveReviewThreads(
 	return buildReviewThreads(threads);
 }
 export async function resolveContext(args: {
-	readonly reader: T.GitHubReader;
+	readonly reader: T.ForgeReader;
 	readonly owner: string | null;
 	readonly repo: string | null;
 	readonly pr: T.PrNumber | null;
@@ -363,8 +320,74 @@ export function orderStack(
 	);
 }
 export async function discoverStack(
-	reader: T.GitHubReader,
+	reader: T.ForgeReader,
 	context: T.PrContext,
 ): Promise<T.NonEmpty<T.PrContext>> {
 	return orderStack(context, await reader.openPullRequests(context));
+}
+
+export function assessGitHubMerge(args: {
+	readonly mergeStateStatus: T.MergeStateStatus;
+	readonly headRollupState: T.RollupState;
+}): T.GitHubMergeAssessment {
+	if (args.mergeStateStatus === "BLOCKED") {
+		if (args.headRollupState === "ERROR" || args.headRollupState === "FAILURE")
+			return {
+				kind: "refused",
+				forge: "github",
+				mergeStateStatus: args.mergeStateStatus,
+				headRollupState: args.headRollupState,
+			};
+		return {
+			kind: "allowed",
+			forge: "github",
+			basis: "rollup",
+			mergeStateStatus: args.mergeStateStatus,
+			headRollupState: args.headRollupState,
+		};
+	}
+	return {
+		kind: "allowed",
+			forge: "github",
+		basis: "merge-state",
+		mergeStateStatus: args.mergeStateStatus,
+		headRollupState: args.headRollupState,
+	};
+}
+export async function readGitHubMerge(
+	reader: T.GitHubReader,
+	facts: T.PullRequestFacts,
+): Promise<T.MergeRead> {
+	if (facts.mergeState.forge !== "github")
+		throw new Error("readGitHubMerge needs GitHub pull request facts");
+	const commits = await reader.commitRollups(facts.context);
+	const headRollupState =
+		facts.headRefOid === null
+			? null
+			: (commits.find((commit) => commit.oid === facts.headRefOid)?.state ??
+				null);
+	return {
+		hadPreviousPassingCi: commits.some(
+			(commit) => commit.oid !== facts.headRefOid && commit.state === "SUCCESS",
+		),
+		merge: assessGitHubMerge({
+			mergeStateStatus: facts.mergeState.status,
+			headRollupState,
+		}),
+	};
+}
+export function githubForge(
+	reader: T.GitHubReader,
+	host = "github.com",
+): T.ForgeReader {
+	return {
+		forge: { kind: "github", host },
+		originRepo: () => reader.originRepo(),
+		currentPr: (pr) => reader.currentPr(pr),
+		pullRequest: (context) => reader.pullRequest(context),
+		openPullRequests: (repository) => reader.openPullRequests(repository),
+		checks: (facts) => resolveChecks(reader, facts.context),
+		reviewThreads: (context) => resolveReviewThreads(reader, context),
+		mergeRead: (facts) => readGitHubMerge(reader, facts),
+	};
 }

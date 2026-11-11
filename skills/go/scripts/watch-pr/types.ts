@@ -9,6 +9,11 @@ export function parsePrNumber(value: unknown, label = "PR number"): PrNumber {
 		throw new Error(`${label} must be a positive integer`);
 	return value as PrNumber;
 }
+export type ForgeKind = "github" | "gitlab";
+export interface Forge {
+	readonly kind: ForgeKind;
+	readonly host: string;
+}
 export interface Repository {
 	readonly owner: string;
 	readonly repo: string;
@@ -38,10 +43,23 @@ export type ReviewDecision =
 	| "CHANGES_REQUESTED"
 	| "REVIEW_REQUIRED"
 	| null;
+export interface GitHubMergeState {
+	readonly forge: "github";
+	readonly status: MergeStateStatus;
+}
+export interface GitLabPipeline {
+	readonly id: number;
+	readonly status: string;
+}
+export interface GitLabMergeState {
+	readonly forge: "gitlab";
+	readonly detailedMergeStatus: string;
+	readonly headPipeline: GitLabPipeline | null;
+}
 export interface PullRequestFacts {
 	readonly context: PrContext;
 	readonly mergeable: "MERGEABLE" | "CONFLICTING" | "UNKNOWN";
-	readonly mergeStateStatus: MergeStateStatus;
+	readonly mergeState: GitHubMergeState | GitLabMergeState;
 	readonly reviewDecision: ReviewDecision;
 	readonly headRefOid: string | null;
 	readonly headRefName: string;
@@ -89,7 +107,7 @@ export type Check =
 export type FailedCheck = Extract<Check, { readonly kind: "failed" }>;
 export type PendingCheck = Extract<Check, { readonly kind: "pending" }>;
 export interface CheckRead {
-	readonly source: "gh-pr-checks" | "graphql-rollup";
+	readonly source: "gh-pr-checks" | "graphql-rollup" | "gitlab-pipeline";
 	readonly checks: NonEmpty<Check>;
 }
 export interface CommitRollup {
@@ -98,23 +116,43 @@ export interface CommitRollup {
 }
 export interface GitHubMergeRefusal {
 	readonly kind: "refused";
+	readonly forge: "github";
 	readonly mergeStateStatus: "BLOCKED";
 	readonly headRollupState: "ERROR" | "FAILURE";
 }
 export type GitHubMergeAllowed =
 	| {
 			readonly kind: "allowed";
+			readonly forge: "github";
 			readonly basis: "merge-state";
 			readonly mergeStateStatus: Exclude<MergeStateStatus, "BLOCKED">;
 			readonly headRollupState: RollupState;
 	  }
 	| {
 			readonly kind: "allowed";
+			readonly forge: "github";
 			readonly basis: "rollup";
 			readonly mergeStateStatus: "BLOCKED";
 			readonly headRollupState: Exclude<RollupState, "ERROR" | "FAILURE">;
 	  };
 export type GitHubMergeAssessment = GitHubMergeAllowed | GitHubMergeRefusal;
+export interface GitLabMergeRefusal {
+	readonly kind: "refused";
+	readonly forge: "gitlab";
+	readonly headPipelineStatus: "failed" | "canceled";
+}
+export interface GitLabMergeAllowed {
+	readonly kind: "allowed";
+	readonly forge: "gitlab";
+	readonly headPipelineStatus: string | null;
+}
+export type MergeRefusal = GitHubMergeRefusal | GitLabMergeRefusal;
+export type MergeAllowed = GitHubMergeAllowed | GitLabMergeAllowed;
+export type MergeAssessment = MergeAllowed | MergeRefusal;
+export interface MergeRead {
+	readonly hadPreviousPassingCi: boolean;
+	readonly merge: MergeAssessment;
+}
 interface CiBase {
 	readonly source: CheckRead["source"];
 	readonly all: NonEmpty<Check>;
@@ -124,13 +162,13 @@ export type CiFailing = CiBase & {
 	readonly kind: "ci-failing";
 	readonly failed: NonEmpty<FailedCheck>;
 	readonly pending: readonly PendingCheck[];
-	readonly github: GitHubMergeAssessment;
+	readonly merge: MergeAssessment;
 };
-export type CiGithubRejected = CiBase & {
-	readonly kind: "ci-github-rejected";
+export type CiMergeRefused = CiBase & {
+	readonly kind: "ci-merge-refused";
 	readonly failed: readonly [];
 	readonly pending: readonly PendingCheck[];
-	readonly github: GitHubMergeRefusal;
+	readonly merge: MergeRefusal;
 };
 export type CiPending = CiBase & {
 	readonly kind: "ci-pending";
@@ -141,9 +179,9 @@ export type CiClean = CiBase & {
 	readonly kind: "ci-clean";
 	readonly failed: readonly [];
 	readonly pending: readonly [];
-	readonly github: GitHubMergeAllowed;
+	readonly merge: MergeAllowed;
 };
-export type CiState = CiFailing | CiGithubRejected | CiPending | CiClean;
+export type CiState = CiFailing | CiMergeRefused | CiPending | CiClean;
 export type PrSnapshot =
 	| {
 			readonly kind: "merged" | "closed";
@@ -180,7 +218,8 @@ export interface MergedPr {
 export type MergeGateReason =
 	| "closed-without-merge"
 	| "draft-pr"
-	| "changes-requested";
+	| "changes-requested"
+	| "forge-merge-status";
 export type MergeBlocker =
 	| {
 			readonly kind: "merge-conflicts";
@@ -195,12 +234,13 @@ export type MergeBlocker =
 	| {
 			readonly kind: "failing-checks";
 			readonly pr: PrContext;
-			readonly ci: CiFailing | CiGithubRejected;
+			readonly ci: CiFailing | CiMergeRefused;
 	  }
 	| {
 			readonly kind: "merge-gate";
 			readonly pr: PrContext;
 			readonly reason: MergeGateReason;
+			readonly facts: PullRequestFacts;
 	  };
 export type QueryFailure =
 	| {
@@ -258,7 +298,7 @@ export type StackDecision =
 	| { readonly kind: "clear"; readonly prs: NonEmpty<ReadyPr | MergedPr> };
 export type WatchMode = "single" | "stack" | "queued-stack";
 interface EventBase<K extends string, M extends WatchMode = WatchMode> {
-	readonly schemaVersion: 1;
+	readonly schemaVersion: 2;
 	readonly sequence: number;
 	readonly observedAt: string;
 	readonly mode: M;
@@ -405,6 +445,16 @@ export interface GitHubReader {
 		after: string | null,
 	): Promise<ReviewThreadPage>;
 	commitRollups(context: PrContext): Promise<readonly CommitRollup[]>;
+}
+export interface ForgeReader {
+	readonly forge: Forge;
+	originRepo(): Promise<Repository | null>;
+	currentPr(pr: PrNumber | null): Promise<PrContext>;
+	pullRequest(context: PrContext): Promise<PullRequestFacts>;
+	openPullRequests(repository: Repository): Promise<readonly OpenPullRequest[]>;
+	checks(facts: PullRequestFacts): Promise<CheckRead>;
+	reviewThreads(context: PrContext): Promise<readonly ReviewThread[]>;
+	mergeRead(facts: PullRequestFacts): Promise<MergeRead>;
 }
 export interface PollingOptions {
 	readonly interval: number;
