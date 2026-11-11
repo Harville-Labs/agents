@@ -4,8 +4,11 @@ The forge follows the repository's remote: GitHub uses `gh`, GitLab uses `glab`.
 
 ## glab pitfalls
 
-- `glab api` endpoints take `:id` for the current project, resolved from the remote. Outside the repository, use `projects/<url-encoded group/project>` and `--hostname <host>`.
+- `glab api` endpoints take `:id` for the current project, resolved from the remote. Outside the repository, use the URL-encoded path and `--hostname <host>`: `projects/group%2Fsub%2Fproject`. An unencoded path returns 404.
 - `glab api --paginate` without `--output ndjson` can print several JSON arrays back to back. Pipe paginated output through `--output ndjson` and `jq -s`, never plain `jq`.
+- glab has no `--json <fields>` flag. `view` and `list` commands take `--output json` (or `-F json`) and filter with `--jq`. For merge status, pipelines, and threads, run the watcher (`scripts/watch-pr/watch-pr --status-only`) instead of reading fields by hand.
+- The pipeline that gates an MR is the MR's `head_pipeline` (`glab mr view <mr> -F json --jq .head_pipeline`). A merged-results pipeline runs on `refs/merge-requests/<iid>/merge`, so a branch pipeline list does not show it. List an MR's pipelines with `glab api "projects/:id/merge_requests/<mr>/pipelines"`.
+- The `glab mr note` subcommands are experimental, and `glab mr notes` is not a command. If your glab has no `mr note list`, read `glab api --paginate --output ndjson "projects/:id/merge_requests/<mr>/discussions"`. A review thread is a discussion whose first non-system note has `resolvable: true`. Notes with `system: true` record events such as review requests and approvals.
 - `-f` sends a string. `-F` converts `true`, `false`, numbers, and JSON. Use `-F` for booleans such as `resolved=true`.
 - `glab mr create`, `glab issue create`, and `glab mr merge` prompt for confirmation. Pass `--yes`.
 - `glab mr merge` turns auto-merge on by default. It merges once the pipeline passes, and on a project with merge trains it adds the merge request to the train. Keep the default and pass `--yes` so it does not prompt.
@@ -22,6 +25,7 @@ The forge follows the repository's remote: GitHub uses `gh`, GitLab uses `glab`.
 | Mark ready | `gh pr ready <pr>` | `glab mr update <mr> --ready` |
 | Retarget | `gh pr edit <pr> --base <branch>` | `glab mr update <mr> --target-branch <branch>` |
 | Status, CI, threads, mergeability | `scripts/watch-pr/watch-pr --status-only` | the same command. It reads the forge from the remote. |
+| Read raw PR or MR fields | `gh pr view <pr> --json state,headRefOid` | `glab mr view <mr> --output json --jq '{state, sha, detailed_merge_status}'` |
 | Read a failed job's log | `gh run view <run> --log-failed` | `glab ci trace <job-id>` |
 | Review queue | `gh search prs --review-requested=@me --state=open --json url,title,repository,isDraft -- -author:@me` | `glab api --paginate --output ndjson "merge_requests?scope=all&state=opened&wip=no&reviewer_username=<you>&not[author_username]=<you>"` |
 | Approve | `gh pr review <pr> --approve` | `glab mr approve <mr>` |
