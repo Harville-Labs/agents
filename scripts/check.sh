@@ -42,6 +42,18 @@ for file in $(git ls-files --cached --others --exclude-standard '*.md'); do
   done
 done
 
+# With no path, rg reads stdin when stdin is not a TTY, and agent shells often
+# leave stdin open as a pipe, so a pathless example hangs the agent.
+for file in $(git ls-files --cached --others --exclude-standard '*.md'); do
+  grep -n -o -E '(^|`)rg [^`]*' "$file" | awk -v file="$file" '
+    { line = $0; sub(/:.*/, "", line); text = substr($0, length(line) + 2); sub(/^`/, "", text)
+      gsub(/'"'"'[^'"'"']*'"'"'|"[^"]*"/, "\x27Q", text)
+      n = split(text, t, /[ \t]+/); last = t[n]; prev = t[n - 1]
+      if (last ~ /^['"'"'"-]/ || prev ~ /^-([egtTmACB]|-glob|-type|-type-not|-max-count|-context|-after-context|-before-context|-regexp)$/)
+        { print "error: " file ":" line ": rg example needs an explicit path, such as ." > "/dev/stderr"; bad = 1 } }
+    END { exit bad }' || failed=1
+done
+
 # The OpenCode plugin and the go skill's scripts are TypeScript run by Bun.
 bun install --frozen-lockfile >/dev/null || fail "bun install failed at the repo root"
 bun run --silent typecheck || fail "opencode/plugin.ts does not typecheck"

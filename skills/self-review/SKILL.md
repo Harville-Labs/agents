@@ -20,7 +20,7 @@ Go through each list. Fix what you find, then rerun the full check command.
 - [ ] Errors are handled where they can be handled and propagated with context everywhere else. Nothing is swallowed silently.
 - [ ] Inputs from outside the process are validated at the boundary.
 - [ ] Async work is cancellable and bounded; nothing can hang or grow without limit.
-- [ ] Callers of anything you changed still work. Search for them: `rg '<name>'`.
+- [ ] Callers of anything you changed still work. Search for them: `rg '<name>' .`.
 
 ## Repository invariants
 

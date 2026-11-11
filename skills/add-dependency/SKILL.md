@@ -9,7 +9,7 @@ Every runtime dependency ships to users and is attack surface we maintain. Equal
 
 ## Check first
 
-1. Is it already solved in the repository, the standard library, or an existing dependency? Search: `rg '<capability>'`, and read `package.json` / `go.mod`.
+1. Is it already solved in the repository, the standard library, or an existing dependency? Search: `rg '<capability>' .`, and read `package.json` / `go.mod`.
 2. Is there an official SDK? Vendor APIs always use the vendor's official SDK.
 3. Is it in the repository's list of deliberately hand-rolled code (see its `AGENTS.md`)? Then don't replace it without discussion.
 

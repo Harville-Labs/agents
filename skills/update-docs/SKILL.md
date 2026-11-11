@@ -12,7 +12,7 @@ Docs change in the same PR as the behavior. A new config key without a line in t
 Search for every place the changed thing is mentioned:
 
 ```sh
-rg -n '<flag|key|route|env var|function name>' --glob '*.md' --glob '*.jsonc'
+rg -n '<flag|key|route|env var|function name>' --glob '*.md' --glob '*.jsonc' .
 ```
 
 Then check this list:

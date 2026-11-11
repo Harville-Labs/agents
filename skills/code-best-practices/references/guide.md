@@ -17,7 +17,7 @@ Enforce it in CI with [templates/check-file-length.sh](../../../templates/check-
 
 **Each piece of logic has one home.** Two copies of a rule drift until they disagree, and then one of them is a bug.
 
-- Before writing a helper, search for one: `rg -i '<what it does>'`, and read the repository's shared modules (`lib/`, `utils/`, `internal/`, `packages/*`).
+- Before writing a helper, search for one: `rg -i '<what it does>' .`, and read the repository's shared modules (`lib/`, `utils/`, `internal/`, `packages/*`).
 - The second time you'd write the same logic, extract it and make both callers use it. Don't copy and adapt.
 - Validation, parsing, formatting, permission checks, pricing, and constants (limits, URLs, error codes) are the usual offenders. Define each once and import it everywhere, across the client and server too when they share a package.
 - Types come from one source: derive them from the schema (`z.infer`, Pydantic models), the database schema, or the protocol package. Don't redeclare them by hand.
