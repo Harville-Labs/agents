@@ -8,7 +8,8 @@ The forge follows the repository's remote: GitHub uses `gh`, GitLab uses `glab`.
 - `glab api --paginate` without `--output ndjson` can print several JSON arrays back to back. Pipe paginated output through `--output ndjson` and `jq -s`, never plain `jq`.
 - glab has no `--json <fields>` flag. `view` and `list` commands take `--output json` (or `-F json`) and filter with `--jq`. For merge status, pipelines, and threads, run the watcher (`scripts/watch-pr/watch-pr --status-only`) instead of reading fields by hand.
 - The pipeline that gates an MR is the MR's `head_pipeline` (`glab mr view <mr> -F json --jq .head_pipeline`). A merged-results pipeline runs on `refs/merge-requests/<iid>/merge`, so a branch pipeline list does not show it. List an MR's pipelines with `glab api "projects/:id/merge_requests/<mr>/pipelines"`.
-- The `glab mr note` subcommands are experimental, and `glab mr notes` is not a command. If your glab has no `mr note list`, read `glab api --paginate --output ndjson "projects/:id/merge_requests/<mr>/discussions"`. A review thread is a discussion whose first non-system note has `resolvable: true`. Notes with `system: true` record events such as review requests and approvals.
+- The `glab mr note` subcommands, drafts included, are experimental. The recipes here were checked against glab 1.130. `glab mr notes` is not a command. If your glab has no `mr note list`, read `glab api --paginate --output ndjson "projects/:id/merge_requests/<mr>/discussions"`. A review thread is a discussion whose first non-system note has `resolvable: true`. Notes with `system: true` record events such as review requests and approvals.
+- `glab api` has no `--jq` flag. Pipe its output to `jq`: `glab api user | jq -r .username`.
 - `-f` sends a string. `-F` converts `true`, `false`, numbers, and JSON. Use `-F` for booleans such as `resolved=true`.
 - `glab mr create`, `glab issue create`, and `glab mr merge` prompt for confirmation. Pass `--yes`.
 - `glab mr merge` turns auto-merge on by default. It merges once the pipeline passes, and on a project with merge trains it adds the merge request to the train. Keep the default and pass `--yes` so it does not prompt.
@@ -33,43 +34,72 @@ The forge follows the repository's remote: GitHub uses `gh`, GitLab uses `glab`.
 
 ## Review threads
 
-A review comment belongs on the diff line it is about, in a thread the author can resolve. A general comment on the PR or MR is for the summary only.
+A review comment belongs on the diff line it is about, in a thread. A general comment on the PR or MR is for the summary only. Write each body to a file. Pass it as `--input <file>` to `gh api` or on stdin to `glab`, never as a shell argument.
 
-Write to a PR or MR with `scripts/forge/forge`. It works the same on both forges and reads the forge, host, and repository from the origin remote, like the watcher. Both scripts live in this skill's directory, not in the repository you are working on, and are not on `PATH`. Run them by absolute path from inside the checkout. Pass `--forge gitlab --hostname <host>` when origin points elsewhere, and `--owner` and `--repo` to act on another repository. Each command prints one JSON line, or exits 1 with the reason on stderr.
+### Post a review
 
-| Action | Command (both forges) |
-|---|---|
-| Post one review: summary plus line threads | `scripts/forge/forge --pr <n> review --summary-file <summary.md> --comments <comments.json>` |
-| Post a summary with no line threads | `scripts/forge/forge --pr <n> review --summary-file <summary.md>` |
-| Reply in a thread | `scripts/forge/forge --pr <n> reply --thread <id> --body-file <reply.md>` |
-| Resolve a thread | `scripts/forge/forge --pr <n> resolve --thread <id>` |
-| List open threads | `scripts/watch-pr/watch-pr --status-only` |
-
-The thread `<id>` is the `id` the watcher prints: a GraphQL node id on GitHub, a discussion id on GitLab. `comments.json` lists one object per finding:
+On GitHub one call posts the summary and every line thread, as a comment, with one notification. Write `review.json`, with `commit_id` from `gh pr view <pr> --json headRefOid --jq .headRefOid`:
 
 ```json
-[
-  { "path": "src/a.ts", "line": 42, "body": "<finding>" },
-  { "path": "src/b.ts", "line": 7, "side": "old", "body": "<finding on a removed line>" }
-]
+{
+  "commit_id": "<head sha>",
+  "event": "COMMENT",
+  "body": "<summary>",
+  "comments": [
+    { "path": "src/a.ts", "line": 42, "side": "RIGHT", "body": "<finding>" },
+    { "path": "src/b.ts", "line": 7, "side": "LEFT", "body": "<finding on a removed line>" }
+  ]
+}
 ```
 
-`line` is the line number in the new file. Set `"side": "old"` to comment on a removed line by its number in the old file. The review is posted as a comment, never an approval, and the author gets one notification.
+```sh
+gh api --method POST repos/<owner>/<repo>/pulls/<pr>/reviews --input review.json
+```
 
-On GitLab the command saves each finding as a draft note on the latest MR version, then publishes them all at once. It refuses in two cases and posts nothing:
+`RIGHT` takes the line number in the new file. `LEFT` takes a removed line by its number in the old file. GitHub rejects the whole review if any line is outside the diff. Move that finding into the summary and post again.
 
-- The line is not in the MR diff. GitLab can't hold a thread there. Move that finding into the summary.
-- You already have unpublished drafts on the MR. Publishing would post them too. Submit or discard them in the GitLab UI, then run the command again.
+On GitLab, save each finding as a draft note, publish them together, then post the summary:
+
+| Step | Command |
+|---|---|
+| Check you have no drafts. Publishing posts all of them. | `glab mr note draft list <mr> -F json --jq length` prints `0`. Otherwise submit or discard them in the GitLab UI first. |
+| Draft a finding on a new or changed line | `glab mr note draft create <mr> --file <path> --line <n> < finding.md` |
+| Draft a finding on a removed line | `glab mr note draft create <mr> --file <path> --old-line <n> < finding.md` |
+| Publish the drafts | `glab mr note draft publish <mr> --yes` |
+| Post the summary | `glab mr note create <mr> --resolvable=false < summary.md` |
+
+`draft create` refuses a line outside the diff (`line <n> not found in diff`). Move that finding into the summary. Post the summary with `--resolvable=false`. A resolvable summary opens a thread that blocks a project requiring all threads resolved.
+
+### Reply and resolve
+
+The thread `<id>` is the `id` the watcher (`scripts/watch-pr/watch-pr --status-only`) prints: a GraphQL node id on GitHub, a discussion id on GitLab.
+
+| Action | GitHub | GitLab |
+|---|---|---|
+| Reply in a thread | Get the first comment's id with `gh api graphql -f query='query($id:ID!){node(id:$id){... on PullRequestReviewThread{comments(first:1){nodes{databaseId}}}}}' -F id=<id> --jq '.data.node.comments.nodes[0].databaseId'`. Write `{"body": "<reply>"}` to `reply.json`, then `gh api --method POST repos/<owner>/<repo>/pulls/<pr>/comments/<comment-id>/replies --input reply.json` | `glab mr note create <mr> --reply <id> < reply.md` |
+| Resolve a review bot's thread | `gh api graphql -f query='mutation($id:ID!){resolveReviewThread(input:{threadId:$id}){thread{isResolved}}}' -F id=<id>` | `glab mr note resolve <mr> <id>` |
+
+Resolve only a review bot's thread, once you have replied with the fix or the dismissal, as `review-bot-triage.md` says. A human reviewer resolves their own threads. `glab mr note resolve` takes the MR first. Its usage line shows the reverse, which fails.
 
 ## Your last review
 
-The last head you reviewed is the SHA to diff from and the reason to skip a PR whose head hasn't moved:
+The last head you reviewed is the SHA to diff from and the reason to skip a PR whose head hasn't moved. Compare it with the watcher's `headRefOid`. Empty output or `null` means you haven't reviewed.
+
+On GitHub it is the commit your latest review was made on, approvals included:
 
 ```sh
-scripts/forge/forge --pr <n> last-review
+gh pr view <pr> --json reviews --jq '[.reviews[] | select(.author.login == "<you>")] | last | .commit.oid'
 ```
 
-It prints `{"forge", "pr", "commit"}`, with `commit` set to `null` when you haven't reviewed. On GitHub it is the commit your latest review was made on, approvals included. On GitLab a note doesn't record the head it saw, so it is the head of the MR version that was current at your latest note. Approving adds a note in your name, so approvals count. Compare it with the watcher's `headRefOid`.
+On GitLab a note doesn't record the head it saw, so take the head of the MR version that was current at your latest note. Approving adds a note in your name, so approvals count.
+
+```sh
+me=$(glab api user | jq -r .username)
+at=$(glab api --paginate --output ndjson "projects/:id/merge_requests/<mr>/notes" \
+  | jq -rs --arg me "$me" '[.[] | select(.author.username == $me) | .created_at] | max')
+glab api --paginate --output ndjson "projects/:id/merge_requests/<mr>/versions" \
+  | jq -rs --arg at "$at" '[.[] | select(.created_at <= $at)] | max_by(.created_at) | .head_commit_sha'
+```
 
 ## Labels
 
