@@ -54,7 +54,7 @@ Tests alone are not sufficient verification. A PR is verified only when its unit
 ### PR mechanics, for every PR
 
 - [ ] Resolve the forge once from the remote: `gh` for GitHub, `glab` for GitLab. Never require `gt`.
-- [ ] Open the PR ready, never draft, per **Opening a PR**. Use the run's built-in PR tool when it has one, else `gh pr create --base <base-branch>` or `glab mr create --target-branch <base-branch>` according to the resolved forge. A stack child targets its parent branch.
+- [ ] Open the PR ready, never draft, per **Opening a PR**. Use the run's built-in PR tool when it has one, else the create command for the resolved forge in `../references/forges.md`, with `--base <base-branch>` on GitHub or `--target-branch <base-branch>` on GitLab. A stack child targets its parent branch.
 - [ ] Run the repo's lint and typecheck once before the PR-facing push. Push with hooks on.
 - [ ] Run the **deslop** skill before each commit and the **no-comments** skill before review.
 - [ ] Triage every review-bot and security-scanner comment per `../references/review-bot-triage.md`.

@@ -1,6 +1,31 @@
 # Forges
 
-The forge follows the repository's remote: GitHub uses `gh`, GitLab uses `glab`. GitLab calls a pull request a merge request (MR). This file holds the commands the playbooks share for review threads and labels. Write every comment body to a file and pass the file. Never put comment text in a shell argument.
+The forge follows the repository's remote: GitHub uses `gh`, GitLab uses `glab`. GitLab calls a pull request a merge request (MR). This file holds the commands the playbooks share. Each GitLab command was checked against `glab` 1.130. Write every comment body to a file and pass the file. Never put comment text in a shell argument.
+
+## glab pitfalls
+
+- `glab api` endpoints take `:id` for the current project, resolved from the remote. Outside the repository, use `projects/<url-encoded group/project>` and `--hostname <host>`.
+- `glab api --paginate` without `--output ndjson` can print several JSON arrays back to back. Pipe paginated output through `--output ndjson` and `jq -s`, never plain `jq`.
+- `-f` sends a string. `-F` converts `true`, `false`, numbers, and JSON. Use `-F` for booleans such as `resolved=true`.
+- `glab mr create`, `glab issue create`, and `glab mr merge` prompt for confirmation. Pass `--yes`.
+- `glab mr merge` turns auto-merge on by default. Pass `--auto-merge=false` to merge now.
+- `@me` works in `glab mr list` and `glab issue list` filters. For `--assignee` on create and update, pass a username: `"$(glab api user | jq -r .username)"`. Prefix it with `+` on update to add rather than replace.
+- `/merge_requests` without a project defaults to `scope=created_by_me`. Add `scope=all` when you filter by reviewer or assignee.
+
+## Everyday commands
+
+| Action | GitHub | GitLab |
+|---|---|---|
+| Read an issue | `gh issue view <n> --comments` | `glab issue view <n> --comments` |
+| Assign an issue to yourself | `gh issue edit <n> --add-assignee @me` | `glab issue update <n> --assignee "+<username>"` |
+| Open a PR or MR | `gh pr create --base <base> --title <title> --body-file <body.md> --assignee @me` | `glab mr create --target-branch <base> --title <title> --description-file <body.md> --assignee <username> --yes` |
+| Mark ready | `gh pr ready <pr>` | `glab mr update <mr> --ready` |
+| Retarget | `gh pr edit <pr> --base <branch>` | `glab mr update <mr> --target-branch <branch>` |
+| Status, CI, threads, mergeability | `scripts/watch-pr/watch-pr --status-only` | the same command. It reads the forge from the remote. |
+| Read a failed job's log | `gh run view <run> --log-failed` | `glab ci trace <job-id>` |
+| Review queue | `gh search prs --review-requested=@me --state=open` | `glab mr list --reviewer=@me --not-draft` |
+| Approve | `gh pr review <pr> --approve` | `glab mr approve <mr>` |
+| Merge now, squashed | `gh pr merge <pr> --squash --match-head-commit <sha>` | `glab mr merge <mr> --squash --sha <sha> --auto-merge=false --yes` |
 
 ## Review threads
 
@@ -10,8 +35,8 @@ A review comment belongs on the diff line it is about, in a thread the author ca
 |---|---|---|
 | Open a thread on a line | `gh api --method POST "repos/{owner}/{repo}/pulls/<pr>/reviews" --input <review.json>` | `glab api --method POST "projects/:id/merge_requests/<mr>/discussions" --input <thread.json>` |
 | Reply in a thread | `gh api --method POST "repos/{owner}/{repo}/pulls/<pr>/comments/<comment-id>/replies" --input <reply.json>` | `glab api --method POST "projects/:id/merge_requests/<mr>/discussions/<discussion-id>/notes" --input <reply.json>` |
-| Resolve a thread | `gh api graphql -f query='mutation($id: ID!) { resolveReviewThread(input: {threadId: $id}) { thread { isResolved } } }' -f id=<thread-id>` | `glab api --method PUT "projects/:id/merge_requests/<mr>/discussions/<discussion-id>" -f resolved=true` |
-| List open threads | `scripts/watch-pr/watch-pr --status-only` | `glab api --paginate "projects/:id/merge_requests/<mr>/discussions"`, keeping discussions with a note where `resolvable` is true and `resolved` is false |
+| Resolve a thread | `gh api graphql -f query='mutation($id: ID!) { resolveReviewThread(input: {threadId: $id}) { thread { isResolved } } }' -f id=<thread-id>` | `glab api --method PUT "projects/:id/merge_requests/<mr>/discussions/<discussion-id>" -F resolved=true` |
+| List open threads | `scripts/watch-pr/watch-pr --status-only` | the same command, or `glab mr note list <mr> --state unresolved` |
 
 On GitHub, one review carries every line comment, so the author gets one notification. Take `commit_id` from `gh pr view <pr> --json headRefOid`:
 
@@ -43,7 +68,7 @@ On GitLab, a thread is a discussion with a `position`. Without one it lands on t
 }
 ```
 
-Set `new_line` for an added line, `old_line` for a removed line, and both for an unchanged line. To send several findings as one review, create each with `POST .../merge_requests/<mr>/draft_notes` (same `note` body and `position`), then publish them together with `POST .../merge_requests/<mr>/draft_notes/bulk_publish`.
+Set `new_line` for an added line, `old_line` for a removed line, and both for an unchanged line. The watcher's thread `id` is the discussion id that the reply and resolve endpoints take. A reply body is `{"body": "<reply>"}`. To send several findings as one review, create each with `POST .../merge_requests/<mr>/draft_notes`, whose body names the text `note` instead of `body` and takes the same `position`, then publish them together with `POST .../merge_requests/<mr>/draft_notes/bulk_publish`.
 
 ## Labels
 
@@ -51,7 +76,7 @@ The label scheme is in the **git-best-practices** skill. GitHub uses `P1`, `type
 
 | Action | GitHub | GitLab |
 |---|---|---|
-| Create an issue | `gh issue create --title <title> --body-file <body.md> --label P1,type:bug` | `glab issue create --title <title> --description "$(cat <body.md>)" --label "priority::1,type::bug"` |
+| Create an issue | `gh issue create --title <title> --body-file <body.md> --label P1,type:bug` | `glab issue create --title <title> --description-file <body.md> --label "priority::1,type::bug" --yes` |
 | Label a PR or MR | `gh pr edit <pr> --add-label P1` | `glab mr update <mr> --label "priority::1"` |
 | Remove a label | `gh pr edit <pr> --remove-label P1` | `glab mr update <mr> --unlabel "priority::1"` |
 
