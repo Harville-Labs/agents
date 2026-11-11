@@ -63,8 +63,9 @@ if raw=$(gh pr list --author "@me" --state all --limit 1000 \
 	--json number,state,headRefName 2>/dev/null); then
 	printf '%s' "$raw" | jq '[.[] | {number, state: (.state | ascii_downcase), head: .headRefName}]' > "$prs" 2>/dev/null
 elif command -v glab >/dev/null 2>&1 \
-	&& raw=$(glab mr list --author=@me --all --per-page 100 --output json 2>/dev/null); then
-	printf '%s' "$raw" | jq '[.[] | {number: .iid, state: (if .state == "opened" then "open" else .state end), head: .source_branch}]' > "$prs" 2>/dev/null
+	&& raw=$(glab api --paginate --output ndjson \
+		"projects/:id/merge_requests?scope=created_by_me&state=all&per_page=100" 2>/dev/null); then
+	printf '%s' "$raw" | jq -s '[.[] | {number: .iid, state: (if .state == "opened" then "open" else .state end), head: .source_branch}]' > "$prs" 2>/dev/null
 fi
 [ -s "$prs" ] || echo "[]" > "$prs"
 
