@@ -1,9 +1,9 @@
 import { describe, expect, it } from "bun:test";
 import { WatcherQueryError } from "./errors.ts";
+import { assessGitHubMerge, githubForge } from "./github.ts";
 import { runSimple } from "./poll.ts";
 import { runQueued } from "./queue.ts";
 import {
-	assessGitHubMerge,
 	classifyPr,
 	queryBackoffSeconds,
 	readSnapshot,
@@ -16,6 +16,7 @@ import {
 	pendingCheck,
 } from "./fakes.test-helper.ts";
 import type {
+	MergeStateStatus,
 	PollingOptions,
 	PrContext,
 	PullRequestFacts,
@@ -39,7 +40,7 @@ const options = {
 describe("readiness truth table", () => {
 	it("covers every specified row and every UNKNOWN rollup value", () => {
 		const cases: readonly [
-			PullRequestFacts["mergeStateStatus"],
+			MergeStateStatus,
 			RollupState,
 			"allowed" | "refused",
 		][] = [
@@ -64,7 +65,7 @@ describe("readiness truth table", () => {
 
 	it("turns a clean visible list plus GitHub refusal into an explicit CI blocker", async () => {
 		const reader = fakeReader({
-			facts: { mergeStateStatus: "BLOCKED" },
+			facts: { mergeState: { forge: "github", status: "BLOCKED" } },
 			fastPath: { kind: "checks", checks: [passingCheck()] },
 			commitRollups: [{ oid: "head", state: "FAILURE" }],
 		});
@@ -76,7 +77,7 @@ describe("readiness truth table", () => {
 		});
 		expect(snapshot.kind).toBe("open");
 		if (snapshot.kind !== "open") throw new Error("expected open snapshot");
-		expect(snapshot.ci.kind).toBe("ci-github-rejected");
+		expect(snapshot.ci.kind).toBe("ci-merge-refused");
 		expect(classifyPr(snapshot)).toMatchObject({
 			kind: "blocker",
 			blocker: { kind: "failing-checks" },
@@ -287,7 +288,7 @@ describe("polling deadline sleeps", () => {
 		});
 		const result = await runSimple({
 			dependencies: {
-				reader: {
+				reader: githubForge({
 					...pending,
 					async checksFastPath(pr) {
 						reads += 1;
@@ -295,7 +296,7 @@ describe("polling deadline sleeps", () => {
 							? pending.checksFastPath(pr)
 							: passed.checksFastPath(pr);
 					},
-				},
+				}),
 				clock: {
 					now: () => now,
 					observedAt: () => "2026-07-26T00:00:00.000Z",

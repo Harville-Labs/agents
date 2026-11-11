@@ -5,7 +5,15 @@ import {
 	InvalidArgumentError,
 	Option,
 } from "commander";
-import { GhGitHubReader, discoverStack, resolveContext } from "./github.ts";
+import {
+	GhGitHubReader,
+	discoverStack,
+	githubForge,
+	resolveContext,
+} from "./github.ts";
+import { GlabGitLabReader } from "./gitlab.ts";
+import { run } from "./command.ts";
+import { detectForge, parseRemote } from "./remote.ts";
 import { WatcherQueryError } from "./errors.ts";
 import { runSimple, type WatchClock } from "./poll.ts";
 import { statusQueryVerdict, verdictFactory } from "./policy.ts";
@@ -13,7 +21,11 @@ import { runQueued } from "./queue.ts";
 import { renderJson, renderPretty } from "./render.ts";
 import type * as T from "./types.ts";
 import { nonEmpty, parsePrNumber } from "./types.ts";
-export interface CliOptions {
+export interface ForgeChoice {
+	readonly forge: T.ForgeKind | null;
+	readonly hostname: string | null;
+}
+export interface CliOptions extends ForgeChoice {
 	readonly owner: string | null;
 	readonly repo: string | null;
 	readonly pr: T.PrNumber | null;
@@ -57,6 +69,8 @@ function stackPrList(value: string): T.NonEmpty<T.PrNumber> {
 	return parsed;
 }
 interface RawOptions {
+	readonly forge?: T.ForgeKind;
+	readonly hostname?: string;
 	readonly owner?: string;
 	readonly repo?: string;
 	readonly pr?: T.PrNumber;
@@ -81,9 +95,16 @@ export function parseArgs(
 		)
 		.configureOutput({ writeOut: io.stdout, writeErr: io.stderr })
 		.exitOverride()
-		.option("--owner <owner>", "GitHub repository owner")
-		.option("--repo <repo>", "GitHub repository name")
-		.option("--pr <number>", "pull request number", prNumber)
+		.addOption(
+			new Option(
+				"--forge <forge>",
+				"github or gitlab; detected from the origin remote when omitted",
+			).choices(["github", "gitlab"]),
+		)
+		.option("--hostname <host>", "GitLab host (implies --forge gitlab)")
+		.option("--owner <owner>", "repository owner or GitLab namespace path")
+		.option("--repo <repo>", "repository name")
+		.option("--pr <number>", "pull or merge request number", prNumber)
 		.addOption(
 			new Option("--stack", "watch the connected open stack")
 				.default(false)
@@ -125,7 +146,11 @@ export function parseArgs(
 	const raw = program.opts<RawOptions>();
 	if (raw.stackPrs !== undefined && !raw.queuedStack)
 		program.error("error: --stack-prs requires --queued-stack");
+	if (raw.forge === "github" && raw.hostname !== undefined)
+		program.error("error: --hostname applies only to GitLab");
 	return {
+		forge: raw.forge ?? null,
+		hostname: raw.hostname ?? null,
 		owner: raw.owner ?? null,
 		repo: raw.repo ?? null,
 		pr: raw.pr ?? null,
@@ -143,14 +168,24 @@ export function parseArgs(
 	};
 }
 export interface CliRuntime {
-	readonly reader: T.GitHubReader;
+	readonly reader: (choice: ForgeChoice) => Promise<T.ForgeReader>;
 	readonly clock: WatchClock;
 	readonly stdout: (value: string) => void;
 	readonly stderr: (value: string) => void;
 }
+async function realReader(choice: ForgeChoice): Promise<T.ForgeReader> {
+	const origin = await run(["git", "remote", "get-url", "origin"]);
+	const forge = detectForge({
+		...choice,
+		remote: origin.code === 0 ? parseRemote(origin.stdout) : null,
+	});
+	return forge.kind === "github"
+		? githubForge(new GhGitHubReader())
+		: new GlabGitLabReader(forge.host);
+}
 function realRuntime(): CliRuntime {
 	return {
-		reader: new GhGitHubReader(),
+		reader: realReader,
 		clock: {
 			now: () => performance.now() / 1_000,
 			observedAt: () => new Date().toISOString(),
@@ -173,13 +208,15 @@ export async function main(
 		if (!(error instanceof CommanderError)) throw error;
 		return error.exitCode === 0 ? 0 : 64;
 	}
-	const render = options.pretty ? renderPretty : renderJson;
+	const reader = await runtime.reader(options);
+	const render = (verdict: T.WatcherVerdict): string =>
+		options.pretty ? renderPretty(verdict, reader.forge) : renderJson(verdict);
 	const emit = (verdict: T.ProgressVerdict): void =>
 		runtime.stdout(render(verdict));
 	let contexts: T.NonEmpty<T.PrContext>;
 	try {
 		const seed = await resolveContext({
-			reader: runtime.reader,
+			reader,
 			owner: options.owner,
 			repo: options.repo,
 			pr: options.pr ?? options.stackPrs[0] ?? null,
@@ -188,7 +225,7 @@ export async function main(
 			nonEmpty(options.stackPrs.map((number) => ({ ...seed, number }))) ??
 			(options.mode === "single"
 				? [seed]
-				: await discoverStack(runtime.reader, seed));
+				: await discoverStack(reader, seed));
 	} catch (error) {
 		if (!(error instanceof WatcherQueryError)) throw error;
 		const verdict = statusQueryVerdict(
@@ -199,7 +236,7 @@ export async function main(
 		runtime.stdout(render(verdict));
 		return verdict.exitCode;
 	}
-	const dependencies = { reader: runtime.reader, clock: runtime.clock, emit };
+	const dependencies = { reader, clock: runtime.clock, emit };
 	const verdict =
 		options.mode === "queued-stack" && !options.statusOnly
 			? await runQueued({ dependencies, contexts, options: options.polling })

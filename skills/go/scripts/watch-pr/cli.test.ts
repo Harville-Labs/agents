@@ -2,12 +2,12 @@ import { describe, expect, it } from "bun:test";
 import { type CliRuntime, main, parseArgs } from "./cli.ts";
 import { fakeReader, passingCheck } from "./fakes.test-helper.ts";
 import { renderJson, renderPretty } from "./render.ts";
-import type { GitHubReader, WatcherVerdict } from "./types.ts";
+import type { ForgeReader, WatcherVerdict } from "./types.ts";
 import { parsePrNumber } from "./types.ts";
 
 const silentIo = { stdout: () => {}, stderr: () => {} };
 
-function testRuntime(reader: GitHubReader): {
+function testRuntime(reader: ForgeReader): {
 	readonly runtime: CliRuntime;
 	readonly stdout: string[];
 	readonly stderr: string[];
@@ -18,7 +18,7 @@ function testRuntime(reader: GitHubReader): {
 		stdout,
 		stderr,
 		runtime: {
-			reader,
+			reader: async () => reader,
 			clock: {
 				now: () => 0,
 				observedAt: () => "2026-07-26T00:00:00.000Z",
@@ -83,6 +83,13 @@ describe("parseArgs", () => {
 		expect(parsed.pretty).toBe(true);
 	});
 
+	it("reads the forge and GitLab host", () => {
+		expect(parseArgs([], silentIo)).toMatchObject({ forge: null, hostname: null });
+		expect(
+			parseArgs(["--forge", "gitlab", "--hostname", "gitlab.example"], silentIo),
+		).toMatchObject({ forge: "gitlab", hostname: "gitlab.example" });
+	});
+
 	it("rejects every invalid mode and numeric shape as usage", async () => {
 		const invalid = [
 			["--unknown"],
@@ -93,6 +100,8 @@ describe("parseArgs", () => {
 			["--stack", "--queued-stack"],
 			["--stack-prs", "1,2"],
 			["--queued-stack", "--stack-prs", "1,1"],
+			["--forge", "bitbucket"],
+			["--forge", "github", "--hostname", "gitlab.example"],
 		];
 		for (const argv of invalid) {
 			const harness = testRuntime(fakeReader());
@@ -110,7 +119,7 @@ describe("rendering", () => {
 		number: parsePrNumber(1),
 	};
 	const status = {
-		schemaVersion: 1,
+		schemaVersion: 2,
 		sequence: 1,
 		observedAt: "2026-07-26T00:00:00.000Z",
 		mode: "single",
@@ -125,7 +134,7 @@ describe("rendering", () => {
 				facts: {
 					context,
 					mergeable: "MERGEABLE",
-					mergeStateStatus: "CLEAN",
+					mergeState: { forge: "github", status: "CLEAN" },
 					reviewDecision: "APPROVED",
 					headRefOid: "head",
 					headRefName: "feature",
@@ -150,6 +159,32 @@ describe("rendering", () => {
 		expect(rendered).toContain(
 			"| [#1](https://github.com/owner/repo/pull/1) | \u2014 | \u2014 | ✅ merged |",
 		);
+	});
+
+	it("names a GitLab merge request with its URL and merge status", () => {
+		const gitlab = {
+			...status,
+			rows: [
+				{
+					kind: "merged",
+					context,
+					facts: {
+						...status.rows[0].facts,
+						mergeState: {
+							forge: "gitlab",
+							detailedMergeStatus: "mergeable",
+							headPipeline: { id: 900, status: "success" },
+						},
+					},
+				},
+			],
+		} satisfies WatcherVerdict;
+		const rendered = renderPretty(gitlab, { kind: "gitlab", host: "gitlab.example" });
+		expect(rendered).toContain("| MR | CI | Review | Merge |");
+		expect(rendered).toContain(
+			"[!1](https://gitlab.example/owner/repo/-/merge_requests/1)",
+		);
+		expect(rendered).not.toContain("GitHub");
 	});
 });
 
@@ -193,7 +228,7 @@ describe("main", () => {
 
 	it("returns exit 4 for a hidden GitHub-side CI refusal", async () => {
 		const reader = fakeReader({
-			facts: { mergeStateStatus: "BLOCKED" },
+			facts: { mergeState: { forge: "github", status: "BLOCKED" } },
 			fastPath: { kind: "checks", checks: [passingCheck()] },
 			commitRollups: [{ oid: "head", state: "FAILURE" }],
 		});
@@ -209,7 +244,7 @@ describe("main", () => {
 			exitCode: 4,
 			blocker: {
 				kind: "failing-checks",
-				ci: { kind: "ci-github-rejected" },
+				ci: { kind: "ci-merge-refused" },
 			},
 		});
 	});

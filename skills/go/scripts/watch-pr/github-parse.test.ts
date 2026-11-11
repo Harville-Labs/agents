@@ -124,8 +124,8 @@ describe("closed enum parsing", () => {
 			parsePullRequest(
 				{ ...rawPullRequest, mergeStateStatus: "CONFLICTING" },
 				context,
-			).mergeStateStatus,
-		).toBe("CONFLICTING");
+			).mergeState,
+		).toEqual({ forge: "github", status: "CONFLICTING" });
 	});
 
 	it("reads gh's empty reviewDecision as no decision rather than a parse failure", () => {

@@ -30,8 +30,9 @@ const cleanCi = {
 	failed: [],
 	pending: [],
 	hadPreviousPassingCi: false,
-	github: {
+	merge: {
 		kind: "allowed",
+		forge: "github",
 		basis: "merge-state",
 		mergeStateStatus: "CLEAN",
 		headRollupState: "SUCCESS",
@@ -52,7 +53,7 @@ const readyPr = {
 	},
 } satisfies ReadyPr;
 const ready = {
-	schemaVersion: 1,
+	schemaVersion: 2,
 	sequence: 1,
 	observedAt: "2026-07-26T00:00:00.000Z",
 	mode: "single",
@@ -69,7 +70,7 @@ void ready;
 const refused = {
 	kind: "allowed",
 	basis: "rollup",
-	mergeStateStatus: "BLOCKED",
+	mergeState: { forge: "github", status: "BLOCKED" },
 	headRollupState: "FAILURE",
 } as const;
 
