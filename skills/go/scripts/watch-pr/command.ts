@@ -9,11 +9,13 @@ export const firstLine = (value: string): string =>
 	value.trim().split(/\r?\n/, 1)[0]?.slice(0, 240) ?? "";
 export function run(
 	argv: readonly [string, ...string[]],
+	input?: string,
 ): Promise<CommandResult> {
 	return new Promise((resolve, reject) => {
 		const child = spawn(argv[0], argv.slice(1), {
-			stdio: ["ignore", "pipe", "pipe"],
+			stdio: ["pipe", "pipe", "pipe"],
 		});
+		child.stdin.end(input);
 		let stdout = "";
 		let stderr = "";
 		child.stdout.setEncoding("utf8");
@@ -41,8 +43,9 @@ export function parseJson(text: string, label: string): unknown {
 }
 export async function runText(
 	argv: readonly [string, ...string[]],
+	input?: string,
 ): Promise<string> {
-	const result = await run(argv);
+	const result = await run(argv, input);
 	if (result.code !== 0)
 		throw new WatcherQueryError({
 			kind: "command-exit",

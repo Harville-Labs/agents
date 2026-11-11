@@ -3,8 +3,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "bun test watch-pr check-plan.test.ts",
-    "typecheck": "tsc --project watch-pr/tsconfig.json --noEmit --strict && tsc --noEmit --strict --module esnext --target esnext --moduleResolution bundler --types bun-types --skipLibCheck check-plan.ts"
+    "test": "bun test watch-pr forge check-plan.test.ts",
+    "typecheck": "tsc --project watch-pr/tsconfig.json --noEmit --strict && tsc --project forge/tsconfig.json --noEmit --strict && tsc --noEmit --strict --module esnext --target esnext --moduleResolution bundler --types bun-types --skipLibCheck check-plan.ts"
   },
   "dependencies": {
     "commander": "14.0.0"
