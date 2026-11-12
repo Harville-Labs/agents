@@ -96,6 +96,7 @@ The default answer is **go**, which runs most of the others when its steps need 
 | Run a large or cross-cutting change, or one to review after stepping away | [`figure-it-out`](../figure-it-out/SKILL.md) |
 | Keep a decision log during a run, and review it afterward | [`show-me-your-work`](../show-me-your-work/SKILL.md) |
 | Pick a model for each size and a reasoning budget | [`setup-models`](../setup-models/SKILL.md) |
+| Install Recoder so PR reviews also run a Recoder review | [`setup-recoder`](../setup-recoder/SKILL.md) |
 | Turn their own working habits into a personal mode skill | [`automate-me`](../automate-me/SKILL.md) |
 | Turn what a finished task taught into skill edits | [`reflect`](../reflect/SKILL.md) |
 | Stop agents from repeating the same mistakes in this repo | [`correct`](../correct/SKILL.md) |

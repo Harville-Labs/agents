@@ -75,6 +75,7 @@ Type a skill as `/hl:<name>` in Claude Code, `@<name>` in OpenCode, or `$<name>`
 | [go](skills/go/SKILL.md) | Do any nontrivial task with rigor: picks a playbook and runs it |
 | [help](skills/help/SKILL.md) | Find the right skill, playbook, or principle, and get set up |
 | [setup-models](skills/setup-models/SKILL.md) | Map the model sizes to your models and set a reasoning budget |
+| [setup-recoder](skills/setup-recoder/SKILL.md) | Install and set up Recoder, so PR reviews also run a Recoder review |
 | [typescript](skills/typescript-best-practices/SKILL.md), [python](skills/python-best-practices/SKILL.md), [go](skills/go-best-practices/SKILL.md), [rust](skills/rust-best-practices/SKILL.md), [svelte](skills/svelte-best-practices/SKILL.md) `-best-practices` | Apply a language's toolchain and rules |
 | [code](skills/code-best-practices/SKILL.md), [testing](skills/testing-best-practices/SKILL.md), [security](skills/security-best-practices/SKILL.md), [git](skills/git-best-practices/SKILL.md), [deploy](skills/deploy-best-practices/SKILL.md) `-best-practices` | Apply the cross-language rules for each topic |
 | [how](skills/how/SKILL.md), [why](skills/why/SKILL.md), [teach](skills/teach/SKILL.md) | Learn how code works, why it's shaped that way, or both in plain words |
