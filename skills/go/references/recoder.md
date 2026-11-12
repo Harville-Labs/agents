@@ -31,6 +31,20 @@ Keep the `runId` from the one JSON line `--detach` prints. Exit 3 from `--detach
 
 Leave the model and the budget at their defaults unless the user names them. The default `--budget low` runs one reviewer. Pass `--budget medium` for a large or risky change. Never start two reviews of the same head at once. They cost the same and return the same findings.
 
+## Reuse an earlier run
+
+A run is stored with its report, so a diff Recoder already reviewed never needs a second run. Before you start one, list the finished runs with the commit range each one reviewed:
+
+```sh
+recoder runs -p --limit 50 \
+  | jq -r '.[] | select(.state == "complete" and .reportFile != null) | "\(.runId) \(.reportFile)"' \
+  | while read -r id file; do
+      jq -r --arg id "$id" '"\($id) \(.target.headSha) \(.target.mergeBaseSha) \(.target.url)"' "$file"
+    done
+```
+
+Each line is a run id, the head it reviewed, the commit its diff started at, and the PR URL for a `--pull` run. A run matches a whole-PR review when its head and URL match. It matches an incremental review when its head matches and its start is your last reviewed SHA. Read a match with `recoder result -p <run-id> --format json` and start nothing.
+
 ## Read the report
 
 | Field | Use |
