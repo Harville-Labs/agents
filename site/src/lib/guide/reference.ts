@@ -86,6 +86,22 @@ export const reference: GuideSection[] = [
     ],
   },
   {
+    id: 'design',
+    title: 'design',
+    entries: [
+      {
+        title: [['giga-ui', 'skills/giga-ui/SKILL.md']],
+        mono: true,
+        one: 'a calm, precise visual language for product UI.',
+        body: [
+          {
+            p: 'tokens, component and sidebar recipes, a motion system, 22 anti-slop rules, annotated reference screenshots, and a screenshot QA round.',
+          },
+        ],
+      },
+    ],
+  },
+  {
     id: 'slack',
     title: 'slack automation',
     entries: [

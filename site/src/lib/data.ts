@@ -161,7 +161,7 @@ export const playbooks: Playbook[] = [
 ];
 
 export const otherPlaybooks =
-  'Also: multi-phase plan, orchestrate, eval, runtime forensics, trace forensics, visual parity, autopilot, pause safely, worktree cleanup, and authoring a skill.';
+  'Also: multi-phase plan, orchestrate, eval, runtime forensics, trace forensics, designing UI, visual parity, autopilot, pause safely, worktree cleanup, and authoring a skill.';
 
 export const principles: [string, [string, string][]][] = [
   [
