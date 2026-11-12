@@ -19,7 +19,8 @@ A review takes 5 to 40 minutes, longer than most shell tool limits. Start it in 
 | Step | Command |
 |---|---|
 | Start a PR or MR review | `recoder review -p --detach --pull <url>` |
-| Start a review of a range in a checkout | `recoder review -p --detach --repo <dir> --base <sha> --head HEAD --title <title> --body-file <body.md>` |
+| Review only the commits after one you reviewed | `recoder review -p --detach --pull <url> --since <sha>` |
+| The same, on a release without `--since` | `recoder review -p --detach --repo <worktree> --base <sha> --head HEAD --title <title> --body-file <body.md>` |
 | Wait | `recoder wait -p <run-id> --timeout 5`. Repeat while `state` is `running`. |
 | Read the report | `recoder result -p <run-id> --format json` |
 | Stop it | `recoder cancel -p <run-id>` |
@@ -27,7 +28,7 @@ A review takes 5 to 40 minutes, longer than most shell tool limits. Start it in 
 
 Keep the `runId` from the one JSON line `--detach` prints. Exit 3 from `--detach` means the review did not start. Read `error` in that line. `wait` exits 0 both when the run ends and when the timeout passes, so read `state`. Always pass the whole run id. With none, a command reads the newest run, which may belong to another review.
 
-`--pull` fetches the head into a throwaway checkout and takes the forge's title and body as the change's intent. It needs `gh` or `glab` signed in. Recoder never changes the working tree, index, or branches of the repository it reads.
+`--pull` fetches the head into a throwaway checkout and takes the forge's title and body as the change's intent. It needs `gh` or `glab` signed in. `--since` starts the diff at that commit. It is a usage error (exit 2) when the commit is not in the history of the PR's head, as after a rebase or force-push. A release that predates `--since` also refuses it with exit 2, naming the flag. Then use the worktree range command, and tell the user to run `recoder upgrade`. Recoder never changes the working tree, index, or branches of the repository it reads.
 
 Leave the model and the budget at their defaults unless the user names them. The default `--budget low` runs one reviewer. Pass `--budget medium` for a large or risky change. Never start two reviews of the same head at once. They cost the same and return the same findings.
 
