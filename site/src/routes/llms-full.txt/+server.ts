@@ -9,6 +9,6 @@ export function GET() {
     ...[...c.workflow, ...c.bestPractices, ...c.principles, ...c.agents].map((e) => e.path),
     ...c.playbooks,
   ];
-  const text = `# hl plugin, full text\n\n${files.map((f) => `<file path="${f}">\n${c.read(f)}\n</file>`).join('\n\n')}\n`;
+  const text = `# hl stack, full text\n\n${files.map((f) => `<file path="${f}">\n${c.read(f)}\n</file>`).join('\n\n')}\n`;
   return new Response(text, { headers: { 'content-type': 'text/plain; charset=utf-8' } });
 }

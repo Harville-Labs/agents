@@ -1,14 +1,12 @@
 ---
 name: no-comments
-description: "Spawn Comment Sicko, fix accepted findings, and offer encodings for claimed constraints."
+description: "Strip needless comments from a diff with the comment-auditor subagent, fix the workarounds it flags, and offer checks that enforce any real constraint a comment claimed. Use before review, or for /no-comments."
 disable-model-invocation: true
 ---
 
 # No comments
 
-Spawn Comment Sicko. Act on accepted findings.
-
-Defer to Comment Sicko's fresh perspective.
+Spawn the `comment-auditor` subagent and act on the findings you accept. It didn't write the comments, so defer to its fresh read.
 
 ## Scope
 

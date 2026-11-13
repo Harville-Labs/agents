@@ -1,6 +1,6 @@
-# Harville Labs engineering standards
+# hl stack
 
-Engineering standards, skills, and subagents for AI coding agents and the people who work with them. They run the same way in Claude Code, OpenCode, and Codex.
+The Harville Labs agent stack: engineering standards, skills, and subagents for AI coding agents and the people who work with them. They run the same way in Claude Code, OpenCode, and Codex.
 
 - **[AGENTS.md](AGENTS.md)**: the rules. Short enough to load into every session.
 - **[skills/](skills/)**: the **go** router and its playbooks, the engineering principles, the `*-best-practices` standards, and review and writing workflows.
@@ -77,18 +77,23 @@ Type a skill as `/hl:<name>` in Claude Code, `@<name>` in OpenCode, or `$<name>`
 | [setup-models](skills/setup-models/SKILL.md) | Map the model sizes to your models and set a reasoning budget |
 | [typescript](skills/typescript-best-practices/SKILL.md), [python](skills/python-best-practices/SKILL.md), [go](skills/go-best-practices/SKILL.md), [rust](skills/rust-best-practices/SKILL.md), [svelte](skills/svelte-best-practices/SKILL.md) `-best-practices` | Apply a language's toolchain and rules |
 | [code](skills/code-best-practices/SKILL.md), [testing](skills/testing-best-practices/SKILL.md), [security](skills/security-best-practices/SKILL.md), [git](skills/git-best-practices/SKILL.md), [deploy](skills/deploy-best-practices/SKILL.md) `-best-practices` | Apply the cross-language rules for each topic |
+| [in-your-own-words](skills/in-your-own-words/SKILL.md), [sharpen](skills/sharpen/SKILL.md) | Check the agent understood the goal, or rewrite a prompt before sending it |
 | [how](skills/how/SKILL.md), [why](skills/why/SKILL.md), [teach](skills/teach/SKILL.md) | Learn how code works, why it's shaped that way, or both in plain words |
+| [recall](skills/recall/SKILL.md), [catchup](skills/catchup/SKILL.md), [catchup-video](skills/catchup-video/SKILL.md) | Rebuild context from recent work, or catch up on this chat in text or a short video |
 | [architect](skills/architect/SKILL.md), [arena](skills/arena/SKILL.md), [swarm](skills/swarm/SKILL.md) | Settle a design, merge several attempts, or run parallel checks |
+| [figure-it-out](skills/figure-it-out/SKILL.md), [show-me-your-work](skills/show-me-your-work/SKILL.md) | Design a rigorous run for a large or unattended task, and keep a decision log a reviewer can check |
+| [tdd](skills/tdd/SKILL.md), [benchmark-checklist](skills/benchmark-checklist/SKILL.md) | Fix a bug test-first, or vet a performance number before acting on it |
 | [interrogate](skills/interrogate/SKILL.md), [blast-radius](skills/blast-radius/SKILL.md), [self-review](skills/self-review/SKILL.md) | Review a diff with other models, find breakage outside it, or check it yourself |
 | [deslop](skills/deslop/SKILL.md), [no-comments](skills/no-comments/SKILL.md), [unslop](skills/unslop/SKILL.md) | Clean AI slop out of code, comments, or prose |
 | [ui-design](skills/ui-design/SKILL.md) | Design or polish a UI in the repository's own style (or a default one): a brief, motion, anti-slop rules, and a screenshot QA round |
 | [control-cli](skills/control-cli/SKILL.md), [control-ui](skills/control-ui/SKILL.md) | Drive a CLI, TUI, or browser UI the way a user does, and capture proof |
-| [create-verification-skill](skills/create-verification-skill/SKILL.md), [create-formal-verification-skill](skills/create-formal-verification-skill/SKILL.md) | Give agents a scripted or formal way to prove behavior |
+| [create-verification-skill](skills/create-verification-skill/SKILL.md), [maintain-verification-skill](skills/maintain-verification-skill/SKILL.md), [create-formal-verification-skill](skills/create-formal-verification-skill/SKILL.md), [maintain-formal-verification-skill](skills/maintain-formal-verification-skill/SKILL.md) | Give agents a scripted or formal way to prove behavior, and keep it in line with the code |
+| [statechart](skills/statechart/SKILL.md) | Show a PM or designer a chart of what the user sees, checked by a TLA+ model |
 | [technical-writing](skills/technical-writing/SKILL.md), [update-docs](skills/update-docs/SKILL.md), [write-adr](skills/write-adr/SKILL.md), [write-agents-md](skills/write-agents-md/SKILL.md) | Write docs, decisions, and agent guides to a standard |
 | [add-dependency](skills/add-dependency/SKILL.md), [add-service](skills/add-service/SKILL.md) | Justify a package, or add a container image, deploy manifests, and the infrastructure handoff |
 | [reflect](skills/reflect/SKILL.md), [correct](skills/correct/SKILL.md), [automate-me](skills/automate-me/SKILL.md) | Turn lessons and habits into skill edits |
 
-The `principle-*` skills are one rule each. **go** reads and cites them, and you can steer with their names ("apply prove it works"). `/hl:help` covers the rest (recall, catchup, sharpen, statechart, and others).
+The `principle-*` skills are one rule each. **go** reads and cites them, and you can steer with their names ("apply prove it works"). `/hl:help` explains when to use each skill.
 
 ## Changing this repository
 

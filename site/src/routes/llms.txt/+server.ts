@@ -9,7 +9,7 @@ const list = (entries: Entry[]) =>
 // The llms.txt convention (https://llmstxt.org): a title, a one-line summary, then linked lists.
 export function GET() {
   const c = catalog();
-  const text = `# hl plugin
+  const text = `# hl stack
 
 > Engineering rules, workflow skills, and review subagents for coding agents. It behaves the same in Claude Code, OpenCode, and Codex. The go skill routes a task to a playbook and applies the principles.
 

@@ -1,6 +1,6 @@
 ---
 name: unslop
-description: Cut AI tells from any writing.
+description: Cut AI tells from any writing, such as docs, PR bodies, commit messages, comments, and replies. Use before you send or commit prose, or for /unslop.
 disable-model-invocation: true
 ---
 

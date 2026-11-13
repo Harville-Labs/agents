@@ -451,7 +451,7 @@ export const reference: GuideSection[] = [
       {
         title: [['comment-auditor', 'agents/comment-auditor.md']],
         mono: true,
-        one: 'the comment sicko.',
+        one: 'deletes comments, flags workarounds.',
         body: [
           {
             p: 'keeps legal headers, external constraints, justified suppressions, public API docs, issue links. everything else is MUST KILL. reports only.',
