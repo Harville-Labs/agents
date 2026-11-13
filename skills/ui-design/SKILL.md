@@ -1,6 +1,6 @@
 ---
 name: ui-design
-description: A method for designing UI that looks and feels finished (a design brief, a motion and interaction system, anti-slop rules, and a screenshot QA round), applied on top of the repository's own design, with a default visual style for repositories that have none. Use when building, redesigning, or polishing any user interface (a component, landing page, dashboard, app screen, mobile UI, onboarding or auth flow), especially from a short or vague prompt.
+description: Use for any change to how a user interface looks or feels, including building, redesigning, polishing, cleaning up, or restyling a page, screen, or component (dashboard, landing page, form, app shell, mobile UI, onboarding or auth flow), even from a short prompt like "polish this page" or "make it look good". Runs a design method on top of the repository's own design (a brief, motion and interaction rules, anti-slop rules, and a screenshot QA round), with a default style for repositories that have none.
 ---
 
 # ui-design
