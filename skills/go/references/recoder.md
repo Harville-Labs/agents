@@ -30,6 +30,8 @@ Keep the `runId` from the one JSON line `--detach` prints. Exit 3 from `--detach
 
 `--pull` fetches the head into a throwaway checkout and takes the forge's title and body as the change's intent. It needs `gh` or `glab` signed in. `--since` starts the diff at that commit. It is a usage error (exit 2) when the commit is not in the history of the PR's head, as after a rebase or force-push. A release that predates `--since` also refuses it with exit 2, naming the flag. Then use the worktree range command, and tell the user to run `recoder upgrade`. Recoder never changes the working tree, index, or branches of the repository it reads.
 
+A review reports. It never fixes. Recoder's own `recoder` skill, which `recoder init` installs, tells an agent to fix the findings and review again. Follow that only for a change you own and were asked to fix. When you review someone else's PR, post the findings and change nothing.
+
 Leave the model and the budget at their defaults unless the user names them. The default `--budget low` runs one reviewer. Pass `--budget medium` for a large or risky change. Never start two reviews of the same head at once. They cost the same and return the same findings.
 
 ## Reuse an earlier run
