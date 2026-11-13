@@ -77,6 +77,7 @@ The default answer is **go**, which runs most of the others when its steps need 
 | Settle types and module shape before code that crosses a function boundary | [`architect`](../architect/SKILL.md) |
 | Get several attempts at one brief, merged into the best one | [`arena`](../arena/SKILL.md) |
 | Run parallel checks over slices, or race workers | [`swarm`](../swarm/SKILL.md) |
+| Check their own diff against the repository's standards before calling it done | [`self-review`](../self-review/SKILL.md) |
 | Have different models review a diff and try to break it | [`interrogate`](../interrogate/SKILL.md) |
 | Fix a bug test-first when a cheap local test exists | [`tdd`](../tdd/SKILL.md) |
 | Apply a language's rules to their code | [`typescript-best-practices`](../typescript-best-practices/SKILL.md), [`python-best-practices`](../python-best-practices/SKILL.md), [`go-best-practices`](../go-best-practices/SKILL.md), [`rust-best-practices`](../rust-best-practices/SKILL.md), [`svelte-best-practices`](../svelte-best-practices/SKILL.md) |
@@ -109,7 +110,7 @@ Close calls:
 - `how` explains what the code does. `why` explains the reasons. `teach` runs one or both and explains the result plainly.
 - `arena` gives every worker the same brief and merges the best parts. `swarm` splits work into slices or a race and returns one report.
 - `architect` implements right after it settles the design. Add "with checkpoint" to review the design before it writes code.
-- `interrogate` reviews the diff. `blast-radius` looks for breakage outside the diff and proves the one fact that makes the change safe.
+- `self-review` is the agent checking its own diff against the standards. `interrogate` has other models review the diff. `blast-radius` looks for breakage outside the diff and proves the one fact that makes the change safe.
 - `deslop` cleans code. `unslop` cleans prose.
 - `recall` rebuilds context across recent chats. `catchup` covers only this chat since the user's last message. Resuming one specific chat or branch is the Session pickup playbook.
 - `figure-it-out` designs one rigorous run. The Orchestrate playbook runs a program that spans days and many PRs. The Autonomous run playbook drives one task to a finish condition.

@@ -26,16 +26,16 @@ const shown = $derived.by(() => {
 </script>
 
 <svelte:head>
-  <title>field guide · hl plugin</title>
+  <title>field guide · hl stack</title>
   <meta
     name="description"
-    content="Every skill, playbook, principle, and agent in the hl plugin: what it is, when it runs, what it does, and one line that explains it."
+    content="Every skill, playbook, principle, and agent in hl stack: what it is, when it runs, what it does, and one line that explains it."
   />
   <link rel="canonical" href="{site}/guide/" />
 </svelte:head>
 
 <nav class="absolute top-4 right-4 flex gap-4 text-foreground-muted lowercase sm:top-6 sm:right-6">
-  <a href="../" class="hover:text-foreground">hl plugin</a>
+  <a href="../" class="hover:text-foreground">hl stack</a>
   <a href={repo} class="hover:text-foreground">github</a>
 </nav>
 
@@ -45,7 +45,7 @@ const shown = $derived.by(() => {
   <header class="space-y-5">
     <Typography.H1>field guide</Typography.H1>
     <Typography.Text variant="lead">
-      every skill, playbook, principle, and agent in the hl plugin: what it is, when it runs, what it does step
+      every skill, playbook, principle, and agent in hl stack: what it is, when it runs, what it does step
       by step, and one line you can say out loud to explain it. adapted from lauren tan's (poteto)
       <a class={link} href={pstack}>pstack</a> and michael denyer's <a class={link} href={port}>claude code port</a>.
     </Typography.Text>
