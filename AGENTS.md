@@ -11,6 +11,7 @@ Details for specific stacks and topics live in the `*-best-practices` skills, an
 3. **Prove it works.** Run the repository's full check command before saying you're done, and fix what it reports. If you can't run something (no database, no model server, no network), say exactly what you didn't run.
 4. **Report honestly.** Say what you changed, what you ran, and what you didn't verify. A failing test is reported as failing, with its output. Never describe a change as tested when it wasn't.
 5. **Keep moving; stop only at the irreversible.** Commit, branch, push your own branches, open PRs, and answer review threads without asking: those are reversible and expected. Stop and ask before force-pushing a shared branch, deploying, deleting data, or sending a message to a customer. When a repository's `AGENTS.md` lists more stop points, honor them.
+6. **Correct guidance that turns out wrong.** When a skill, `AGENTS.md`, or doc tells you something that proves false, such as a command, flag, path, or behavior, do what actually works. Then name in your report the file, what it claims, what is true, and the command and output that showed it. In the repository that owns the file, fix it in its own commit. Never edit an installed plugin's copy, since the next update overwrites it; give the user the fix to send to the plugin's repository instead.
 
 ## Toolchains
 

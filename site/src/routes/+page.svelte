@@ -60,7 +60,7 @@ const tabs = $derived(
   <Section id="layers" title="three layers, each loaded when needed">
     <p>
       <Code>AGENTS.md</Code> holds the rules every session follows: read before you write, keep the change
-      focused, prove it works, report honestly, and keep moving until something is irreversible. it is short
+      focused, prove it works, report honestly, keep moving until something is irreversible, and correct guidance that turns out wrong. it is short
       on purpose, because it loads into every session.
     </p>
     <p>

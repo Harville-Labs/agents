@@ -4,6 +4,12 @@ Notable changes to the hl stack. The format follows [Keep a Changelog](https://k
 
 ## [Unreleased]
 
+## [0.3.5] - 2026-11-13
+
+### Added
+
+- `AGENTS.md` and **go**: when a skill or doc turns out wrong, agents do what works, report the file, the claim, and the evidence, and fix the file or hand the user a fix for the plugin's repository.
+
 ## [0.3.4] - 2026-11-12
 
 ### Added
