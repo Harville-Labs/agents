@@ -85,6 +85,7 @@ Type a skill as `/hl:<name>` in Claude Code, `@<name>` in OpenCode, or `$<name>`
 | [tdd](skills/tdd/SKILL.md), [benchmark-checklist](skills/benchmark-checklist/SKILL.md) | Fix a bug test-first, or vet a performance number before acting on it |
 | [interrogate](skills/interrogate/SKILL.md), [blast-radius](skills/blast-radius/SKILL.md), [self-review](skills/self-review/SKILL.md) | Review a diff with other models, find breakage outside it, or check it yourself |
 | [deslop](skills/deslop/SKILL.md), [no-comments](skills/no-comments/SKILL.md), [unslop](skills/unslop/SKILL.md) | Clean AI slop out of code, comments, or prose |
+| [ui-design](skills/ui-design/SKILL.md) | Design or polish a UI in the repository's own style (or a default one): a brief, motion, anti-slop rules, and a screenshot QA round |
 | [control-cli](skills/control-cli/SKILL.md), [control-ui](skills/control-ui/SKILL.md) | Drive a CLI, TUI, or browser UI the way a user does, and capture proof |
 | [create-verification-skill](skills/create-verification-skill/SKILL.md), [maintain-verification-skill](skills/maintain-verification-skill/SKILL.md), [create-formal-verification-skill](skills/create-formal-verification-skill/SKILL.md), [maintain-formal-verification-skill](skills/maintain-formal-verification-skill/SKILL.md) | Give agents a scripted or formal way to prove behavior, and keep it in line with the code |
 | [statechart](skills/statechart/SKILL.md) | Show a PM or designer a chart of what the user sees, checked by a TLA+ model |

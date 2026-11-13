@@ -86,6 +86,22 @@ export const reference: GuideSection[] = [
     ],
   },
   {
+    id: 'design',
+    title: 'design',
+    entries: [
+      {
+        title: [['ui-design', 'skills/ui-design/SKILL.md']],
+        mono: true,
+        one: "a design method that runs on the repo's own style.",
+        body: [
+          {
+            p: "the method always applies: a brief, a motion and interaction system, anti-slop rules, and a screenshot QA round. the style is the repo's own tokens and components when it has them, and a default style (tokens, component and sidebar recipes, reference screenshots) when it doesn't.",
+          },
+        ],
+      },
+    ],
+  },
+  {
     id: 'slack',
     title: 'slack automation',
     entries: [

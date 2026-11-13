@@ -4,6 +4,13 @@ Notable changes to the hl stack. The format follows [Keep a Changelog](https://k
 
 ## [Unreleased]
 
+## [0.3.4] - 2026-11-12
+
+### Added
+
+- **ui-design**: a skill for building and polishing UI. Its method (a brief, motion and interaction rules, anti-slop rules, and a screenshot QA round through **control-ui**) runs on the repository's own design, and a default style applies when the repository has none ([#28](https://github.com/Harville-Labs/agents/pull/28)).
+- **go**: a Designing UI playbook that finds the repository's style first and sketches variations through Prototype when the look is open ([#28](https://github.com/Harville-Labs/agents/pull/28)).
+
 ## [0.3.3] - 2026-11-12
 
 ### Added
