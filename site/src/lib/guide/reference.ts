@@ -90,12 +90,12 @@ export const reference: GuideSection[] = [
     title: 'design',
     entries: [
       {
-        title: [['giga-ui', 'skills/giga-ui/SKILL.md']],
+        title: [['ui-design', 'skills/ui-design/SKILL.md']],
         mono: true,
-        one: 'a calm, precise visual language for product UI.',
+        one: "a design method that runs on the repo's own style.",
         body: [
           {
-            p: 'tokens, component and sidebar recipes, a motion system, 22 anti-slop rules, annotated reference screenshots, and a screenshot QA round.',
+            p: "the method always applies: a brief, a motion and interaction system, anti-slop rules, and a screenshot QA round. the style is the repo's own tokens and components when it has them, and a default style (tokens, component and sidebar recipes, reference screenshots) when it doesn't.",
           },
         ],
       },

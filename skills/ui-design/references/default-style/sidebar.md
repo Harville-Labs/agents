@@ -1,22 +1,22 @@
 # Sidebar and nav rail
 
-Models tend to get sidebars wrong. Read this whole recipe before you write a sidebar, then compare your result with 2 or 3 files in `images/sidebars/`.
-
-Tags: **[seen]** means it is visible in Marcel's images. **[inferred]** means it is estimated from screenshots that have no known pixel scale, so treat it as a ratio and not as an exact value. **[expert]** means it is a common product-design default, not taken from him.
+Models tend to get sidebars wrong. Read this whole recipe before you write a sidebar in the default style, then compare your result with 2 or 3 files in `images/sidebars/`. Pixel values measured from screenshots are ratios, not exact values.
 
 **Two good shells. Pick one per product; neither is the default.**
-- **Inset:** the app background is tinted (`#F7F7F7`–`#F4F4F5` light, or the app base in dark). The sidebar has **no background of its own** and shares that tint. The content sits in a separate panel: white (or `#0f0f0f`–`#111` in dark), about 8px from the viewport top, right and bottom, radius 12–16px, a hairline plus a soft shadow (`0 0 0 1px rgb(0 0 0/.06), 0 1px 2px rgb(0 0 0/.04)`), with its own scroll [seen: Minto, Uniops, Timelines]. Suits calm products where the content should float: CRMs, inboxes, docs, AI chat.
-- **Flush:** the sidebar is a full-height surface of its own, edge to edge, separated from the content by one hairline; the content is not inset [seen: Snaplytics, the dark actions panel]. Suits dense tools that want every pixel: analytics, admin, IDE-like screens, embedded views. A flush sidebar is just as finished as an inset one when the rows, spacing and active pill are right.
+- **Inset:** the app background is tinted (`#F7F7F7`–`#F4F4F5` light, or the app base in dark). The sidebar has **no background of its own** and shares that tint. The content sits in a separate panel: white (or `#0f0f0f`–`#111` in dark), about 8px from the viewport top, right and bottom, radius 12–16px, a hairline plus a soft shadow (`0 0 0 1px rgb(0 0 0/.06), 0 1px 2px rgb(0 0 0/.04)`), with its own scroll. Suits calm products where the content should float: CRMs, inboxes, docs, AI chat.
+- **Flush:** the sidebar is a full-height surface of its own, edge to edge, separated from the content by one hairline; the content is not inset. Suits dense tools that want every pixel: analytics, admin, IDE-like screens, embedded views. A flush sidebar is just as finished as an inset one when the rows, spacing and active pill are right.
 
 Whichever you pick, everything below (rows, columns, pill, collapse) is the same.
 
-**What his sidebars have in common [seen]** (see `images/sidebars/` files for 2106499785813360687, 2106500336081063986, 2110467790343737666_3, 2113384174924988778, 2113997498008117362)
-- **The sidebar is quieter than the content.** It sits on the canvas tone (`#F7F7F7`–`#FAFAFA` light, or the app's base in dark). The main content area is a white panel with a large radius and a hairline or soft shadow, so the *content* floats and the sidebar doesn't. He confirmed this in a reply: "different color sidebar than the main block" is "a great design pattern" (xpages p020).
-- **Top block:** a workspace or brand switcher. It has a 20–28px rounded-square logo, the name in Medium, sometimes a muted handle on a second line (`Uniops / @kargulstudio`), and a small `⌄`/`⇅` chevron or a collapse icon (`⊟`/sidebar icon) at the right edge.
-- **Search or primary action under the switcher.** Either a search input with a `/` keycap on the right (Snaplytics, Timelines), or a full-width white secondary button ("+ New timeline") that uses the `components.md` §4.1 button recipe.
+## Anatomy
+
+What the reference sidebars share (see `images/sidebars/` files for 2106499785813360687, 2106500336081063986, 2110467790343737666_3, 2113384174924988778, 2113997498008117362):
+- **The sidebar is quieter than the content.** It sits on the canvas tone (`#F7F7F7`–`#FAFAFA` light, or the app's base in dark). The main content area is a white panel with a large radius and a hairline or soft shadow, so the *content* floats and the sidebar doesn't.
+- **Top block:** a workspace or brand switcher. It has a 20–28px rounded-square logo, the name in Medium, sometimes a muted handle on a second line (`Uniops / @uniops`), and a small `⌄`/`⇅` chevron or a collapse icon (`⊟`/sidebar icon) at the right edge.
+- **Search or primary action under the switcher.** Either a search input with a `/` keycap on the right (Snaplytics, Timelines), or a full-width white secondary button ("+ New timeline") that uses the [secondary button](components.md#secondary-button) recipe.
 - **Section labels** are small and muted ("Navigation", "Reports & Management", "Other Tools", "Projects"). Some designs use sentence case. Others use small uppercase with tracking ("WORKSPACE", "UTILITY", "PINNED TOOLS", and "MESSAGES / DATA / DELAYS" in the dark Actions panel). Pick one style per product.
 - **Items:** a 16px outline icon plus a 14px label in grey (`#525252`–`#737373`). There is no border, no background at rest, and the icons are monochrome. Color appears only for project dots or swatches (small rounded squares) and for brand logos of pinned tools.
-- **Active item:** a soft grey fill pill (`#EDEDED`-ish on a `#F7F7F7` sidebar) or a white raised pill with a soft shadow, plus a darker label. He also shows high-contrast variants: a black pill with white text and a count badge (2106852842342375894), and a white rounded pill in a grey sidebar (Minto). There is **never** a left accent bar with a colored background.
+- **Active item:** a soft grey fill pill (`#EDEDED`-ish on a `#F7F7F7` sidebar) or a white raised pill with a soft shadow, plus a darker label. High-contrast variants also work: a black pill with white text and a count badge (2106852842342375894), and a white rounded pill in a grey sidebar (Minto). There is **never** a left accent bar with a colored background.
 - **Trailing meta** is right-aligned: counts in a small rounded badge or tabular grey numbers, a `›` chevron on the active item that opens a sub-view (Uniops "Team ›"), and `⠿` drag handles on pinned items.
 - **Nesting:** child items are indented by roughly one icon width plus gap so that child icons line up under the parent's label. Children keep icons, and there are no tree lines (Timelines "Reports → All Reports, Performance Trends…").
 - **Groups are separated by whitespace or a hairline divider.** In Minto the divider is a dashed hairline. Group gaps are clearly bigger than gaps between items.
@@ -24,35 +24,37 @@ Whichever you pick, everything below (rows, columns, pill, collapse) is the same
 - **Icon rail variant** (inbox app 2107869459142914419): a narrow rail with the logo tile at the top, a round "+" button, about 8 icon-only buttons in 2 groups split by a short hairline, an active icon in a soft tinted square, and settings plus an avatar at the bottom. A second "list" column (Inbox with filter pills) sits next to the rail.
 - **Dark variant** (2107505914345603127): a `#1A1A1C` panel with 16–20px radius, uppercase muted section labels, and colored 16px icons. A dragged item lifts as a raised card with a grip `⠿`, and the footer row ends in `›`.
 
-**Measurements**
-| Token | Value | Tag |
-|---|---|---|
-| Expanded width | 240–264px (Width relative to the 1440 canvas ≈ 16–18%, consistent with this) | [inferred] ratio / [expert] px |
-| Collapsed rail width | 56–64px (Icon centred, 32–36px hit square) | [expert]; rail shape [seen] |
-| Item height | 32px desktop (28 dense, 36 roomy) | [expert]; "compact, single-line" [seen] |
-| Item radius | 8px (pill-like, matches control tier) | [inferred] |
-| Item padding-x | 8–10px; icon→label gap 8px | [inferred] |
-| Icon | 16px, stroke 1.5, same grey as label | [seen] style / [expert] size |
-| Item gap | 2px between items; 16–24px between groups | [inferred] |
-| Section label | 11–12px, Medium, `#A3A3A3`, 8px below previous group gap, 4px above first item | [inferred] |
-| Sidebar padding | 12px horizontal, 12–16px top | [inferred] |
-| App background | Tinted `#F7F7F7`/`#F4F4F5`; the sidebar has no fill of its own and shares this tint | [seen] tone / [expert] hex |
-| Inset main panel | margin 8px top/right/bottom (8px gap from sidebar optional), radius 12–16, white, 1px `rgb(0 0 0/.06)` ring + `0 1px 2px rgb(0 0 0/.04)` shadow, `overflow:auto` inside | [seen] shape / [inferred] px |
-| Mobile panel | Inset removed below 768px (margin 0, radius 0); sidebar becomes a drawer | [expert] |
+## Measurements
+| Token | Value |
+|---|---|
+| Expanded width | 240–264px (≈ 16–18% of a 1440 canvas) |
+| Collapsed rail width | 56–64px (Icon centred, 32–36px hit square) |
+| Item height | 32px desktop (28 dense, 36 roomy) |
+| Item radius | 8px (pill-like, matches control tier) |
+| Item padding-x | 8–10px; icon→label gap 8px |
+| Icon | 16px, stroke 1.5, same grey as label |
+| Item gap | 2px between items; 16–24px between groups |
+| Section label | 11–12px, Medium, `#A3A3A3`, 8px below previous group gap, 4px above first item |
+| Sidebar padding | 12px horizontal, 12–16px top |
+| App background | Tinted `#F7F7F7`/`#F4F4F5`; the sidebar has no fill of its own and shares this tint |
+| Inset main panel | margin 8px top/right/bottom (8px gap from sidebar optional), radius 12–16, white, 1px `rgb(0 0 0/.06)` ring + `0 1px 2px rgb(0 0 0/.04)` shadow, `overflow:auto` inside |
+| Mobile panel | Inset removed below 768px (margin 0, radius 0); sidebar becomes a drawer |
 
-**Behavior & motion [expert unless marked]**
+## Behavior and motion
 - **Hover:** the background goes to `rgb(0 0 0 / .04)` and the label goes to `#171717` within 120ms. There is no movement and no scale on nav items.
-- **Active change:** one shared pill slides between items using the `components.md` §4.3 `layoutId` spring (`visualDuration .25, bounce .15`). Do not fade one pill out while another fades in. Without Motion, measure the current item (`[aria-current="page"]`) against the scroll container and move one absolutely positioned pill with `transform`; skip the transition on first paint so it doesn't fly in from the top. Items need `position: relative` to paint above it.
-- **Rows share two columns.** Every row (switcher, nav items, settings, account) puts its icon, logo tile or avatar in one **icon column** and its text in one **text column**. With 10px sidebar padding and a 60px rail: 16px icons sit 12px into the row (centre 30px from the edge), 24px tiles and avatars 8px into the row (also centre 30px), and all text starts at 48px. Measure it (`getBoundingClientRect().left` on each icon and label) rather than eyeballing. Because the columns never move, collapsing to the rail is just hiding text [expert].
-- **Triggers are rows.** A workspace or account trigger is a full-width row button the same height and inset as the rows around it, with `text-align: start`. A narrower, shorter button whose label sits a few px off the nav labels below is the most common sidebar misalignment [expert].
-- **Collapse:** animate `width` (240→60) with 220ms `var(--ease-out)`. This is the one place where a width animation is acceptable. If you animate a CSS grid column, use `grid-template-columns`. Labels fade or clip with `opacity` over 120ms, and they must *not* wrap while shrinking (`white-space: nowrap; overflow: hidden`). Icons must not move horizontally, so keep a fixed icon column. In collapsed mode, show a tooltip on hover (right side, same delay as every other tooltip, `motion.md` §6) and show none on touch or when expanded. Save the collapsed state in localStorage. The toggle sits at the right of the switcher row while expanded and moves to the start of the topbar while collapsed; `⌘B` / `Ctrl+B` toggles from anywhere except rich-text fields, where it means bold.
-- **Resize [expert]:** a resizable sidebar has an 8px invisible handle on its right edge (`cursor: col-resize`) that shows a 2px line only after ~150ms of hover, so passing the edge doesn't flash it. Drag with pointer capture and clamp between a min and max (e.g. 200–320px). Dragging well past the minimum (~56px) snaps it to the rail or closed, dragging back out reopens it. Double-click resets the width. Turn the width transition off while dragging so it tracks the pointer 1:1. Make the handle a focusable `role="separator"` with `aria-valuenow`, ←/→ to resize, and Enter to toggle.
+- **Active change:** one shared pill slides between items using the [sliding indicator](../method/motion.md#sliding-indicator) recipe (`layoutId` spring `visualDuration .25, bounce .15` in Motion, a measured pill in Svelte or plain CSS). Do not fade one pill out while another fades in. Measure against the scroll container, and skip the transition on first paint so the pill doesn't fly in from the top. Items need `position: relative` to paint above it.
+- **Rows share two columns.** Every row (switcher, nav items, settings, account) puts its icon, logo tile or avatar in one **icon column** and its text in one **text column**. With 10px sidebar padding and a 60px rail: 16px icons sit 12px into the row (centre 30px from the edge), 24px tiles and avatars 8px into the row (also centre 30px), and all text starts at 48px. Measure it (`getBoundingClientRect().left` on each icon and label) rather than eyeballing. Because the columns never move, collapsing to the rail is just hiding text.
+- **Triggers are rows.** A workspace or account trigger is a full-width row button the same height and inset as the rows around it, with `text-align: start`. A narrower, shorter button whose label sits a few px off the nav labels below is the most common sidebar misalignment.
+- **Collapse:** animate `width` (240→60) with 220ms `var(--ease-out)`. This is the one place where a width animation is acceptable. If you animate a CSS grid column, use `grid-template-columns`. Labels fade or clip with `opacity` over 120ms, and they must *not* wrap while shrinking (`white-space: nowrap; overflow: hidden`). Icons must not move horizontally, so keep a fixed icon column. In collapsed mode, show a tooltip on hover (right side, same delay as every other tooltip, see [interaction.md](../method/interaction.md#micro-interaction-checklist)) and show none on touch or when expanded. Save the collapsed state in localStorage. The toggle sits at the right of the switcher row while expanded and moves to the start of the topbar while collapsed; `⌘B` / `Ctrl+B` toggles from anywhere except rich-text fields, where it means bold.
+- **Resize:** a resizable sidebar has an 8px invisible handle on its right edge (`cursor: col-resize`) that shows a 2px line only after ~150ms of hover, so passing the edge doesn't flash it. Drag with pointer capture and clamp between a min and max (e.g. 200–320px). Dragging well past the minimum (~56px) snaps it to the rail or closed, dragging back out reopens it. Double-click resets the width. Turn the width transition off while dragging so it tracks the pointer 1:1. Make the handle a focusable `role="separator"` with `aria-valuenow`, ←/→ to resize, and Enter to toggle.
 - **Nesting:** expanding a group animates the height of the children (Motion `height: "auto"`) and rotates the chevron 90° in 150ms. Children stagger by 20ms at most.
-- **Workspace switcher:** opens a popover (`components.md` §4.7) anchored to the switcher and scaling from 0.96 at its top-left origin. It lists workspaces with logo tiles and a check on the current one, followed by "Create workspace" and "Log out".
+- **Workspace switcher:** opens a [popover](components.md#popover--dropdown--command-palette) anchored to the switcher and scaling from 0.96 at its top-left origin. It lists workspaces with logo tiles and a check on the current one, followed by "Create workspace" and "Log out".
 - **Keyboard:** the whole sidebar is a `<nav aria-label>`. Items are `<a>` with `aria-current="page"`, and a group toggle is a `<button aria-expanded>`. Focus-visible gets a 2px ring inside the pill.
-- **Mobile (<768px):** hide the sidebar. Open it as a left drawer (85% width, max 320) over a dimmed `rgb(0 0 0 / .3)` scrim, slide it in with `translateX` 280ms `cubic-bezier(.32,.72,0,1)`, and close it by tapping the scrim, pressing Esc, or swiping. Items grow to 44px height. In consumer mobile apps use his **floating pill tab bar** with 4–5 items instead [seen].
+- **Mobile (<768px):** hide the sidebar. Open it as a left drawer (85% width, max 320) over a dimmed `rgb(0 0 0 / .3)` scrim, slide it in with `translateX` 280ms `cubic-bezier(.32,.72,0,1)`, and close it by tapping the scrim, pressing Esc, or swiping. Items grow to 44px height. In consumer mobile apps use a **floating pill tab bar** with 4–5 items instead.
 
-**Common mistakes (seen in AI output; fix all of them)**
+## Common mistakes
+
+These show up in AI output. Fix all of them.
 1. A shell that is neither inset nor flush: an inset panel with no radius or margin, an inset sidebar that also has its own fill and border, a heavy shadow on the panel, or the whole page scrolling instead of the panel. Flush done badly is the same white on both sides of a 1px border with no tonal difference; give the sidebar its own surface (`#FAFAFA`, or one step up in dark).
 2. A colored active state (`bg-indigo-600 text-white`) or a 3px left accent bar.
 3. Mixed icon sizes and styles, or emoji used as icons. Icons that are not vertically centered with the text.
@@ -64,7 +66,9 @@ Whichever you pick, everything below (rows, columns, pill, collapse) is the same
 9. No hover, focus, or active differentiation. A missing `aria-current`.
 10. Fifteen top-level items with no groups. Instead, group them into 3–4 sections of 3–6 items each and put rarely used links in the footer.
 
-**Code (React + Motion + Tailwind; tokens from `style.md` §3)**
+## Code
+
+React, Motion, and Tailwind, with tokens from [style.md](style.md#tokens).
 ```tsx
 const groups = [
   { label: "Workspace", items: [
@@ -152,4 +156,4 @@ Inset shell layout:
                    max-md:m-0 max-md:rounded-none">…</main>       {/* inset, slightly elevated panel */}
 </div>
 ```
-Flush shell: drop the margins and radius on `<main>` and keep it white, and give the sidebar its own surface: `bg-[#FAFAFA] border-r border-black/[.06]` (one step up from the base in dark). On mobile, render the same `<nav>` inside a `components.md` §4.8 sheet from the left, and put a hamburger in a sticky 56px top bar.
+Flush shell: drop the margins and radius on `<main>` and keep it white, and give the sidebar its own surface: `bg-[#FAFAFA] border-r border-black/[.06]` (one step up from the base in dark). On mobile, render the same `<nav>` inside a [sheet](components.md#modal--bottom-sheet) from the left, and put a hamburger in a sticky 56px top bar.

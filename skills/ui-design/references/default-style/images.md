@@ -1,15 +1,15 @@
 # Reference images
 
-## Screens
+The default style's reference screenshots. Compare your desktop shot with one of these in the verification round. The images come from public posts by @marcelkargul (Kargul Studio) and are included for style reference only. This skill is not affiliated with him.
 
-All images are from @marcelkargul's public posts and are included for style reference only.
+## Screens
 
 | File | Why it matters |
 |---|---|
 | [2026-11-03_2117435880021561852_1](images/2026-11-03_2117435880021561852_1.jpg) | "Perfect signup page": split auth card, violet `#7B3AEC` CTA, soft hairline inputs, product preview with carousel dots. |
 | [2026-10-30_2116131638916854067_1](images/2026-10-30_2116131638916854067_1.jpg) | Step-by-step secondary button: 30px, 10px radius, Geist 14 Medium, `#FFF→#F7F7F7`, two shadows (exact values). |
 | [2026-10-11_2109273659038650501_1](images/2026-10-11_2109273659038650501_1.jpg) | Geist tracking demo at 100px: −6% vs −3% vs 0. Basis of the tracking rules. |
-| [2026-10-13_2110066751866089488_1](images/2026-10-13_2110066751866089488_1.jpg) | SF Pro Rounded at +1% letter spacing, his mobile typeface of choice. |
+| [2026-10-13_2110066751866089488_1](images/2026-10-13_2110066751866089488_1.jpg) | SF Pro Rounded at +1% letter spacing, the mobile typeface. |
 | [2026-10-06_2107619825719910460_2](images/2026-10-06_2107619825719910460_2.jpg) | Command palette: 24px radius, filter pills, grouped results, keycap legend footer. |
 | [2026-10-26_2114761395946311853_1](images/2026-10-26_2114761395946311853_1.jpg) | Statsnap dashboard: sidebar shell, mono KPI numbers, delta pills, dark chart tooltip, clean table. |
 | [2026-10-03_2106500278157795628_1](images/2026-10-03_2106500278157795628_1.jpg) | Mobile calendar: grey canvas, inset white cards, round icon buttons, pastel event blocks, blue pill CTA. |
@@ -21,7 +21,7 @@ All images are from @marcelkargul's public posts and are included for style refe
 
 ## Sidebars
 
-`images/sidebars/` contains 36 sidebar and nav-rail examples from his posts. Look at 2–3 of them before you build any app shell. Recommended starting points:
+`images/sidebars/` contains 36 sidebar and nav-rail examples. Look at 2–3 of them before you build any app shell. Recommended starting points:
 
 | File | Why it matters |
 |---|---|
@@ -35,8 +35,8 @@ All images are from @marcelkargul's public posts and are included for style refe
 | [2026-10-04_2106852842342375894_1](images/sidebars/2026-10-04_2106852842342375894_1.jpg) | Close-up: black active pill with white label and count badge. |
 
 ## Sources
-- Anti-slop sentiment: the X posts cited at the end of `anti-slop.md` (searched Nov 3, 2026 via the X API).
-- @marcelkargul posts and captions on X (style, typography rules, button recipe, process quotes). Style **inspired by** his work. This skill is not affiliated with him.
+- Anti-slop rules: public X posts on AI-built UI tells, October and November 2026.
+- @marcelkargul (Kargul Studio) posts and captions on X: the default style, its typography rules, the button recipe, and the reference images. The default style is **inspired by** his work.
 - Motion docs, Transitions: https://motion.dev/docs/react-transitions (tween default 0.3s; spring `bounce` default 0.25; `visualDuration`; inertia `power 0.8`, `timeConstant 700`; `stagger` with `grid`/`from`).
 - Emil Kowalski, "Great Animations": https://emilkowal.ski/ui/great-animations (ease-out, < 300ms, transform/opacity, interruptibility, reduced motion, no animation on keyboard actions). Also his easing curves `cubic-bezier(0.23,1,0.32,1)` and `(0.77,0,0.175,1)` and the Vaul drawer curve `(0.32,0.72,0,1)`.
 - Apple Human Interface Guidelines, Motion and Accessibility (purposeful motion, honor Reduce Motion, 44pt targets) and SwiftUI spring presets (`smooth`/`snappy`/`bouncy`).
