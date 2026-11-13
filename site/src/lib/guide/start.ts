@@ -315,10 +315,10 @@ export const start: GuideSection[] = [
         one: 'the screenshots are the proof.',
         body: [
           {
-            p: "brief first, one accent, giga-ui recipes in the repo's own stack, then a screenshot check round through control-ui. two fix rounds at most.",
+            p: "find the repo's own style first, sketch variations through prototype when the look is open, then a brief, the build in the repo's stack, and a screenshot check round through control-ui. two fix rounds at most.",
           },
         ],
-        keys: 'designing ui design polish playbook giga-ui',
+        keys: 'designing ui design polish playbook ui-design',
       },
       {
         title: [['visual parity', 'skills/go/playbooks/visual-parity.md']],

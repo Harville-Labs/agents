@@ -146,8 +146,8 @@ A large or cross-cutting effort (a migration across many call sites, an ambitiou
 - **Trace forensics.** Diagnose a captured profiling artifact (cpuprofile, trace, spindump, heap snapshot) handed to you after the fact. The deliverable is a diagnosis, not a fix.
 - **Feature.** New or changed behavior, built from a named data shape.
 - **Refactoring.** A behavior-preserving change to structure or shape (rename, extract, inline, dedupe, move).
-- **Prototype.** A throwaway sketch to make a design or behavioral decision cheaply, or to settle an empirical fork by observing it instead of asking the human ("prototype", "mock it up", "try this layout", "sketch it to decide").
-- **Designing UI.** Building, redesigning, or polishing how a screen or component looks and feels, especially from a short prompt ("make it look good", "design a dashboard", "polish this page"). Runs the **giga-ui** skill.
+- **Prototype.** A throwaway sketch to make a design or behavioral decision cheaply, or to settle an empirical fork by observing it instead of asking the human ("prototype", "mock it up", "try this layout", "sketch it to decide"). When the deliverable is the decision, Prototype wins over Designing UI.
+- **Designing UI.** Building, redesigning, or polishing how a screen or component looks and feels, when the deliverable is shipped UI, especially from a short prompt ("make it look good", "design a dashboard", "polish this page"). Runs the **ui-design** skill, and runs Prototype first when the look is still open.
 - **Visual parity.** Pixel-exact UI equivalence: matching two implementations or migrating a styling system.
 - **Authoring or modifying a skill.** Writing or editing a SKILL.md. File: `playbooks/authoring-a-skill.md`.
 - **Eval.** Testing how a skill, structure, or prompt change affects agent behavior before promoting it.
