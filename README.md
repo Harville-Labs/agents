@@ -1,6 +1,6 @@
-# Harville Labs engineering standards
+# hl stack
 
-Engineering standards, skills, and subagents for AI coding agents and the people who work with them. They run the same way in Claude Code, OpenCode, and Codex.
+The Harville Labs agent stack: engineering standards, skills, and subagents for AI coding agents and the people who work with them. They run the same way in Claude Code, OpenCode, and Codex.
 
 - **[AGENTS.md](AGENTS.md)**: the rules. Short enough to load into every session.
 - **[skills/](skills/)**: the **go** router and its playbooks, the engineering principles, the `*-best-practices` standards, and review and writing workflows.

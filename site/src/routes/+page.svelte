@@ -39,7 +39,7 @@ const tabs = $derived(
   class="mx-auto max-w-[680px] space-y-10 px-4 pt-16 pb-28 text-[15px] leading-relaxed lowercase sm:px-6 [&_button]:lowercase [&_code]:normal-case [&_pre]:normal-case"
 >
   <header class="space-y-5">
-    <Typography.H1>hl plugin</Typography.H1>
+    <Typography.H1>hl stack</Typography.H1>
     <Typography.Text variant="lead">
       one set of engineering rules, workflow skills, and review subagents that behaves the same in claude
       code, opencode, and codex. it is built on lauren tan's (poteto) <a class={link} href={pstack}>pstack</a>.
