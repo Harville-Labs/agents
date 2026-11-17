@@ -1,26 +1,19 @@
 <script lang="ts">
-import { CodeBlock, ToggleGroup, Typography } from '@sivir-ui/svelte';
+import { CodeBlock, Typography } from '@sivir-ui/svelte';
 import Cmd from '../lib/Cmd.svelte';
 import { commands, flow, sizes } from '../lib/data.ts';
+import HarnessToggle from '../lib/HarnessToggle.svelte';
 import { harness, harnesses, installs, isHarness, pick } from '../lib/harness.svelte.ts';
 import Playbooks from '../lib/Playbooks.svelte';
 import Principles from '../lib/Principles.svelte';
 import Quiz from '../lib/Quiz.svelte';
-import { repo } from '../lib/repo.ts';
+import { link, repo } from '../lib/repo.ts';
 import Section from '../lib/Section.svelte';
 
 const { InlineCode: Code } = Typography;
 const pstack = 'https://github.com/cursor/plugins/tree/main/pstack';
-const link =
-  'text-foreground underline decoration-border-strong underline-offset-4 hover:decoration-foreground';
 
-// ToggleGroup clears its value when the active item is clicked again; keep the last pick.
-let choice = $derived<string | string[] | undefined>(harness.current);
 let tab = $derived<string>(harness.current);
-$effect(() => {
-  if (isHarness(choice)) pick(choice);
-  else choice = harness.current;
-});
 $effect(() => {
   if (isHarness(tab)) pick(tab);
 });
@@ -31,6 +24,7 @@ const tabs = $derived(
 </script>
 
 <nav class="absolute top-4 right-4 flex gap-4 text-foreground-muted lowercase sm:top-6 sm:right-6">
+  <a href="examples/" class="hover:text-foreground">examples</a>
   <a href="guide/" class="hover:text-foreground">field guide</a>
   <a href={repo} class="hover:text-foreground">github</a>
 </nav>
@@ -45,16 +39,7 @@ const tabs = $derived(
       code, opencode, and codex. it is built on lauren tan's (poteto) <a class={link} href={pstack}>pstack</a>.
       this page shows how it works, which playbook fits which task, and the principles behind each decision.
     </Typography.Text>
-    <div class="flex flex-wrap items-center gap-3">
-      <fieldset class="contents">
-      <legend class="float-left mr-3 text-foreground-muted">skills for</legend>
-      <ToggleGroup.Root bind:value={choice}>
-        {#each harnesses as h (h.value)}
-          <ToggleGroup.Item value={h.value}>{h.label}</ToggleGroup.Item>
-        {/each}
-      </ToggleGroup.Root>
-      </fieldset>
-    </div>
+    <HarnessToggle />
   </header>
 
   <Section id="layers" title="three layers, each loaded when needed">
@@ -164,6 +149,7 @@ const tabs = $derived(
 
   <Section id="commands" title="skills you will type yourself">
     <p class="text-foreground-muted">go calls most skills for you. these are the ones worth knowing by name. the
+      <a class={link} href="examples/">examples</a> walk through real prompts step by step, and the
       <a class={link} href="guide/">field guide</a> covers every skill, playbook, and principle in depth.
     </p>
     <dl class="divide-y divide-border">

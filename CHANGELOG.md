@@ -4,6 +4,17 @@ Notable changes to the hl stack. The format follows [Keep a Changelog](https://k
 
 ## [Unreleased]
 
+### Added
+
+- The site has an examples page. It walks through real prompts step by step and shows which skills, subagents, and guardrails go applies to each one.
+
+## [0.3.5] - 2026-11-16
+
+### Changed
+
+- **go**: the forges reference explains how to read the status of GitLab child and multi-project pipelines through the bridges endpoint ([#33](https://github.com/Harville-Labs/agents/pull/33)).
+- **go**: the forges reference says to reply to and resolve GitLab threads with the `glab mr note` subcommands, not raw `glab api` calls ([#32](https://github.com/Harville-Labs/agents/pull/32)).
+
 ## [0.3.4] - 2026-11-12
 
 ### Added
