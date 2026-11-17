@@ -51,7 +51,7 @@ export const examples: Example[] = [
       {
         title: 'Find the forge and list the queue',
         by: 'go',
-        text: 'It reads the origin remote to decide between `glab` for GitLab and `gh` for GitHub. Then it lists the open MRs where you are a requested reviewer, leaves out the ones you wrote yourself, and skips drafts.',
+        text: 'It reads the origin remote to decide between `glab` for GitLab and `gh` for GitHub. Then it lists the open MRs in this repository where you are a requested reviewer, leaves out the ones you wrote yourself, and skips drafts.',
         uses: [forges],
       },
       {
