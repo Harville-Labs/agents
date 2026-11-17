@@ -14,6 +14,7 @@ export function GET() {
 > Engineering rules, workflow skills, and review subagents for coding agents. It behaves the same in Claude Code, OpenCode, and Codex. The go skill routes a task to a playbook and applies the principles.
 
 - [Overview](${site}/): how the plugin works and which playbook fits which task.
+- [Examples](${site}/examples/): real prompts, and each step, skill, and guardrail go applies to them.
 - [Field guide](${site}/guide/): every skill, playbook, principle, and agent in depth.
 - [Full text](${site}/llms-full.txt): every file below in one document.
 - [Rules every session follows](${c.raw('AGENTS.md')})
