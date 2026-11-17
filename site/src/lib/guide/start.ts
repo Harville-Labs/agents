@@ -258,7 +258,7 @@ export const start = (n: Counts): GuideSection[] => [
         one: 'review the queue that waits on you.',
         body: [
           {
-            p: 'list the PRs or MRs where you are a requested reviewer, review each in a fresh subagent, confirm every finding, and post it in a thread on its diff line. approve only when told to.',
+            p: "list the PRs or MRs in this repository where you are a requested reviewer (or every repository's, if you ask), review each in a fresh subagent, confirm every finding, and post it in a thread on its diff line. approve only when told to.",
           },
         ],
         keys: 'reviewing prs playbook review assigned',

@@ -29,7 +29,8 @@ The forge follows the repository's remote: GitHub uses `gh`, GitLab uses `glab`.
 | Status, CI, threads, mergeability | `scripts/watch-pr/watch-pr --status-only` | the same command. It reads the forge from the remote. |
 | Read raw PR or MR fields | `gh pr view <pr> --json state,headRefOid` | `glab mr view <mr> --output json --jq '{state, sha, detailed_merge_status}'` |
 | Read a failed job's log | `gh run view <run> --log-failed` | `glab ci trace <job-id>` |
-| Review queue | `gh search prs --review-requested=@me --state=open --json url,title,repository,isDraft -- -author:@me` | `glab api --paginate --output ndjson "merge_requests?scope=all&state=opened&wip=no&reviewer_username=<you>&not[author_username]=<you>"` |
+| Review queue, this repository | `gh pr list --state open --search "review-requested:@me -author:@me" --json url,title,isDraft` | `glab api --paginate --output ndjson "projects/:id/merge_requests?state=opened&wip=no&reviewer_username=<you>&not[author_username]=<you>"` |
+| Review queue, every repository | `gh search prs --review-requested=@me --state=open --json url,title,repository,isDraft -- -author:@me` | `glab api --paginate --output ndjson "merge_requests?scope=all&state=opened&wip=no&reviewer_username=<you>&not[author_username]=<you>"` |
 | Approve | `gh pr review <pr> --approve` | `glab mr approve <mr>` |
 | Merge, squashed | `gh pr merge <pr> --squash --match-head-commit <sha>` | `glab mr merge <mr> --squash --sha <sha> --yes` |
 
