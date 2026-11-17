@@ -75,6 +75,8 @@ On GitLab, save each finding as a draft note, publish them together, then post t
 
 The thread `<id>` is the `id` the watcher (`scripts/watch-pr/watch-pr --status-only`) prints: a GraphQL node id on GitHub, a discussion id on GitLab.
 
+Reply and resolve with the `glab mr note` subcommands below, not raw `glab api` REST or GraphQL. The REST resolve endpoint 404s on every form and `glab api graphql` appends a schema dump that breaks naive JSON parsing; the subcommands take a note id or an 8+ character discussion-id prefix and resolve a thread in one call.
+
 | Action | GitHub | GitLab |
 |---|---|---|
 | Reply in a thread | Get the first comment's id with `gh api graphql -f query='query($id:ID!){node(id:$id){... on PullRequestReviewThread{comments(first:1){nodes{databaseId}}}}}' -F id=<id> --jq '.data.node.comments.nodes[0].databaseId'`. Write `{"body": "<reply>"}` to `reply.json`, then `gh api --method POST repos/<owner>/<repo>/pulls/<pr>/comments/<comment-id>/replies --input reply.json` | `glab mr note create <mr> --reply <id> < reply.md` |
