@@ -1,6 +1,6 @@
-import type { GuideSection } from './types.ts';
+import type { Counts, GuideSection } from './types.ts';
 
-export const reference: GuideSection[] = [
+export const reference = (n: Counts): GuideSection[] => [
   {
     id: 'verify',
     title: 'verification and driving apps',
@@ -251,7 +251,7 @@ export const reference: GuideSection[] = [
   {
     id: 'principles',
     title: 'principles',
-    sub: 'the 25 reasons. go cites them; they never fire on their own.',
+    sub: `the ${n.principles} reasons. go cites them; they never fire on their own.`,
     entries: [
       {
         title: [['core']],

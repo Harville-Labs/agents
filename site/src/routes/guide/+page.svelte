@@ -1,7 +1,7 @@
 <script lang="ts">
 import { Input, Typography } from '@sivir-ui/svelte';
 import GuideEntry from '../../lib/guide/GuideEntry.svelte';
-import { sections } from '../../lib/guide/index.ts';
+import { guide } from '../../lib/guide/index.ts';
 import { link, repo } from '../../lib/repo.ts';
 import Section from '../../lib/Section.svelte';
 import { site } from '../../lib/site.ts';
@@ -9,10 +9,15 @@ import { site } from '../../lib/site.ts';
 const pstack = 'https://github.com/cursor/plugins/tree/main/pstack';
 const port = 'https://github.com/michael-denyer/pstack-claude';
 
-const indexed = sections.map((s) => ({
-  ...s,
-  entries: s.entries.map((entry) => ({ entry, text: JSON.stringify(entry).toLowerCase() })),
-}));
+let { data } = $props();
+
+const sections = $derived(guide(data.counts));
+const indexed = $derived(
+  sections.map((s) => ({
+    ...s,
+    entries: s.entries.map((entry) => ({ entry, text: JSON.stringify(entry).toLowerCase() })),
+  })),
+);
 
 let query = $state('');
 const shown = $derived.by(() => {

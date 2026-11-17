@@ -17,3 +17,11 @@ export type Entry = {
 };
 
 export type GuideSection = { id: string; title: string; sub?: string; entries: Entry[] };
+
+export type Counts = {
+  playbooks: number;
+  workflow: number;
+  bestPractices: number;
+  principles: number;
+  agents: number;
+};

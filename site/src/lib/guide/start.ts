@@ -1,6 +1,6 @@
-import type { GuideSection } from './types.ts';
+import type { Counts, GuideSection } from './types.ts';
 
-export const start: GuideSection[] = [
+export const start = (n: Counts): GuideSection[] => [
   {
     id: 'start',
     title: 'start here',
@@ -13,11 +13,19 @@ export const start: GuideSection[] = [
           {
             table: [
               ['layer', 'count', 'what it is'],
-              ['go + playbooks', '1 + 24', 'the router and its step-by-step recipes'],
-              ['workflow skills', '41', 'procedures you can call directly or that go calls'],
-              ['best practices', '10', 'rule tables per stack or topic'],
-              ['principles', '25', 'the why, cited by go and the playbooks; never auto-invoked'],
-              ['agents', '4', 'subagents: worker, reviewer, verifier, comment-auditor'],
+              ['go + playbooks', `1 + ${n.playbooks}`, 'the router and its step-by-step recipes'],
+              [
+                'workflow skills',
+                `${n.workflow}`,
+                'procedures you can call directly or that go calls',
+              ],
+              ['best practices', `${n.bestPractices}`, 'rule tables per stack or topic'],
+              [
+                'principles',
+                `${n.principles}`,
+                'the why, cited by go and the playbooks; never auto-invoked',
+              ],
+              ['agents', `${n.agents}`, 'subagents: worker, reviewer, verifier, comment-auditor'],
             ],
           },
         ],
