@@ -170,7 +170,7 @@ export const start = (n: Counts): GuideSection[] => [
         keys: 'refactoring playbook',
       },
       {
-        title: [['pruning tests', 'skills/go/playbooks/pruning-tests.md']],
+        title: [['prune tests', 'skills/go/playbooks/prune-tests.md']],
         one: 'every test left fails on a regression, and only on one.',
         body: [
           {
@@ -182,7 +182,7 @@ export const start = (n: Counts): GuideSection[] => [
             ],
           },
         ],
-        keys: 'pruning tests prune playbook brittle tests',
+        keys: 'prune tests pruning playbook brittle tests',
       },
       {
         title: [['perf issue', 'skills/go/playbooks/perf-issue.md']],

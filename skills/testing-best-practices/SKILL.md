@@ -33,6 +33,6 @@ Keep a test only when it depends on intended behavior. It changes only when that
 - **The implementation.** It changes whenever the code does, even when behavior didn't. Its expected value comes from the same logic as the code, so a wrong result still passes. Or it asserts private state, internal call order, or which helper was invoked.
 - **A copy.** Another test already guards the same behavior.
 
-A suite meets the standard when every test would fail on a regression and only on one, no two tests guard the same behavior, and no production code exists only for tests. When a change removes or moves code, delete the tests that guarded it in the same change. To clean up an existing suite, run the **go** skill's Pruning tests playbook.
+A suite meets the standard when every test would fail on a regression and only on one, no two tests guard the same behavior, and no production code exists only for tests. When a change removes or moves code, delete the tests that guarded it in the same change. To clean up an existing suite, run the **go** skill's Prune tests playbook.
 
 Details: `references/guide.md`.

@@ -6,7 +6,7 @@ Notable changes to the hl stack. The format follows [Keep a Changelog](https://k
 
 ### Added
 
-- **go**: a Pruning tests playbook that deletes or rewrites tests that guard no behavior, along with production code that only existed for them. Adapted from the prune-tests skill in [caldoai/skills](https://github.com/caldoai/skills) ([#39](https://github.com/Harville-Labs/agents/pull/39)).
+- **go**: a Prune tests playbook that deletes or rewrites tests that guard no behavior, along with production code that only existed for them. Adapted from the prune-tests skill in [caldoai/skills](https://github.com/caldoai/skills) ([#39](https://github.com/Harville-Labs/agents/pull/39)).
 
 ### Changed
 

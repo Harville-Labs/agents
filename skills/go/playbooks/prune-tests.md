@@ -1,4 +1,4 @@
-### Pruning tests
+### Prune tests
 
 **You own the suite's signal, not its size.** Every test left fails when intended behavior regresses, and only then. Distinct from Refactoring, which reshapes production code against a pinned contract.
 
