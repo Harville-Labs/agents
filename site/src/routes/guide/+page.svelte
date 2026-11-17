@@ -2,14 +2,12 @@
 import { Input, Typography } from '@sivir-ui/svelte';
 import GuideEntry from '../../lib/guide/GuideEntry.svelte';
 import { sections } from '../../lib/guide/index.ts';
-import { repo } from '../../lib/repo.ts';
+import { link, repo } from '../../lib/repo.ts';
 import Section from '../../lib/Section.svelte';
 import { site } from '../../lib/site.ts';
 
 const pstack = 'https://github.com/cursor/plugins/tree/main/pstack';
 const port = 'https://github.com/michael-denyer/pstack-claude';
-const link =
-  'text-foreground underline decoration-border-strong underline-offset-4 hover:decoration-foreground';
 
 const indexed = sections.map((s) => ({
   ...s,
@@ -36,6 +34,7 @@ const shown = $derived.by(() => {
 
 <nav class="absolute top-4 right-4 flex gap-4 text-foreground-muted lowercase sm:top-6 sm:right-6">
   <a href="../" class="hover:text-foreground">hl stack</a>
+  <a href="../examples/" class="hover:text-foreground">examples</a>
   <a href={repo} class="hover:text-foreground">github</a>
 </nav>
 
