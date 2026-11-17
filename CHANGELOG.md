@@ -4,15 +4,9 @@ Notable changes to the hl stack. The format follows [Keep a Changelog](https://k
 
 ## [Unreleased]
 
-## [0.3.6] - 2026-11-16
-
 ### Added
 
 - The site has an examples page. It walks through real prompts step by step and shows which skills, subagents, and guardrails go applies to each one.
-
-### Changed
-
-- **go**: "open MRs for issues 31, 32, and 40 and babysit them" routes to Autopilot-stack.
 
 ## [0.3.5] - 2026-11-16
 

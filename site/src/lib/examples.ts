@@ -15,7 +15,7 @@ export type Example = {
   id: string;
   skill: string;
   prompt: string;
-  playbook: Ref;
+  playbooks: Ref[];
   know: string;
   steps: Step[];
   will: string[];
@@ -39,7 +39,7 @@ export const examples: Example[] = [
     id: 'review-queue',
     skill: 'go',
     prompt: "review all the MRs I'm requested on",
-    playbook: playbook('reviewing-prs', 'reviewing prs'),
+    playbooks: [playbook('reviewing-prs', 'reviewing prs')],
     know: 'You only have to say that you want your review queue cleared. You do not need to list the MRs, name the forge, or remember which ones you already reviewed.',
     steps: [
       {
@@ -103,36 +103,42 @@ export const examples: Example[] = [
     id: 'issues-to-mrs',
     skill: 'go',
     prompt: 'open MRs for issues 31, 32, and 40 and babysit them',
-    playbook: playbook('autopilot-stack', 'autopilot-stack'),
-    know: 'You only need the issue numbers. go treats the three issues as a queue of separate MRs, and because you did not ask it to merge, it stops once each MR is verified and green and hands them back to you.',
+    playbooks: [
+      playbook('bug-fix', 'bug fix'),
+      playbook('feature', 'feature'),
+      opening,
+      playbook('babysit', 'babysit'),
+    ],
+    know: 'You only need the issue numbers. go reads this as two jobs: first build an MR for each issue, then babysit all of them once they exist. Because you did not ask it to merge, it stops when each MR is ready to merge and hands them back to you.',
     steps: [
       {
         title: 'Read the issues',
         by: 'go',
-        text: 'go reads each issue along with its comments, assigns it to you, and writes down the goal of each in its own words. Anything you said you want to decide yourself stays with you.',
+        text: "go reads each issue along with its comments, assigns it to you, and decides whether it is a bug or a feature. It also reads the repository's `AGENTS.md` and stops to tell you if an issue conflicts with one of its rules.",
         uses: [opening],
       },
       {
-        title: 'Give each MR its own owner',
+        title: 'Plan the work',
+        by: 'go',
+        text: 'Three separate issues touch separate code, so go plans to build them at the same time. Each one gets its own branch from `main`, such as `fix/31-export-crash`, in its own worktree.',
+        uses: [playbook('feature', 'feature')],
+      },
+      {
+        title: 'Build each MR',
         by: 'subagents',
-        text: 'It starts one background worker per issue. They all branch from `main` in parallel, each in its own worktree, on a branch such as `fix/31-export-crash`. Each worker follows the playbook its issue calls for, so a bug fix starts by reproducing the problem and writing a failing test, and a feature starts by reading the code and comparing designs.',
+        text: 'go hands each issue to a worker and reviews what comes back. A bug fix starts by reproducing the bug and pinning it with a failing test before anything changes. A feature starts by reading the code around it and comparing a few designs.',
         uses: [
           agent('worker'),
           playbook('bug-fix', 'bug fix'),
           playbook('feature', 'feature'),
           skill('tdd'),
+          skill('architect'),
         ],
       },
       {
-        title: 'Keep a trail a replacement can follow',
+        title: 'Open the MRs',
         by: 'subagents',
-        text: 'Each worker pushes early and keeps a decision log, so that if its session dies, a new worker can read the log and pick up where it stopped.',
-        uses: [skill('show-me-your-work')],
-      },
-      {
-        title: 'Open the MRs early',
-        by: 'subagents',
-        text: 'Each MR opens as ready rather than draft, assigned to you, with a Conventional Commits title and a description whose Why section ends in `Closes #31`. Opening early lets CI and the review bots run while the work finishes. Docs are updated in the same MR. Before calling the code ready, the worker strips out AI slop and needless comments and reviews its own diff.',
+        text: 'Before opening an MR, the worker updates the docs, adds a changelog line, runs the full check command, strips out AI slop and needless comments, and reviews its own diff. Each MR opens as ready rather than draft, assigned to you, with a Conventional Commits title and a Why section that ends in `Closes #31`. The worker posts the link and returns without babysitting.',
         uses: [
           opening,
           skill('update-docs'),
@@ -142,43 +148,44 @@ export const examples: Example[] = [
         ],
       },
       {
-        title: 'Verify with fresh eyes',
+        title: 'Start the babysit',
         by: 'go',
-        text: 'Because go did not write the code, it is in a good position to check it. It sends out verifiers that rerun the checks, try the change on the real surface in a browser or terminal, and read through the diff. An MR is held back only for a problem a verifier can show with a failing run, or for a doc line the MR made wrong.',
-        uses: [skill('swarm'), skill('control-ui'), skill('control-cli'), agent('verifier')],
-      },
-      {
-        title: 'Babysit conflicts, threads, and CI',
-        by: 'subagents',
-        text: "A watcher script reads each MR's pipeline, including child pipelines, its open threads, and GitLab's merge status. The worker handles conflicts first, then threads, then CI. It rebases its own branch to clear a conflict and pushes with `--force-with-lease`, and it batches every known fix into a single push.",
+        text: 'Once all three MRs exist, go starts the babysit. "babysit them" means `drive` mode, which keeps working until the MRs are ready to merge. It checks that nothing else is already babysitting them, then runs the watcher in the background so it does not hold your session. The watcher reads each pipeline, including child pipelines, the open threads, and GitLab\'s merge status.',
         uses: [playbook('babysit', 'babysit'), watcher],
       },
       {
+        title: 'Clear blockers in order',
+        by: 'go',
+        text: 'go clears one MR at a time, starting with conflicts, then review threads, then CI. It batches every known fix into a single push. It does not rebase or force-push during a babysit, so a conflict is reported to you with the branch that needs a rebase.',
+        uses: [playbook('babysit', 'babysit')],
+      },
+      {
         title: 'Handle review bot threads',
-        by: 'subagents',
-        text: 'Every bot comment is checked against the code and then sorted three ways. A real bug gets a failing test and a fix, and once that fix is pushed, the worker replies in the thread with the commit and resolves it. A false alarm gets a reply explaining exactly why it does not apply, and then it is resolved. When a finding touches security, auth, billing, data, or migrations and is not a plain fix, the worker asks you rather than dismissing it.',
+        by: 'go',
+        text: 'Every bot comment is checked against the code before anything happens. A real bug gets a failing test and a fix, and once that fix is pushed, go replies in the thread with the commit and resolves it. A false alarm gets a reply that explains exactly why it does not apply, and then it is resolved. A finding about security, auth, billing, data, or migrations that is not a plain fix goes to you rather than being dismissed.',
         uses: [triage, forges],
       },
       {
         title: 'Handle human review threads',
-        by: 'subagents',
-        text: 'When a person leaves a comment, the worker replies in that thread, and if the point holds it pushes a fix and cites the commit. The thread stays open, because resolving it is the reviewer’s call.',
+        by: 'go',
+        text: 'When a person leaves a comment, go replies in that thread, and if the point holds it pushes a fix and cites the commit. The thread stays open, because resolving it is the reviewer’s call.',
         uses: [forges],
       },
       {
         title: 'Deal with failing CI',
-        by: 'subagents',
-        text: 'Before retrying anything, the worker works out why the job failed. A flaky failure gets one fresh pipeline, never a retry of the single job. If the same failure happens again, it was not flaky, so the worker reads the job log. When the failure is in code the MR never touched, it checks with `git merge-base --is-ancestor` whether the branch has fallen behind `main`, and if so it rebases instead of retrying.',
+        by: 'go',
+        text: 'Before retrying anything, go works out why the job failed. A flaky failure gets one fresh pipeline, never a retry of the single job. If the same failure happens again, it was not flaky, so go reads the job log. When the failure is in code the MR never touched, it checks with `git merge-base --is-ancestor` whether the branch has fallen behind `main`, and reports that it needs a rebase instead of retrying.',
         uses: [playbook('babysit', 'babysit')],
       },
       {
-        title: 'Hand the MRs back',
+        title: 'Stop at ready to merge',
         by: 'go',
-        text: 'Work stops when every MR is verified and green at its latest commit. Nothing is merged, and nobody pushes again until you say so. The reply lists each MR with its verdict and anything waiting on you.',
-        uses: [skill('catchup')],
+        text: 'Babysitting ends when GitLab agrees each MR can merge. A missing approval is something to wait for, not a problem to fix. go merges nothing. It then looks back over the bot comments it dismissed, and if one keeps coming up, it offers a PR that adds it to the shared triage rules.',
+        uses: [triage],
       },
     ],
     will: [
+      'Build every MR before it starts babysitting any of them.',
       'Reply inside the existing thread rather than adding a new top-level comment.',
       "Resolve a bot's thread after replying with the fix or the reason it was dismissed.",
       'Push a fix before replying, so the reply can link the commit.',
@@ -186,15 +193,19 @@ export const examples: Example[] = [
     ],
     wont: [
       "Resolve a human reviewer's thread.",
+      'Rebase or force-push while babysitting.',
       'Change code just to quiet a bot.',
-      'Dismiss a finding about security, auth, billing, data, or migrations on its own.',
       'Retry a single failed job, or retry a pipeline more than once.',
       'Merge anything.',
     ],
     variants: [
       [
-        'full autopilot, merge them when green',
-        'This runs Autopilot-full, where each MR merges once go has verified it.',
+        '…and merge them when ready',
+        'Once babysitting ends, go runs Shipping, which checks each MR again before it merges.',
+      ],
+      [
+        "autopilot issues 31, 32, and 40, don't merge",
+        'Runs Autopilot-stack instead. Each MR gets one owner that builds it, babysits it, and rebases its own branch, and go verifies every MR with fresh eyes before handing it back.',
       ],
     ],
   },
@@ -203,7 +214,7 @@ export const examples: Example[] = [
     skill: 'go',
     prompt:
       "I'm stepping away for the night. Move every service off the old config loader and run until it's done",
-    playbook: playbook('autonomous-run', 'autonomous run'),
+    playbooks: [playbook('autonomous-run', 'autonomous run')],
     know: 'You need the goal and the fact that you are leaving. Saying you are stepping away tells go to keep working without waiting for you, and to keep a record you can check in the morning.',
     steps: [
       {
@@ -270,7 +281,7 @@ export const examples: Example[] = [
     id: 'reflect',
     skill: 'reflect',
     prompt: 'what have you learned from your issues with glab?',
-    playbook: skill('reflect'),
+    playbooks: [skill('reflect')],
     know: 'You only need to notice that the session went badly with a tool. reflect reads the current session, so run it in the session where the trouble happened.',
     steps: [
       {
@@ -320,7 +331,7 @@ export const examples: Example[] = [
     id: 'bug',
     skill: 'go',
     prompt: 'fix #31, the export button crashes on an empty report',
-    playbook: playbook('bug-fix', 'bug fix'),
+    playbooks: [playbook('bug-fix', 'bug fix')],
     know: 'You only need to describe the symptom. You do not need to know where the code lives, how to reproduce the crash, or how to test the fix.',
     steps: [
       {
@@ -370,7 +381,7 @@ export const examples: Example[] = [
     id: 'interrogate',
     skill: 'interrogate',
     prompt: 'this branch',
-    playbook: skill('interrogate'),
+    playbooks: [skill('interrogate')],
     know: 'You only need a branch you are not sure about.',
     steps: [
       {

@@ -14,7 +14,11 @@ const used = $derived(new Set(e.steps.flatMap((s) => s.uses ?? []).map((r) => r.
 <Section id={e.id} title="{cmd(e.skill)} {e.prompt}">
   <p class="text-foreground-muted">
     From this one line, go runs {e.steps.length} steps and draws on {used} skills, references, and agents,
-    following <a class={quietLink} href={fileUrl(e.playbook.path)}><Typography.InlineCode>{e.playbook.label}</Typography.InlineCode></a>.
+    following
+    {#each e.playbooks as p, i (p.path)}{i === 0 ? '' : i === e.playbooks.length - 1 ? ' and ' : ', '}<a
+        class={quietLink}
+        href={fileUrl(p.path)}><Typography.InlineCode>{p.label}</Typography.InlineCode></a
+      >{/each}.
   </p>
   <p class="border-l-2 border-border-strong pl-3">
     <span class="mr-1 text-foreground-muted">what you need to know:</span>{e.know}
