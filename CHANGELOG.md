@@ -6,6 +6,7 @@ Notable changes to the hl stack. The format follows [Keep a Changelog](https://k
 
 ### Added
 
+- **go**: a Pruning tests playbook that deletes or rewrites tests that guard no behavior, along with production code that only existed for them. Adapted from the prune-tests skill in [caldoai/skills](https://github.com/caldoai/skills).
 - The site has an examples page. It walks through real prompts step by step and shows which skills, subagents, and guardrails go applies to each one.
 
 ## [0.3.5] - 2026-11-16

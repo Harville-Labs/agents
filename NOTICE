@@ -32,3 +32,9 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+------------------------------------------------------------------------------
+
+The go skill's Pruning tests playbook is adapted from the prune-tests skill in
+caldoai/skills, https://github.com/caldoai/skills, under the MIT License,
+Copyright (c) 2026 Maze.
