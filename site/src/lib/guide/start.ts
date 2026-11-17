@@ -105,6 +105,7 @@ export const start = (n: Counts): GuideSection[] => [
               'any code: name the data shape first (model-the-domain).',
               'code crossing a function boundary: `architect`.',
               'parallel fan-out: `swarm`. design bakeoff: `arena`. contested design: `interrogate`.',
+              'nontrivial multi-step work: write the throughput checkpoint (feature step 3).',
               'any prose, including the reply: `unslop`. docs, PRs, commits: `technical-writing`.',
               'before commit: `deslop`. before review: `no-comments`.',
               'shipping a UI, CLI, or TUI: `control-ui` or `control-cli`. bugs get reproduced on the real surface first.',
