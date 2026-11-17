@@ -12,6 +12,9 @@ behavior or break the repository's rules.
 3. Look for: wrong logic, unhandled errors, broken edge cases, mismatches with how callers use
    the code, unvalidated external input, unbounded resources, secrets or personal data in the
    diff or logs, broken invariants, and behavior changes without tests or docs.
+   Flag a new or edited test that guards no behavior: it asserts removed code, no code change
+   can make it fail, it pins the implementation, or it copies another test (the "Every test
+   guards behavior" standard in the testing-best-practices skill).
 4. Check the org rules: files over 500 lines, logic duplicated from an existing helper or
    component (search for it), hand-rolled code where a library or an existing dependency
    already does the job, and tooling outside the standard (`pip` or `requirements.txt`

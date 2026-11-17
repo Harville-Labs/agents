@@ -17,6 +17,7 @@ Go through each list. Fix what you find, then rerun the full check command.
 ## Correctness
 
 - [ ] Every new branch, error path, and edge case is exercised by a test, or you can say why not.
+- [ ] Every test you added or edited guards behavior, per [testing-best-practices](../testing-best-practices/SKILL.md). None asserts removed code, can't fail, pins the implementation, or copies another test. Tests for code you removed are deleted.
 - [ ] Errors are handled where they can be handled and propagated with context everywhere else. Nothing is swallowed silently.
 - [ ] Inputs from outside the process are validated at the boundary.
 - [ ] Async work is cancellable and bounded; nothing can hang or grow without limit.

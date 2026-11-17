@@ -6,7 +6,11 @@ Notable changes to the hl stack. The format follows [Keep a Changelog](https://k
 
 ### Added
 
-- **go**: a Pruning tests playbook that deletes or rewrites tests that guard no behavior, along with production code that only existed for them. Adapted from the prune-tests skill in [caldoai/skills](https://github.com/caldoai/skills).
+- **go**: a Pruning tests playbook that deletes or rewrites tests that guard no behavior, along with production code that only existed for them. Adapted from the prune-tests skill in [caldoai/skills](https://github.com/caldoai/skills) ([#39](https://github.com/Harville-Labs/agents/pull/39)).
+
+### Changed
+
+- **testing-best-practices**: an "Every test guards behavior" standard says a test must not depend on removed code, on nothing, on the implementation, or copy another test. The Feature, Bug fix, and Refactoring playbooks, **self-review**, and the `reviewer` subagent hold new and edited tests to it ([#39](https://github.com/Harville-Labs/agents/pull/39)).
 - The site has an examples page. It walks through real prompts step by step and shows which skills, subagents, and guardrails go applies to each one.
 
 ## [0.3.5] - 2026-11-16
