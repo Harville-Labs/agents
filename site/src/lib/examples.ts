@@ -74,13 +74,13 @@ export const examples: Example[] = [
       {
         title: 'Post one review per MR',
         by: 'go',
-        text: "Each finding goes into its own thread on the diff line it is about, and a short summary goes in the review body. The review is posted as a comment, and go never pushes to the author's branch.",
+        text: "Each finding goes into its own thread on the diff line it is about, and a short summary goes in the review body. The review is posted as a comment. An MR with no findings gets no comment at all, and go never pushes to the author's branch.",
         uses: [forges],
       },
       {
         title: 'Report back',
         by: 'go',
-        text: 'You get a link to each MR, the number of findings posted with the most serious one called out, the MRs it skipped with the reason, and the verdict it recommends for each.',
+        text: "You get a link to each MR's diff, a link to the diff line of every finding it posted, the MRs with no findings, the MRs it skipped with the reason, and the verdict it recommends for each.",
       },
     ],
     will: [
@@ -90,7 +90,8 @@ export const examples: Example[] = [
     ],
     wont: [
       'Open a second thread about something your open thread already covers.',
-      'Review an MR again when nothing has changed since your last review.',
+      'Review an MR again when nothing has changed since your last posted review.',
+      'Leave a comment on an MR where it found nothing.',
       'Approve or request changes unless you asked it to.',
       "Push commits to the author's branch.",
     ],

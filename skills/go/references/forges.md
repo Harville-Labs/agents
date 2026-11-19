@@ -85,6 +85,17 @@ Reply and resolve with the `glab mr note` subcommands below, not raw `glab api` 
 
 Resolve only a review bot's thread, once you have replied with the fix or the dismissal, as `review-bot-triage.md` says. A human reviewer resolves their own threads. `glab mr note resolve` takes the MR first. Its usage line shows the reverse, which fails.
 
+## Diff links
+
+Link code in a PR or MR to its line in the diff. Use a link to the file on a branch, a commit, or the PR's conversation only when the code isn't in the diff.
+
+| Forge | Link |
+|---|---|
+| GitHub | `https://github.com/<owner>/<repo>/pull/<pr>/files#diff-<hash>R<line>`, with `<hash>` from `printf %s <path> \| shasum -a 256 \| cut -c1-64`. `R` takes the new file's line number. Use `L` and the old file's number for a removed line. |
+| GitLab | `https://gitlab.com/<group>/<project>/-/merge_requests/<mr>/diffs?file_path=<url-encoded path>#line_<hash>_A<line>`, with `<hash>` from `printf %s <path> \| shasum -a 1 \| cut -c1-9`. `A<line>` takes an added line's number in the new file. A removed or unchanged line drops the `A` and takes its number in the old file. |
+
+Link the whole diff with `/pull/<pr>/files` or `/-/merge_requests/<mr>/diffs`.
+
 ## Your last review
 
 The last head you reviewed is the SHA to diff from and the reason to skip a PR whose head hasn't moved. Compare it with the watcher's `headRefOid`. Empty output or `null` means you haven't reviewed.
