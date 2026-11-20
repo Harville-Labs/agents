@@ -36,11 +36,11 @@ The forge follows the repository's remote: GitHub uses `gh`, GitLab uses `glab`.
 
 ## Review threads
 
-A review comment belongs on the diff line it is about, in a thread. Don't post a summary comment. Write each body to a file. Pass it as `--input <file>` to `gh api` or on stdin to `glab`, never as a shell argument.
+A review comment belongs on the diff line it is about, in a thread. A finding about code outside the diff goes in a regular comment on the PR or MR. Never post a comment that restates the threads or says you found nothing. Write each body to a file. Pass it as `--input <file>` to `gh api` or on stdin to `glab`, never as a shell argument.
 
 ### Post a review
 
-On GitHub one call posts every line thread, as a comment, with one notification. Leave out `body`. GitHub accepts a review that has threads and no body. Write `review.json`, with `commit_id` from `gh pr view <pr> --json headRefOid --jq .headRefOid`:
+On GitHub one call posts every line thread, as a comment, with one notification. Put findings outside the diff in `body`. With none, leave `body` out. GitHub accepts a review that has threads and no body. Write `review.json`, with `commit_id` from `gh pr view <pr> --json headRefOid --jq .headRefOid`:
 
 ```json
 {
@@ -57,7 +57,7 @@ On GitHub one call posts every line thread, as a comment, with one notification.
 gh api --method POST repos/<owner>/<repo>/pulls/<pr>/reviews --input review.json
 ```
 
-`RIGHT` takes the line number in the new file. `LEFT` takes a removed line by its number in the old file. GitHub rejects the whole review if any line is outside the diff. Drop that finding and post again.
+`RIGHT` takes the line number in the new file. `LEFT` takes a removed line by its number in the old file. GitHub rejects the whole review if any line is outside the diff. Move that finding into `body` and post again.
 
 On GitLab, save each finding as a draft note and publish them together:
 
@@ -67,8 +67,9 @@ On GitLab, save each finding as a draft note and publish them together:
 | Draft a finding on a new or changed line | `glab mr note draft create <mr> --file <path> --line <n> < finding.md` |
 | Draft a finding on a removed line | `glab mr note draft create <mr> --file <path> --old-line <n> < finding.md` |
 | Publish the drafts | `glab mr note draft publish <mr> --yes` |
+| Post a finding outside the diff | `glab mr note create <mr> < finding.md` |
 
-`draft create` refuses a line outside the diff (`line <n> not found in diff`). Drop that finding.
+`draft create` refuses a line outside the diff (`line <n> not found in diff`). Post that finding as a note instead. A note is resolvable by default, so it blocks merging like a thread on a project that requires all threads resolved.
 
 ### Reply and resolve
 
