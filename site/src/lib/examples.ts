@@ -80,7 +80,7 @@ export const examples: Example[] = [
       {
         title: 'Report back',
         by: 'go',
-        text: 'You get a link to each MR, the number of findings posted with the most serious one called out, the MRs with no findings that are ready for you to approve, the MRs it skipped with the reason, and the verdict it recommends for each.',
+        text: 'You get a link to each MR, the number of findings posted with the most serious one called out, the MRs it skipped with the reason, and the verdict it recommends for each. It ends by suggesting you approve the MRs with no findings, and approves them if you say yes.',
       },
     ],
     will: [
