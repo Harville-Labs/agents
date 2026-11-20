@@ -73,7 +73,7 @@ Type a skill as `/hl:<name>` in Claude Code, `@<name>` in OpenCode, or `$<name>`
 | Skill | Use it to |
 |---|---|
 | [go](skills/go/SKILL.md) | Do any nontrivial task with rigor: picks a playbook and runs it |
-| [help](skills/help/SKILL.md) | Find the right skill, playbook, or principle, and get set up |
+| [help](skills/help/SKILL.md) | Find the right skill, playbook, or principle, get set up, or ask what the docs cover. Run alone, it reads the chat or gives a short tour |
 | [setup-models](skills/setup-models/SKILL.md) | Map the model sizes to your models and set a reasoning budget |
 | [typescript](skills/typescript-best-practices/SKILL.md), [python](skills/python-best-practices/SKILL.md), [go](skills/go-best-practices/SKILL.md), [rust](skills/rust-best-practices/SKILL.md), [svelte](skills/svelte-best-practices/SKILL.md) `-best-practices` | Apply a language's toolchain and rules |
 | [code](skills/code-best-practices/SKILL.md), [testing](skills/testing-best-practices/SKILL.md), [security](skills/security-best-practices/SKILL.md), [git](skills/git-best-practices/SKILL.md), [deploy](skills/deploy-best-practices/SKILL.md) `-best-practices` | Apply the cross-language rules for each topic |
