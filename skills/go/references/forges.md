@@ -36,17 +36,16 @@ The forge follows the repository's remote: GitHub uses `gh`, GitLab uses `glab`.
 
 ## Review threads
 
-A review comment belongs on the diff line it is about, in a thread. A general comment on the PR or MR is for the summary only. Write each body to a file. Pass it as `--input <file>` to `gh api` or on stdin to `glab`, never as a shell argument.
+A review comment belongs on the diff line it is about, in a thread. Don't post a review's findings or a summary as a general comment on the PR or MR. Write each body to a file. Pass it as `--input <file>` to `gh api` or on stdin to `glab`, never as a shell argument.
 
 ### Post a review
 
-On GitHub one call posts the summary and every line thread, as a comment, with one notification. Write `review.json`, with `commit_id` from `gh pr view <pr> --json headRefOid --jq .headRefOid`:
+On GitHub one call posts every line thread, as a comment, with one notification. Leave out `body`. GitHub accepts a review that has threads and no body. Write `review.json`, with `commit_id` from `gh pr view <pr> --json headRefOid --jq .headRefOid`:
 
 ```json
 {
   "commit_id": "<head sha>",
   "event": "COMMENT",
-  "body": "<summary>",
   "comments": [
     { "path": "src/a.ts", "line": 42, "side": "RIGHT", "body": "<finding>" },
     { "path": "src/b.ts", "line": 7, "side": "LEFT", "body": "<finding on a removed line>" }
@@ -58,9 +57,9 @@ On GitHub one call posts the summary and every line thread, as a comment, with o
 gh api --method POST repos/<owner>/<repo>/pulls/<pr>/reviews --input review.json
 ```
 
-`RIGHT` takes the line number in the new file. `LEFT` takes a removed line by its number in the old file. GitHub rejects the whole review if any line is outside the diff. Move that finding into the summary and post again.
+`RIGHT` takes the line number in the new file. `LEFT` takes a removed line by its number in the old file. GitHub rejects the whole review if any line is outside the diff. Move that finding to the changed line that causes it, or drop it, and post again.
 
-On GitLab, save each finding as a draft note, publish them together, then post the summary:
+On GitLab, save each finding as a draft note and publish them together:
 
 | Step | Command |
 |---|---|
@@ -68,9 +67,8 @@ On GitLab, save each finding as a draft note, publish them together, then post t
 | Draft a finding on a new or changed line | `glab mr note draft create <mr> --file <path> --line <n> < finding.md` |
 | Draft a finding on a removed line | `glab mr note draft create <mr> --file <path> --old-line <n> < finding.md` |
 | Publish the drafts | `glab mr note draft publish <mr> --yes` |
-| Post the summary | `glab mr note create <mr> --resolvable=false < summary.md` |
 
-`draft create` refuses a line outside the diff (`line <n> not found in diff`). Move that finding into the summary. Post the summary with `--resolvable=false`. A resolvable summary opens a thread that blocks a project requiring all threads resolved.
+`draft create` refuses a line outside the diff (`line <n> not found in diff`). Move that finding to the changed line that causes it, or drop it.
 
 ### Reply and resolve
 
@@ -84,17 +82,6 @@ Reply and resolve with the `glab mr note` subcommands below, not raw `glab api` 
 | Resolve a review bot's thread | `gh api graphql -f query='mutation($id:ID!){resolveReviewThread(input:{threadId:$id}){thread{isResolved}}}' -F id=<id>` | `glab mr note resolve <mr> <id>` |
 
 Resolve only a review bot's thread, once you have replied with the fix or the dismissal, as `review-bot-triage.md` says. A human reviewer resolves their own threads. `glab mr note resolve` takes the MR first. Its usage line shows the reverse, which fails.
-
-## Diff links
-
-Link code in a PR or MR to its line in the diff. Use a link to the file on a branch, a commit, or the PR's conversation only when the code isn't in the diff.
-
-| Forge | Link |
-|---|---|
-| GitHub | `https://github.com/<owner>/<repo>/pull/<pr>/files#diff-<hash>R<line>`, with `<hash>` from `printf %s <path> \| shasum -a 256 \| cut -c1-64`. `R` takes the new file's line number. Use `L` and the old file's number for a removed line. |
-| GitLab | `https://gitlab.com/<group>/<project>/-/merge_requests/<mr>/diffs?file_path=<url-encoded path>#line_<hash>_A<line>`, with `<hash>` from `printf %s <path> \| shasum -a 1 \| cut -c1-9`. `A<line>` takes an added line's number in the new file. A removed or unchanged line drops the `A` and takes its number in the old file. |
-
-Link the whole diff with `/pull/<pr>/files` or `/-/merge_requests/<mr>/diffs`.
 
 ## Your last review
 

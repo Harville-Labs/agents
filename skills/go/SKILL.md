@@ -126,7 +126,7 @@ Write the reply clean as you draft it. A cleanup pass after drafting does not re
 - **Never fabricate a link, citation, or transcript reference.** Link only artifacts you produced or read this session.
 - **Every claim carries its evidence or its label in the same sentence.** Measured, inferred, or guess. A prediction or an unseen cause is a guess. Never hand the human a check you could run.
 
-Every playbook ends with a reply written this way, PR or MR link in full (`https://github.com/<owner>/<repo>/pull/<number>` or `https://gitlab.com/<group>/<project>/-/merge_requests/<number>`). When the reply points at code a PR or MR changes, link its line in the diff, built with "Diff links" in `references/forges.md`. Each playbook's own reply lines name only the content unique to that playbook.
+Every playbook ends with a reply written this way, PR or MR link in full (`https://github.com/<owner>/<repo>/pull/<number>` or `https://gitlab.com/<group>/<project>/-/merge_requests/<number>`). Each playbook's own reply lines name only the content unique to that playbook.
 
 ## Comments
 
