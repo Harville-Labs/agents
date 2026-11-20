@@ -43,9 +43,11 @@ A run is one agent conversation, including its later turns and any summary of it
 
 ## Where it lives
 
-By default the log is a working artifact, not committed. Keep it at `decisions.tsv` in the work dir, or `.audit/<task-slug>.tsv` when several efforts run at once, and leave it out of git.
+Every note a run keeps goes in `.hl/notes/` at the repository root: this log, a resume note, a program's state. One directory lets a repository ignore them all with one line. Keep the log at `.hl/notes/<task-slug>.tsv`.
 
-Commit it only when the work is ambitious enough that a reviewer needs the trail to trust the result.
+By default the log is a working artifact, not committed. If `git check-ignore -q .hl/notes/` fails, add `.hl/notes/` to `.git/info/exclude`. That ignores it in this clone and its worktrees without changing a tracked file.
+
+Commit it only when the work is ambitious enough that a reviewer needs the trail to trust the result. `git add -f` adds it past the ignore rule.
 
 ## Rules
 
@@ -75,7 +77,7 @@ Every reply for a run that produced a trail ends with an "Attention" section. Le
 
 ## Reviewing the trail
 
-Read top to bottom, follow the evidence pointers, spot-check. GitHub renders a committed TSV as a table. `column -s$'\t' -t decisions.tsv` renders it in a terminal.
+Read top to bottom, follow the evidence pointers, spot-check. GitHub renders a committed TSV as a table. `column -s$'\t' -t .hl/notes/<task-slug>.tsv` renders it in a terminal.
 
 ## Composing this skill
 

@@ -4,6 +4,10 @@ Notable changes to the hl stack. The format follows [Keep a Changelog](https://k
 
 ## [Unreleased]
 
+### Changed
+
+- **go** and **show-me-your-work**: run notes (decision logs, resume notes, and an orchestrated program's notes) live in `.hl/notes/`, so one ignore line keeps them all out of git ([#37](https://github.com/Harville-Labs/agents/issues/37)).
+
 ### Added
 
 - The site has an examples page. It walks through real prompts step by step and shows which skills, subagents, and guardrails go applies to each one.
