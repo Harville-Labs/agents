@@ -74,7 +74,7 @@ export const examples: Example[] = [
       {
         title: 'Post one review per MR',
         by: 'go',
-        text: "Each finding goes into its own thread on the diff line it is about. There is no summary comment, and an MR with no findings gets nothing posted. The review is posted as a comment, and go never pushes to the author's branch.",
+        text: "Each finding goes into its own thread on the diff line it is about, with no summary comment. The review is posted as a comment, and go never pushes to the author's branch.",
         uses: [forges],
       },
       {
@@ -92,7 +92,6 @@ export const examples: Example[] = [
       'Open a second thread about something your open thread already covers.',
       'Review an MR again when nothing has changed since your last review.',
       'Approve or request changes unless you asked it to.',
-      'Leave a general comment on the MR, even a summary.',
       "Push commits to the author's branch.",
     ],
     variants: [
