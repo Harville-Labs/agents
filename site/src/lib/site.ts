@@ -1,3 +1,3 @@
-export const site = 'https://harville-labs.github.io/agents';
+export const site = 'https://stack.harville.ai';
 
 export const pages = ['/', '/examples/', '/guide/'];

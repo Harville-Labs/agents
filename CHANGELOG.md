@@ -8,6 +8,10 @@ Notable changes to the hl stack. The format follows [Keep a Changelog](https://k
 
 - The site has an examples page. It walks through real prompts step by step and shows which skills, subagents, and guardrails go applies to each one.
 
+### Fixed
+
+- The site serves the examples page at `/examples/`, the address that its sitemap, `llms.txt`, and field guide link to. Before, that address returned 404.
+
 ## [0.3.5] - 2026-11-16
 
 ### Changed
