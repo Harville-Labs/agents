@@ -69,7 +69,7 @@ If cost is the worry, say where the tokens go and how to spend fewer. The skills
 
 ## Start a task with go
 
-**go** matches the task to a playbook, copies the playbook's steps into the todo list, and runs the other skills as the steps need them. A step it skips stays in the list as `skip: <reason>`. A good prompt states the goal and how to tell it's done. It doesn't list skills, because a hand-written sequence tends to drop or reorder steps the playbook would keep. Read [`references/prompting.md`](references/prompting.md) before you help word one.
+**go** matches the task to a playbook, copies the playbook's steps into the todo list, and runs the other skills as the steps need them. A good prompt states the goal and how to tell it's done. It doesn't list skills, because a hand-written sequence tends to drop or reorder steps the playbook would keep. Read [`references/prompting.md`](references/prompting.md) before you help word one.
 
 Each new task starts with **go** again. Mid-chat, "new task" makes it match a fresh playbook. **go** uses the `worker` subagent for the subagents its playbook steps spawn. To get the same style from a subagent of your own, spawn `worker` (the go skill's harness reference says how where you run).
 
@@ -125,11 +125,11 @@ Close calls:
 
 - `how` explains what the code does. `why` explains the reasons. `teach` runs one or both and explains the result plainly.
 - `arena` gives every worker the same brief and merges the best parts. `swarm` splits work into slices or a race and returns one report.
-- `architect` implements right after it settles the design. Add "with checkpoint" to review the design before it writes code.
+- `architect` sketches two shapes and picks one before code. For a large or contested design it runs `arena` instead.
 - `self-review` is the agent checking its own diff against the standards. `interrogate` has other models review the diff. `blast-radius` looks for breakage outside the diff and proves the one fact that makes the change safe.
 - `deslop` cleans code. `unslop` cleans prose.
 - `recall` rebuilds context across recent chats. `catchup` covers only this chat since the user's last message. Resuming one specific chat or branch is the Session pickup playbook.
-- `figure-it-out` designs one rigorous run. The Orchestrate playbook runs a program that spans days and many PRs. The Autonomous run playbook drives one task to a finish condition.
+- `figure-it-out` designs one rigorous run. The Autonomous run playbook drives one task to a finish condition.
 
 ## Playbooks and principles
 
@@ -142,7 +142,7 @@ Playbooks are step lists inside **go**, not skills, so they have no command. Ins
 - "full autopilot on this queue" runs Autopilot-full. "autopilot, don't merge" runs Autopilot-stack.
 - "run the eval playbook" runs Eval.
 
-The Playbooks section of [`go`](../go/SKILL.md) lists every playbook and when it applies. For work that spans phases or stacked PRs, asking **go** for a plan runs the [Multi-phase plan playbook](../go/playbooks/multi-phase-plan.md), which writes the plan and doesn't implement it. For a design question, the Prototype playbook or `architect` settles it in code first.
+The Playbooks section of [`go`](../go/SKILL.md) lists every playbook. For work that spans phases or stacked PRs, asking **go** for a plan runs the [Multi-phase plan playbook](../go/playbooks/multi-phase-plan.md), which writes the plan and doesn't implement it. For a design question, the Prototype playbook or `architect` settles it in code first.
 
 Principles are one-rule skills that **go** reads and cites in its replies. The user rarely invokes one. They steer with the names instead, as in "apply prove it works. show me the real output." Loading `principle-<name>` by name still works.
 
