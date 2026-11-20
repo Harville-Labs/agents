@@ -146,6 +146,7 @@ A large or cross-cutting effort (a migration across many call sites, an ambitiou
 - **Trace forensics.** Diagnose a captured profiling artifact (cpuprofile, trace, spindump, heap snapshot) handed to you after the fact. The deliverable is a diagnosis, not a fix.
 - **Feature.** New or changed behavior, built from a named data shape.
 - **Refactoring.** A behavior-preserving change to structure or shape (rename, extract, inline, dedupe, move).
+- **Prune tests.** Deleting or rewriting tests that guard no behavior, because they assert removed code, can't fail, pin the implementation, or copy another test ("prune tests", "clean up the test suite", "these tests break on every refactor").
 - **Prototype.** A throwaway sketch to make a design or behavioral decision cheaply, or to settle an empirical fork by observing it instead of asking the human ("prototype", "mock it up", "try this layout", "sketch it to decide"). When the deliverable is the decision, Prototype wins over Designing UI.
 - **Designing UI.** Building, redesigning, or polishing how a screen or component looks and feels, when the deliverable is shipped UI, especially from a short prompt ("make it look good", "design a dashboard", "polish this page"). Runs the **ui-design** skill, and runs Prototype first when the look is still open.
 - **Visual parity.** Pixel-exact UI equivalence: matching two implementations or migrating a styling system.

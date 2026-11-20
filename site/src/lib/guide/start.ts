@@ -170,6 +170,21 @@ export const start = (n: Counts): GuideSection[] => [
         keys: 'refactoring playbook',
       },
       {
+        title: [['prune tests', 'skills/go/playbooks/prune-tests.md']],
+        one: 'every test left fails on a regression, and only on one.',
+        body: [
+          {
+            ol: [
+              'classify each test by what it depends on: the past, nothing, the implementation, or a copy',
+              'delete it, or rewrite it against the behavior callers rely on',
+              'delete production code that only existed for the deleted tests',
+              'break each rewrite once to prove it still fails',
+            ],
+          },
+        ],
+        keys: 'prune tests pruning playbook brittle tests',
+      },
+      {
         title: [['perf issue', 'skills/go/playbooks/perf-issue.md']],
         one: 'every fix tied to a measurement.',
         body: [
