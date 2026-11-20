@@ -4,13 +4,32 @@ Notable changes to the hl stack. The format follows [Keep a Changelog](https://k
 
 ## [Unreleased]
 
-### Added
-
-- The site has an examples page. It walks through real prompts step by step and shows which skills, subagents, and guardrails go applies to each one.
-
 ### Fixed
 
-- The site serves the examples page at `/examples/`, the address that its sitemap, `llms.txt`, and field guide link to. Before, that address returned 404.
+- The site serves the examples page at `/examples/`, the address that its sitemap, `llms.txt`, and field guide link to. Before, that address returned 404 ([#43](https://github.com/Harville-Labs/agents/pull/43)).
+
+## [0.3.8] - 2026-11-19
+
+### Changed
+
+- **help**: run alone, `/hl:help` rereads the chat and answers for the task in progress. With nothing to go on, it gives a one-screen tour with links to the docs site. Every answer links the docs page that covers it ([#42](https://github.com/Harville-Labs/agents/pull/42)).
+- The plugin manifests' `homepage` is the docs site, https://stack.harville.ai, instead of the GitHub repository ([#42](https://github.com/Harville-Labs/agents/pull/42)).
+
+## [0.3.7] - 2026-11-19
+
+### Changed
+
+- **go**: the Reviewing PRs playbook posts each finding in a thread on its diff line, and a finding outside the diff as a regular comment. It no longer posts a summary comment. A PR with no findings gets nothing posted, and the playbook suggests approving it ([#41](https://github.com/Harville-Labs/agents/pull/41)).
+
+## [0.3.6] - 2026-11-17
+
+### Added
+
+- The site has an examples page. It walks through real prompts step by step and shows which skills, subagents, and guardrails go applies to each one ([#34](https://github.com/Harville-Labs/agents/pull/34)).
+
+### Changed
+
+- **go**: "review all MRs I'm requested on" reviews the current repository's queue. It covers other repositories only when you name them or ask for every one ([#35](https://github.com/Harville-Labs/agents/pull/35)).
 
 ## [0.3.5] - 2026-11-16
 
