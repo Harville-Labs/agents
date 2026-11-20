@@ -1,6 +1,6 @@
 ---
 name: help
-description: Guides users through hl agent setup, the go skill, and picking the skill, playbook, or principle for a task. Type /hl:help with a question.
+description: Guides users through hl agent setup, the go skill, and picking the skill, playbook, or principle for a task, and answers what the published docs cover. Type /hl:help with a question, or alone for help with the current chat or a short tour.
 disable-model-invocation: true
 ---
 
@@ -11,6 +11,8 @@ Answer the user's question about the hl skills, hand them a prompt they can send
 A message that asks for work, such as "use go to fix this bug", is not a help question. Read [`go`](../go/SKILL.md) and do the work under it.
 
 This file maps questions to the skills that hold the answers. Those files own the details. Read the file you route to before you quote it, and trust it when it disagrees with this map. The links here point into the installed plugin, which the user may not be able to open, so give the user the file's public copy: the `repository` URL in the plugin's manifest (`.claude-plugin/plugin.json`), followed by `/blob/main/` and its path from the repository root.
+
+Users ask help instead of opening the published docs, so answer as fully as the docs would and link the docs page too. The docs site is the `homepage` URL in the same manifest. Its root page explains how **go** works and which playbook fits which task. `/examples` walks real prompts step by step. `/guide` covers every skill, playbook, principle, and agent. `/llms-full.txt` holds every skill in one file.
 
 ## Name things the way the user's harness does
 
@@ -26,7 +28,9 @@ The recipes below use the Claude Code form. Translate them for the user's harnes
 
 ## Find out what they need
 
-Infer the need from the message and the conversation. A named situation, such as "which skill reviews a PR?", goes straight to its section. If the need is still unclear, ask one multiple-choice question with these options, then answer only the section they pick:
+With no question (`/hl:help` alone), reread the conversation. If it shows a task in progress, a skill that just ran, or a run that went wrong, answer for that: what to do next and the prompt to send. If the conversation has nothing to go on, give the default answer below.
+
+With a question, a named situation such as "which skill reviews a PR?" goes straight to its section. If the question is still unclear, ask one multiple-choice question with these options, then answer only the section they pick:
 
 - Get set up
 - Start a task with go
@@ -41,6 +45,17 @@ Check the state that changes the answer, and mention it only when it does:
 - No formal verification skill in the project means no property is checked past what tests reach. Mention **create-formal-verification-skill** when the question is about a race, an invariant, or another case tests rarely hit. When one exists and the code it covers changed after the commit it records as last in sync, mention **maintain-formal-verification-skill** if the question touches that code.
 
 When the models file is missing and it matters, ask once per chat whether they want to run **setup-models** now. It matters when the user is new, the question is about setup or cost, or the answer depends on which models run.
+
+## Default answer
+
+Fit it on one screen:
+
+1. What hl is, in two sentences. **go** takes a task, picks a playbook, and runs the skills its steps need. Most work starts there.
+2. One example prompt in the user's harness form, with a goal and a check that can pass or fail.
+3. What help answers, as one example question for each topic under Find out what they need.
+4. Links to the docs site's root page, `/examples`, and `/guide`.
+
+Add the setup-models offer when the models file is missing.
 
 ## Get set up
 
@@ -155,4 +170,4 @@ For a run that drifts, [`references/prompting.md`](references/prompting.md) has 
 
 ## Reply
 
-Lead with the answer. Give at most one example prompt in a code block, adapted from [`references/recipes.md`](references/recipes.md) when one fits, then the link to that file. Keep it short unless the user asked for the whole map.
+Lead with the answer. Give at most one example prompt in a code block, adapted from [`references/recipes.md`](references/recipes.md) when one fits, then the link to that file and to the docs page that covers it. Keep it short unless the user asked for the whole map.

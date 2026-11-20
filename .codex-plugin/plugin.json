@@ -1,11 +1,11 @@
 {
   "name": "hl",
-  "version": "0.3.7",
+  "version": "0.3.8",
   "description": "hl stack: engineering standards and workflow skills for AI coding agents: the go router and playbooks, engineering principles, best-practices standards, and review subagents.",
   "author": {
     "name": "Harville Labs"
   },
-  "homepage": "https://github.com/Harville-Labs/agents",
+  "homepage": "https://harville-labs.github.io/agents",
   "repository": "https://github.com/Harville-Labs/agents",
   "license": "MIT",
   "skills": "./skills/",

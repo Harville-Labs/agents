@@ -218,7 +218,7 @@ export const principles: [string, [string, string][]][] = [
 
 export const commands: [string, string][] = [
   ['go', 'Any nontrivial task. Describe the task after it.'],
-  ['help', 'Ask which skill or playbook fits.'],
+  ['help', 'Ask which skill or playbook fits, or run it alone for a tour.'],
   ['setup-models', 'Map sizes to your models.'],
   ['how', 'Explain how a piece of code works.'],
   ['why', 'Explain why it was built that way, from its history.'],
