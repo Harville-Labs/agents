@@ -398,7 +398,7 @@ export const skills: GuideSection[] = [
         one: 'which skill do I want?',
         body: [
           {
-            p: 'a picker table plus the close calls between similar skills.',
+            p: 'a picker table plus the close calls between similar skills. it answers what this site covers and links the page. run alone, it reads the chat for what you need next, or gives a short tour.',
           },
         ],
       },
