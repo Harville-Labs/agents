@@ -53,7 +53,7 @@ export const start = (n: Counts): GuideSection[] => [
             ul: [
               {
                 term: 'nano',
-                text: 'explorers, investigators, trivial edits',
+                text: 'read-only exploring, trivial edits, agents that only dispatch or poll',
               },
               {
                 term: 'small',
@@ -99,27 +99,24 @@ export const start = (n: Counts): GuideSection[] => [
           {
             label: 'non-negotiables (triggers)',
             ul: [
-              "first message: restate the goal, the problem, and the smallest change you expect. don't wait for a yes.",
-              'nontrivial change or "are we sure?": run `how`.',
-              'about to ask a "which approach" question: if running something would answer it, run it instead of asking.',
-              'any code: name the data shape first (model-the-domain).',
-              'code crossing a function boundary: `architect`.',
-              'parallel fan-out: `swarm`. design bakeoff: `arena`. contested design: `interrogate`.',
-              'nontrivial multi-step work: write the throughput checkpoint (feature step 3).',
-              'any prose, including the reply: `unslop`. docs, PRs, commits: `technical-writing`.',
+              'first message: restate the goal and the smallest change that meets it, then proceed.',
+              'starting any agent: the first line of its kickoff points it at `worker.md`, the rules every started agent keeps.',
+              'a fork you could settle by running something: prototype it instead of asking.',
+              'code: name the data shape first. across a function boundary: `architect`.',
+              'fan-out: `swarm`. bakeoff: `arena`. contested design: `interrogate`.',
+              'prose, including the reply: `unslop`. docs, PRs, commits: `technical-writing`.',
               'before commit: `deslop`. before review: `no-comments`.',
-              'shipping a UI, CLI, or TUI: `control-ui` or `control-cli`. bugs get reproduced on the real surface first.',
-              'any number you measured: `benchmark-checklist` before you report it.',
-              'PR status requests: babysit playbook. "land it": shipping playbook.',
-              'review bots: skeptical. judge each comment on its merits.',
-              "broken skill: fix it in its own PR, don't silently work around it.",
-              'long or unattended work: a decision trail via `show-me-your-work`.',
+              'shipping a UI or CLI: `control-ui` or `control-cli`.',
+              'a number you measured: `benchmark-checklist`.',
+              'PR status: babysit playbook. landing a green stack: shipping playbook.',
+              'bot review comments: judge each on its merits.',
+              'long or unattended work: `show-me-your-work`.',
               'cite only principles whose SKILL.md you actually read this session.',
             ],
           },
           {
             label: 'other sections',
-            p: 'autonomy (keep moving, stop only at the irreversible), subagents (pick a size and effort per job), models (read models.md once per session), writing the reply, comments, and the playbook index.',
+            p: 'autonomy (keep moving, stop only at the irreversible), subagents (pick a size and effort per job), models (read models.md once per session), writing the reply, and the playbook index.',
           },
         ],
       },
@@ -129,8 +126,8 @@ export const start = (n: Counts): GuideSection[] => [
         body: [
           {
             ol: [
-              '`how` over the subsystem',
-              '`architect` for parallel designs',
+              'trace the subsystem',
+              '`architect` for the shape',
               'throughput checkpoint',
               'delegate, review, verify on the real surface',
               'opening a PR',
@@ -285,16 +282,6 @@ export const start = (n: Counts): GuideSection[] => [
           },
         ],
         keys: 'autonomous run playbook',
-      },
-      {
-        title: [['orchestrate', 'skills/go/playbooks/orchestrate.md']],
-        one: 'run the program, never the code.',
-        body: [
-          {
-            p: 'multi-day work: decide which agent does each piece, keep state in a committed notes.md, check every output.',
-          },
-        ],
-        keys: 'orchestrate playbook',
       },
       {
         title: [['eval', 'skills/go/playbooks/eval.md']],

@@ -15,9 +15,8 @@ export const skills: GuideSection[] = [
           {
             label: 'steps',
             ol: [
-              'assess complexity',
-              'simple: one explainer',
-              'complex: parallel explorers, then a synthesizer, then present',
+              'one read-only subagent explores and explains in one pass',
+              'present its explanation',
             ],
           },
           {
@@ -33,16 +32,7 @@ export const skills: GuideSection[] = [
         say: 'why is archaeology: it digs through history and context to recover the reason behind a line.',
         body: [
           {
-            label: 'steps',
-            ol: [
-              'pin the code anchor',
-              'one investigator per evidence source: git (always), issues, docs, chat, observability, errors, analytics',
-              'synthesize with the epistemics rules and record null results',
-            ],
-          },
-          {
-            label: 'rule',
-            p: 'skip a source only when no tool reaches it (flag the gap) or it is provably irrelevant.',
+            p: 'answers from the commits and PR discussions behind the code, and other sources when that trail is thin. cites what the authors wrote, marks inferences, and says what the record does not answer.',
           },
         ],
       },
@@ -53,15 +43,7 @@ export const skills: GuideSection[] = [
         say: 'architect sketches the types and seams first, so the code fills in a shape someone already checked.',
         body: [
           {
-            ol: [
-              'ground (how)',
-              'sketch types, signatures, modules, using arena',
-              'agree (opt-in)',
-              'implement against the sketch',
-            ],
-          },
-          {
-            p: 'if the shape is wrong: rerun how, redesign from first principles, subtract, sketch again.',
+            p: 'traces every system the change touches, sketches two shapes, and picks the one with one owner per piece of state, one way to do each task, and the least for callers to know. redesigns when workarounds repeat. a large or contested design runs arena instead.',
           },
         ],
       },
@@ -357,7 +339,7 @@ export const skills: GuideSection[] = [
         one: 'learns from a session.',
         body: [
           {
-            p: 'judgment, tooling, and divergent reviewers, then a synthesizer. waits for approval. never edits the plugin cache.',
+            p: 'reads the transcript itself, keeps lessons that will still hold, routes each to a skill the session used, and waits for approval. never edits the plugin cache.',
           },
         ],
       },

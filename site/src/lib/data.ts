@@ -30,8 +30,8 @@ export const playbooks: Playbook[] = [
     when: 'You are building something new.',
     example: 'add CSV export to the usage report',
     steps: [
-      'Run how over the subsystem the feature touches.',
-      'Run architect to compare designs.',
+      'Trace the subsystem the feature touches.',
+      'Run architect to pick the shape.',
       'Write down the throughput checkpoint.',
       'Delegate the code to a medium worker, with the data shape named.',
       'Verify on the surface the feature changes.',
@@ -161,7 +161,7 @@ export const playbooks: Playbook[] = [
 ];
 
 export const otherPlaybooks =
-  'Also: reviewing PRs, multi-phase plan, orchestrate, eval, runtime forensics, trace forensics, designing UI, visual parity, autopilot, pause safely, worktree cleanup, and authoring a skill.';
+  'Also: reviewing PRs, multi-phase plan, eval, runtime forensics, trace forensics, designing UI, visual parity, autopilot, pause safely, worktree cleanup, and authoring a skill.';
 
 export const principles: [string, [string, string][]][] = [
   [
