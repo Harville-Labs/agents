@@ -4,8 +4,16 @@ Notable changes to the hl stack. The format follows [Keep a Changelog](https://k
 
 ## [Unreleased]
 
+### Changed
+
+- Port pstack's changes from late October through November 19 (pstack 0.15.36 to 0.15.46). The go skill, its playbooks, the principle skills, and the writing skills are shorter. The shorter texts keep their rules and drop detail.
+- **go**: the trigger list is shorter. Every agent go starts reads the new `skills/go/worker.md` first, which lists the rules every started agent keeps. The Orchestrate playbook is removed, and program-scale work routes to **figure-it-out**. The Babysit, Opening a PR, and Multi-phase plan playbooks are each a few short rules. Babysit and Opening a PR keep their GitLab rules and send every forge command to `references/forges.md`. Babysit drops the `background` mode, and the plan checker script is removed.
+- **architect**, **how**, **why**, and **reflect** are each one short file. **why** keeps its git and PR or MR lookup commands. They no longer use reference prompts, parallel explorers, per-source investigators, or reviewer panels. **recall** starts its own investigator for each source.
+- **sharpen**: the rewritten prompt asks the agent to prototype a choice an experiment can settle.
+
 ### Fixed
 
+- **statechart**: runs on native Windows, reads TLC output with `\r\n` line ends, reports the line and column when SANY cannot parse a spec, and draws an arrow into a parent state to its border instead of through its title.
 - The site serves the examples page at `/examples/`, the address that its sitemap, `llms.txt`, and field guide link to. Before, that address returned 404 ([#43](https://github.com/Harville-Labs/agents/pull/43)).
 
 ## [0.3.8] - 2026-11-19
