@@ -7,7 +7,7 @@ description: A disciplined way to do real work. Routes a task to a playbook (inv
 
 The bundled skills live at `../<name>/SKILL.md` from this file. Put this file's absolute path in every `worker` subagent's brief so it can find them.
 
-This skill runs in Claude Code, OpenCode, and Codex. The tools have different names in each. Before the first tool call that this skill names generically (ask the user, spawn a subagent, track todos, load a skill), read the reference for the harness you are running in: [Claude Code](references/claude-code.md), [OpenCode](references/opencode.md), or [Codex](references/codex.md).
+This skill runs in Claude Code, OpenCode, Codex, and Pi. The tools have different names in each. Before the first tool call that this skill names generically (ask the user, spawn a subagent, track todos, load a skill), read the reference for the harness you are running in: [Claude Code](references/claude-code.md), [OpenCode](references/opencode.md), [Codex](references/codex.md), or [Pi](references/pi.md).
 
 The repository's own `AGENTS.md` and any standards it imports still apply. Where this skill and those rules disagree, the stricter rule wins. Verify every behavior change. Use the **tdd** cadence for a bug with a clear, cheap local test path or when the user asks for it; otherwise use the closest useful executable check and report the evidence.
 
