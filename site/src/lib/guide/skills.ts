@@ -131,6 +131,25 @@ export const skills: GuideSection[] = [
         ],
       },
       {
+        title: [['reframe', 'skills/reframe/SKILL.md']],
+        mono: true,
+        one: 'teaches the expert words for what you are building.',
+        say: 'reframe gives you the vocabulary to ask an agent for the thing you could only describe.',
+        body: [
+          {
+            p: 'if the description could mean more than one problem, it lists the two or three candidates and picks the likeliest. then:',
+          },
+          {
+            ol: [
+              '8 to 12 terms, ranked by how much each changes what gets built, each with a checked link',
+              'terms borrowed from 2 or 3 neighboring fields, and where each analogy breaks',
+              'what you did not mention but should care about',
+              'your description rewritten with the new words',
+            ],
+          },
+        ],
+      },
+      {
         title: [['statechart', 'skills/statechart/SKILL.md']],
         mono: true,
         one: "draws a system's states.",

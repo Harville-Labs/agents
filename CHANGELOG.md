@@ -4,6 +4,10 @@ Notable changes to the hl stack. The format follows [Keep a Changelog](https://k
 
 ## [Unreleased]
 
+### Added
+
+- **reframe**: teaches the expert words for what you're building. If your description could name more than one problem, it lists the two or three candidates and picks the likeliest. It then ranks 8 to 12 terms, each with a link it checked, borrows terms from neighboring fields, and rewrites your description with the new words. Ported from pstack 0.15.48.
+
 ### Changed
 
 - Port pstack's changes from late October through November 19 (pstack 0.15.36 to 0.15.46). The go skill, its playbooks, the principle skills, and the writing skills are shorter. The shorter texts keep their rules and drop detail.
