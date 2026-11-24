@@ -82,6 +82,7 @@ The default answer is **go**, which runs most of the others when its steps need 
 | Do any nontrivial task with rigor | [`go`](../go/SKILL.md) |
 | Check that the agent understood their goal and the problem before it starts | [`in-your-own-words`](../in-your-own-words/SKILL.md) |
 | Get a prompt rewritten deeper, not bigger, before sending it. It returns the prompt and doesn't do the task | [`sharpen`](../sharpen/SKILL.md) |
+| Learn the expert words for what they're building, including words borrowed from neighboring fields, with every cited source checked, and get their description rewritten with them | [`reframe`](../reframe/SKILL.md) |
 | Know how code works now, or where new code should live | [`how`](../how/SKILL.md) |
 | Know why code is shaped this way, or where a number came from | [`why`](../why/SKILL.md) |
 | Understand a change or subsystem, explained plainly | [`teach`](../teach/SKILL.md) |
