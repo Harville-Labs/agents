@@ -7,6 +7,7 @@ Notable changes to the hl stack. The format follows [Keep a Changelog](https://k
 ### Added
 
 - Support the Pi harness: a Pi package manifest in `package.json`, a session-reminder extension in `pi/extension.ts`, a `skills/go/references/pi.md` harness reference, Pi model detection in **setup-models**, `~/.pi/agent/AGENTS.md` management in `scripts/install.sh`, and Pi install and skill commands in the docs and site ([#48](https://github.com/Harville-Labs/agents/pull/48)).
+- **reframe**: teaches the expert words for what you're building. If your description could name more than one problem, it lists the two or three candidates and picks the likeliest. It then ranks 8 to 12 terms, each with a link it checked, borrows terms from neighboring fields, and rewrites your description with the new words. Ported from pstack 0.15.48.
 
 ### Changed
 
