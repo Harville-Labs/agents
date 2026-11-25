@@ -16,7 +16,8 @@ export const installs: Record<Harness, string> = {
   pi: 'pi install git:github.com/Harville-Labs/agents',
 };
 
-export const isHarness = (v: unknown): v is Harness => v === 'cc' || v === 'oc' || v === 'cx' || v === 'pi';
+export const isHarness = (v: unknown): v is Harness =>
+  v === 'cc' || v === 'oc' || v === 'cx' || v === 'pi';
 
 function saved(): Harness {
   try {
