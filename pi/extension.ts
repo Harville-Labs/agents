@@ -1,21 +1,37 @@
-// Pi extension for hl stack: registers the session start reminder and helpers.
-import { type ExtensionAPI } from "@earendil-works/pi-coding-agent";
-import { dirname, join } from "node:path";
-import { fileURLToPath } from "node:url";
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const root = join(dirname(fileURLToPath(import.meta.url)), "..");
-const goPath = join(root, "skills", "go", "SKILL.md");
+interface ExtensionContext {
+  ui: {
+    notify(message: string, level: 'info' | 'warning' | 'error'): void;
+  };
+}
+
+interface BeforeAgentStartEvent {
+  systemPrompt: string;
+}
+
+interface ExtensionAPI {
+  on(event: 'session_start', handler: (event: unknown, ctx: ExtensionContext) => Promise<void> | void): void;
+  on(
+    event: 'before_agent_start',
+    handler: (event: BeforeAgentStartEvent, ctx: ExtensionContext) => Promise<{ systemPrompt: string }>,
+  ): void;
+}
+
+const root = join(dirname(fileURLToPath(import.meta.url)), '..');
+const goPath = join(root, 'skills', 'go', 'SKILL.md');
 
 const reminder = `For any nontrivial task, load the "go" skill (${goPath}) and follow it.`;
 
 export default function (pi: ExtensionAPI) {
-  pi.on("session_start", async (_event, ctx) => {
-    ctx.ui.notify("hl stack loaded", "info");
+  pi.on('session_start', async (_event, ctx) => {
+    ctx.ui.notify('hl stack loaded', 'info');
   });
 
-  pi.on("before_agent_start", async (event) => {
+  pi.on('before_agent_start', async (event) => {
     return {
-      systemPrompt: event.systemPrompt + `\n\n${reminder}`,
+      systemPrompt: `${event.systemPrompt}\n\n${reminder}`,
     };
   });
 }

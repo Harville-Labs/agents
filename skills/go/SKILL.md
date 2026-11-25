@@ -90,7 +90,7 @@ Read the leaf skill in full for any principle you apply. Each entry names when i
 
 ## Models
 
-Skills never name a model. They name a size: `nano`, `small`, `medium`, `large`, or `panel`. Each person maps those sizes to real models with the **setup-models** skill, which writes `~/.config/hl/models.md` with one section per harness (`## claude-code`, `## opencode`, `## codex`). Its Sizes table says what each size is for.
+Skills never name a model. They name a size: `nano`, `small`, `medium`, `large`, or `panel`. Each person maps those sizes to real models with the **setup-models** skill, which writes `~/.config/hl/models.md` with one section per harness (`## claude-code`, `## opencode`, `## codex`, `## pi`). Its Sizes table says what each size is for.
 
 To pick a spawn's model:
 

@@ -4,6 +4,10 @@ Notable changes to the hl stack. The format follows [Keep a Changelog](https://k
 
 ## [Unreleased]
 
+### Added
+
+- Support the Pi harness: a Pi package manifest in `package.json`, a session-reminder extension in `pi/extension.ts`, a `skills/go/references/pi.md` harness reference, Pi model detection in **setup-models**, `~/.pi/agent/AGENTS.md` management in `scripts/install.sh`, and Pi install and skill commands in the docs and site ([#48](https://github.com/Harville-Labs/agents/pull/48)).
+
 ### Changed
 
 - Port pstack's changes from late October through November 19 (pstack 0.15.36 to 0.15.46). The go skill, its playbooks, the principle skills, and the writing skills are shorter. The shorter texts keep their rules and drop detail.

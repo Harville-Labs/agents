@@ -1,6 +1,6 @@
 # hl stack
 
-The Harville Labs agent stack: engineering standards, skills, and subagents for AI coding agents and the people who work with them. They run the same way in Claude Code, OpenCode, and Codex.
+The Harville Labs agent stack: engineering standards, skills, and subagents for AI coding agents and the people who work with them. They run the same way in Claude Code, OpenCode, Codex, and Pi.
 
 - **[AGENTS.md](AGENTS.md)**: the rules. Short enough to load into every session.
 - **[skills/](skills/)**: the **go** router and its playbooks, the engineering principles, the `*-best-practices` standards, and review and writing workflows.
@@ -62,7 +62,7 @@ Pi:
 pi install git:github.com/Harville-Labs/agents
 ```
 
-Then run **setup-models** (`/hl:setup-models` in Claude Code, `@setup-models` in OpenCode, or `$setup-models` in Codex) to map the model sizes (nano, small, medium, large, and the review panel) to models you have. Skills never name a model; each person picks their own.
+Then run **setup-models** (`/hl:setup-models` in Claude Code, `@setup-models` in OpenCode, `$setup-models` in Codex, or `/skill:setup-models` in Pi) to map the model sizes (nano, small, medium, large, and the review panel) to models you have. Skills never name a model; each person picks their own.
 
 **Standards** (optional): to load [AGENTS.md](AGENTS.md) into every session on your machine, clone this repository and run
 
@@ -70,11 +70,11 @@ Then run **setup-models** (`/hl:setup-models` in Claude Code, `@setup-models` in
 scripts/install.sh            # --dry-run to preview, --uninstall to remove
 ```
 
-It adds an import of `AGENTS.md` to `~/.claude/CLAUDE.md` and a copy to `~/.codex/AGENTS.md`, between marker lines it manages. Claude Code reads the import live, so `git pull` updates it; rerun the script to refresh the Codex copy. For OpenCode, add this file's absolute path to `instructions` in your `opencode.json` and install the plugin above. The instructions file supplies the standards; the plugin supplies **go**, its playbooks, and the subagents.
+It adds an import of `AGENTS.md` to `~/.claude/CLAUDE.md` and a copy to `~/.codex/AGENTS.md` and `~/.pi/agent/AGENTS.md`, between marker lines it manages. Claude Code reads the import live, so `git pull` updates it; rerun the script to refresh the Codex and Pi copies. For OpenCode, add this file's absolute path to `instructions` in your `opencode.json` and install the plugin above. The instructions file supplies the standards; the plugin supplies **go**, its playbooks, and the subagents.
 
 ## Skills
 
-Type a skill as `/hl:<name>` in Claude Code, `@<name>` in OpenCode, or `$<name>` in Codex. The **help** skill answers questions about any of them.
+Type a skill as `/hl:<name>` in Claude Code, `@<name>` in OpenCode, `$<name>` in Codex, or `/skill:<name>` in Pi. The **help** skill answers questions about any of them.
 
 | Skill | Use it to |
 |---|---|
@@ -106,6 +106,6 @@ The `principle-*` skills are one rule each. **go** reads and cites them, and you
 - Change rules and skills by pull request, like code. Say in the PR what prompted the change: a mistake an agent made, a review comment that keeps recurring, a new decision.
 - Keep [AGENTS.md](AGENTS.md) short; it loads into every session. Put detail in a skill and link to it.
 - A rule belongs here only if it applies to every repository. Keep skills free of any one team's names, hosts, or infrastructure.
-- Skills use the `skills/<name>/SKILL.md` format, with `name` (matching the directory) and a `description` that says when to use it. Name harnesses in the order Claude Code, OpenCode, Codex, and give none a feature the others lack without saying why.
+- Skills use the `skills/<name>/SKILL.md` format, with `name` (matching the directory) and a `description` that says when to use it. Name harnesses in the order Claude Code, OpenCode, Codex, Pi, and give none a feature the others lack without saying why.
 - Bump `version` in [.claude-plugin/plugin.json](.claude-plugin/plugin.json) and [.codex-plugin/plugin.json](.codex-plugin/plugin.json) when skills or subagents change, so installed plugins update.
 - `scripts/check.sh` (also run in CI) validates skill and subagent frontmatter, the plugin manifests, the OpenCode plugin's types, and every relative link.

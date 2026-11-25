@@ -1,6 +1,6 @@
 ---
 name: setup-models
-description: Map the hl model sizes (nano, small, medium, large, and the review panel) to real models, and set the reasoning budget, for Claude Code, OpenCode, and Codex. Detects the models you can use and writes ~/.config/hl/models.md. Use for /hl:setup-models, $setup-models, "configure hl models", "change my models", or a budget change.
+description: Map the hl model sizes (nano, small, medium, large, and the review panel) to real models, and set the reasoning budget, for Claude Code, OpenCode, Codex, and Pi. Detects the models you can use and writes ~/.config/hl/models.md. Use for /hl:setup-models, @setup-models, $setup-models, /skill:setup-models, "configure hl models", "change my models", or a budget change.
 ---
 
 # Setup models
@@ -28,6 +28,7 @@ List the models for the harness you run in. That list is the only dependable sou
 | Claude Code | The values the `Agent` tool's `model` parameter accepts in this session | Exactly as the schema lists them |
 | OpenCode | `opencode models` | `provider/model`, plus `#variant` when the model has variants |
 | Codex | `codex debug models` | The model slug it prints |
+| Pi | `pi --list-models` | `provider/model` from the first two columns |
 
 If you can't list any, ask the user to paste the ones they have. Never write a model you haven't seen in a list. `inherit` is always valid: that size runs on the session's own model.
 
@@ -81,6 +82,10 @@ panel: <model>, <model>
 (same sizes)
 
 ## codex
+
+(same sizes)
+
+## pi
 
 (same sizes)
 ```
