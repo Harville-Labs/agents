@@ -3,6 +3,7 @@
 #
 #   Claude Code: adds an import of this repo's AGENTS.md to ~/.claude/CLAUDE.md
 #   Codex:       copies AGENTS.md into ~/.codex/AGENTS.md (Codex has no imports)
+#   Pi:          copies AGENTS.md into ~/.pi/agent/AGENTS.md
 #
 # Both edits live between marker lines, so rerunning replaces them and nothing
 # else in those files is touched. Skills and subagents install as a plugin
@@ -53,15 +54,17 @@ write_block() {
 if [ "$uninstall" = 1 ]; then
   write_block "$HOME/.claude/CLAUDE.md" ''
   write_block "$HOME/.codex/AGENTS.md" ''
+  write_block "$HOME/.pi/agent/AGENTS.md" ''
   exit 0
 fi
 
 write_block "$HOME/.claude/CLAUDE.md" "# Engineering standards
 @$repo/AGENTS.md"
 
-# Codex can't import, so it gets a copy with links made absolute. Rerun after pulling.
+# Codex and Pi can't import, so they get a copy with links made absolute. Rerun after pulling.
 codex_body=$(sed "s#](skills/#]($repo/skills/#g" "$repo/AGENTS.md")
 write_block "$HOME/.codex/AGENTS.md" "$codex_body"
+write_block "$HOME/.pi/agent/AGENTS.md" "$codex_body"
 
 cat <<EOF
 

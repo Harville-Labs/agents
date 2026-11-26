@@ -1,20 +1,23 @@
-export type Harness = 'cc' | 'oc' | 'cx';
+export type Harness = 'cc' | 'oc' | 'cx' | 'pi';
 
 export const harnesses: { value: Harness; label: string }[] = [
   { value: 'cc', label: 'claude code' },
   { value: 'oc', label: 'opencode' },
   { value: 'cx', label: 'codex' },
+  { value: 'pi', label: 'pi' },
 ];
 
-const prefixes: Record<Harness, string> = { cc: '/hl:', oc: '@', cx: '$' };
+const prefixes: Record<Harness, string> = { cc: '/hl:', oc: '@', cx: '$', pi: '/skill:' };
 
 export const installs: Record<Harness, string> = {
   cc: '/plugin marketplace add Harville-Labs/agents\n/plugin install hl@harville-labs',
   oc: 'opencode plugin add "hl@git+https://github.com/Harville-Labs/agents.git"',
   cx: 'codex plugin marketplace add Harville-Labs/agents\ncodex plugin add hl@harville-labs',
+  pi: 'pi install git:github.com/Harville-Labs/agents',
 };
 
-export const isHarness = (v: unknown): v is Harness => v === 'cc' || v === 'oc' || v === 'cx';
+export const isHarness = (v: unknown): v is Harness =>
+  v === 'cc' || v === 'oc' || v === 'cx' || v === 'pi';
 
 function saved(): Harness {
   try {

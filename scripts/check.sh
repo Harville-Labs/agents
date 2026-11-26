@@ -56,7 +56,7 @@ done
 
 # The OpenCode plugin and the go skill's scripts are TypeScript run by Bun.
 bun install --frozen-lockfile >/dev/null || fail "bun install failed at the repo root"
-bun run --silent typecheck || fail "opencode/plugin.ts does not typecheck"
+bun run --silent typecheck || fail "TypeScript typecheck failed"
 (cd skills/go/scripts && bun install --frozen-lockfile >/dev/null && bun run --silent typecheck && bun run --silent test) ||
   fail "skills/go/scripts: typecheck or tests failed"
 
