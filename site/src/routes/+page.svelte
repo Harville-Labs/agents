@@ -36,7 +36,7 @@ const tabs = $derived(
     <Typography.H1>hl stack</Typography.H1>
     <Typography.Text variant="lead">
       one set of engineering rules, workflow skills, and review subagents that behaves the same in claude
-      code, opencode, and codex. it is built on lauren tan's (poteto) <a class={link} href={pstack}>pstack</a>.
+      code, opencode, codex, pi, cursor, and antigravity. it is built on lauren tan's (poteto) <a class={link} href={pstack}>pstack</a>.
       this page shows how it works, which playbook fits which task, and the principles behind each decision.
     </Typography.Text>
     <HarnessToggle />
@@ -113,7 +113,7 @@ const tabs = $derived(
     </table>
     <CodeBlock
       lang="markdown"
-      code={'budget: large\n\n## claude-code\nnano: <model>\nmedium: <model>\npanel: <model>, <model>\n\n## opencode\n(same sizes)\n\n## codex\n(same sizes)'}
+      code={'budget: large\n\n## claude-code\nnano: <model>\nmedium: <model>\npanel: <model>, <model>\n\n## opencode\n(same sizes)\n\n## codex\n(same sizes)\n\n## pi\n(same sizes)\n\n## cursor\n(same sizes)\n\n## antigravity\n(same sizes)'}
     />
     <p class="text-foreground-muted">
       the panel matters. when two models from the same family agree, that is weaker evidence, and go says so.
@@ -178,6 +178,15 @@ const tabs = $derived(
         set permissions for <Code>worker</Code>, <Code>reviewer</Code>, <Code>verifier</Code>, or
         <Code>comment-auditor</Code> under <Code>agents.&lt;id&gt;.permissions</Code> in
         <Code>opencode.jsonc</Code>. each subagent uses its own rules.
+      </p>
+    {:else if harness.current === 'cu'}
+      <p>
+        cursor installs plugins from a marketplace, and hl isn't in cursor's yet. on a teams plan, an admin can
+        import this repository as a team marketplace instead. after cloning, run <Code>Developer: Reload Window</Code>.
+      </p>
+      <p>
+        cursor keeps user rules in its settings, so paste <Code>AGENTS.md</Code> into cursor settings → rules, or
+        rely on each repository's own <Code>AGENTS.md</Code>.
       </p>
     {:else}
       <p>run <Code>scripts/install.sh</Code> to load the rules.</p>

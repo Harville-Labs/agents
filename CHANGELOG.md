@@ -7,10 +7,16 @@ Notable changes to the hl stack. The format follows [Keep a Changelog](https://k
 ### Added
 
 - Support the Pi harness: a Pi package manifest in `package.json`, a session-reminder extension in `pi/extension.ts`, a `skills/go/references/pi.md` harness reference, Pi model detection in **setup-models**, `~/.pi/agent/AGENTS.md` management in `scripts/install.sh`, and Pi install and skill commands in the docs and site ([#48](https://github.com/Harville-Labs/agents/pull/48)).
+- Cursor and Antigravity support. Each has a plugin manifest (`.cursor-plugin/`, `.antigravity-plugin/`) over the same `skills/` and `agents/`, a session reminder to use **go**, and a harness reference in `skills/go/references/` that maps go's generic actions to its tools, subagent fields, models, and paths. `scripts/install.sh` also copies `AGENTS.md` to `~/.gemini/AGENTS.md` for Antigravity.
 - **reframe**: teaches the expert words for what you're building. If your description could name more than one problem, it lists the two or three candidates and picks the likeliest. It then ranks 8 to 12 terms, each with a link it checked, borrows terms from neighboring fields, and rewrites your description with the new words. Ported from pstack 0.15.48.
 
 ### Changed
 
+- The session reminder lives only in `rules/AGENTS.md`. The Claude Code hook, the Cursor hook, the OpenCode plugin, and the Pi extension print it (the last two through `lib/reminder.ts`), and Antigravity loads it as an always-on rule. The Pi extension no longer shows an "hl stack loaded" notice at every session start.
+- **go**'s Pi reference points `worker.md` at the right relative path (`../../../agents/worker.md`) and says how to list Pi models.
+- Skills point at the Paths and Model rows of the harness references instead of restating each harness's transcript folders and model commands.
+- `reviewer` and `verifier` drop their `tools` list, which named Claude Code tools and can hang an Antigravity subagent. Both still say not to edit files.
+- `scripts/check.sh` fails when plugin manifests disagree on `version`, when a subagent's frontmatter holds anything but `name` and `description`, or when a harness is missing its reference or a row in the lists that name every harness.
 - Port pstack's changes from late October through November 19 (pstack 0.15.36 to 0.15.46). The go skill, its playbooks, the principle skills, and the writing skills are shorter. The shorter texts keep their rules and drop detail.
 - **go**: the trigger list is shorter. Every agent go starts reads the new `skills/go/worker.md` first, which lists the rules every started agent keeps. The Orchestrate playbook is removed, and program-scale work routes to **figure-it-out**. The Babysit, Opening a PR, and Multi-phase plan playbooks are each a few short rules. Babysit and Opening a PR keep their GitLab rules and send every forge command to `references/forges.md`. Babysit drops the `background` mode, and the plan checker script is removed.
 - **architect**, **how**, **why**, and **reflect** are each one short file. **why** keeps its git and PR or MR lookup commands. They no longer use reference prompts, parallel explorers, per-source investigators, or reviewer panels. **recall** starts its own investigator for each source.

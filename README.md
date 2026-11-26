@@ -1,6 +1,6 @@
 # hl stack
 
-The Harville Labs agent stack: engineering standards, skills, and subagents for AI coding agents and the people who work with them. They run the same way in Claude Code, OpenCode, Codex, and Pi.
+The Harville Labs agent stack: engineering standards, skills, and subagents for AI coding agents and the people who work with them. They run the same way in Claude Code, OpenCode, Codex, Pi, Cursor, and Antigravity.
 
 - **[AGENTS.md](AGENTS.md)**: the rules. Short enough to load into every session.
 - **[skills/](skills/)**: the **go** router and its playbooks, the engineering principles, the `*-best-practices` standards, and review and writing workflows.
@@ -62,7 +62,19 @@ Pi:
 pi install git:github.com/Harville-Labs/agents
 ```
 
-Then run **setup-models** (`/hl:setup-models` in Claude Code, `@setup-models` in OpenCode, `$setup-models` in Codex, or `/skill:setup-models` in Pi) to map the model sizes (nano, small, medium, large, and the review panel) to models you have. Skills never name a model; each person picks their own.
+Cursor installs plugins from a marketplace, and hl isn't in Cursor's yet. On a Teams or Enterprise plan, an admin adds this repository under **Dashboard → Plugins & MCPs → Team Marketplaces → Import from Repo**. Otherwise, clone it into Cursor's local plugins folder, then run **Developer: Reload Window**. `git pull` there updates it.
+
+```sh
+git clone https://github.com/Harville-Labs/agents.git ~/.cursor/plugins/local/hl
+```
+
+Antigravity:
+
+```sh
+agy plugin install https://github.com/Harville-Labs/agents
+```
+
+Then run **setup-models** (`/hl:setup-models` in Claude Code, `@setup-models` in OpenCode, `$setup-models` in Codex, `/skill:setup-models` in Pi, or `/setup-models` in Cursor and Antigravity) to map the model sizes (nano, small, medium, large, and the review panel) to models you have. Skills never name a model; each person picks their own.
 
 **Standards** (optional): to load [AGENTS.md](AGENTS.md) into every session on your machine, clone this repository and run
 
@@ -70,11 +82,11 @@ Then run **setup-models** (`/hl:setup-models` in Claude Code, `@setup-models` in
 scripts/install.sh            # --dry-run to preview, --uninstall to remove
 ```
 
-It adds an import of `AGENTS.md` to `~/.claude/CLAUDE.md` and a copy to `~/.codex/AGENTS.md` and `~/.pi/agent/AGENTS.md`, between marker lines it manages. Claude Code reads the import live, so `git pull` updates it; rerun the script to refresh the Codex and Pi copies. For OpenCode, add this file's absolute path to `instructions` in your `opencode.json` and install the plugin above. The instructions file supplies the standards; the plugin supplies **go**, its playbooks, and the subagents.
+It adds an import of `AGENTS.md` to `~/.claude/CLAUDE.md` and copies to `~/.codex/AGENTS.md`, `~/.pi/agent/AGENTS.md`, and `~/.gemini/AGENTS.md` (Antigravity), between marker lines it manages. Claude Code reads the import live, so `git pull` updates it; rerun the script to refresh the copies. For OpenCode, add this file's absolute path to `instructions` in your `opencode.json` and install the plugin above. Cursor keeps user rules in its settings, not a file, so paste `AGENTS.md` into **Cursor Settings → Rules**, or rely on each repository's own `AGENTS.md`, which Cursor reads. The instructions file supplies the standards; the plugin supplies **go**, its playbooks, and the subagents.
 
 ## Skills
 
-Type a skill as `/hl:<name>` in Claude Code, `@<name>` in OpenCode, `$<name>` in Codex, or `/skill:<name>` in Pi. The **help** skill answers questions about any of them.
+Type a skill as `/hl:<name>` in Claude Code, `@<name>` in OpenCode, `$<name>` in Codex, `/skill:<name>` in Pi, or `/<name>` in Cursor and Antigravity. The **help** skill answers questions about any of them.
 
 | Skill | Use it to |
 |---|---|
@@ -106,6 +118,23 @@ The `principle-*` skills are one rule each. **go** reads and cites them, and you
 - Change rules and skills by pull request, like code. Say in the PR what prompted the change: a mistake an agent made, a review comment that keeps recurring, a new decision.
 - Keep [AGENTS.md](AGENTS.md) short; it loads into every session. Put detail in a skill and link to it.
 - A rule belongs here only if it applies to every repository. Keep skills free of any one team's names, hosts, or infrastructure.
-- Skills use the `skills/<name>/SKILL.md` format, with `name` (matching the directory) and a `description` that says when to use it. Name harnesses in the order Claude Code, OpenCode, Codex, Pi, and give none a feature the others lack without saying why.
-- Bump `version` in [.claude-plugin/plugin.json](.claude-plugin/plugin.json) and [.codex-plugin/plugin.json](.codex-plugin/plugin.json) when skills or subagents change, so installed plugins update.
-- `scripts/check.sh` (also run in CI) validates skill and subagent frontmatter, the plugin manifests, the OpenCode plugin's types, and every relative link.
+- Skills use the `skills/<name>/SKILL.md` format, with `name` (matching the directory) and a `description` that says when to use it. Name harnesses in the order Claude Code, OpenCode, Codex, Pi, Cursor, Antigravity, and give none a feature the others lack without saying why. See [Harnesses](#harnesses) for what adding one takes.
+- Bump `version` in every plugin manifest (`.claude-plugin/`, `.codex-plugin/`, `.cursor-plugin/`, `.antigravity-plugin/`) when skills or subagents change, so installed plugins update. `scripts/check.sh` fails when they differ.
+- `scripts/check.sh` (also run in CI) validates skill and subagent frontmatter, the plugin manifests and their versions, that every harness is wired up, the OpenCode plugin's and Pi extension's types, and every relative link.
+
+## Harnesses
+
+Every harness reads the same `skills/` and `agents/`. Skills name actions generically ("ask the user", "spawn a subagent"), and each harness's reference in [skills/go/references/](skills/go/references/) maps them to its tools, subagent fields, models, and paths. Other skills point at those references instead of restating a harness's paths.
+
+| Harness | Entry point | Session reminder |
+|---|---|---|
+| Claude Code | [.claude-plugin/plugin.json](.claude-plugin/plugin.json) | [hooks/hooks.json](hooks/hooks.json) |
+| OpenCode | [opencode/plugin.ts](opencode/plugin.ts) | The plugin's `context` hook |
+| Codex | [.codex-plugin/plugin.json](.codex-plugin/plugin.json) | None |
+| Pi | The `pi` key in [package.json](package.json), loading [pi/extension.ts](pi/extension.ts) | The extension's `before_agent_start` handler |
+| Cursor | [.cursor-plugin/plugin.json](.cursor-plugin/plugin.json) | [hooks/cursor.json](hooks/cursor.json) |
+| Antigravity | [.antigravity-plugin/plugin.json](.antigravity-plugin/plugin.json) | The always-on rule [rules/AGENTS.md](rules/AGENTS.md) |
+
+The reminder text lives only in [rules/AGENTS.md](rules/AGENTS.md); every hook prints that file. Subagent frontmatter stays to `name` and `description`, because a harness-specific field such as a `tools` list means something different, or nothing, elsewhere.
+
+To add a harness: write its reference in `skills/go/references/`, add its manifest and reminder, add it to the plugin-folder list in [agents/worker.md](agents/worker.md), the help skill's table, the setup-models file shape, [scripts/install.sh](scripts/install.sh) where it has a global instructions file, and the site's [harness list](site/src/lib/harness.svelte.ts). `scripts/check.sh` checks most of that list.

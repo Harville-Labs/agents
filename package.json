@@ -8,7 +8,7 @@
     "skills": ["./skills"]
   },
   "scripts": {
-    "typecheck": "tsc --noEmit --strict --module esnext --target esnext --moduleResolution bundler --types bun-types --skipLibCheck opencode/plugin.ts pi/extension.ts"
+    "typecheck": "tsc --noEmit --strict --module esnext --target esnext --moduleResolution bundler --allowImportingTsExtensions --types bun-types --skipLibCheck opencode/plugin.ts pi/extension.ts"
   },
   "devDependencies": {
     "bun-types": "latest",

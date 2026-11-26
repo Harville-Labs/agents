@@ -1,0 +1,6 @@
+{
+  "version": 1,
+  "hooks": {
+    "sessionStart": [{ "command": "sh \"${CURSOR_PLUGIN_ROOT}/hooks/cursor-session-start.sh\"" }]
+  }
+}

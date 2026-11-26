@@ -14,7 +14,7 @@ This skill orchestrates three others: an inline mining pass (see step 1), the Au
 
 ### 0. Check for an existing skill
 
-Look recursively for `*-mode/SKILL.md` matching the user's handle under the project's `.agents/skills/` and `.claude/skills/`, and the user's own skill directories for their harness (`~/.claude/skills/`, `~/.agents/skills/`, `~/.config/opencode/skills/`). Mode skills can live in a personal category directory (`.agents/skills/<handle>/`), not only at the top level. If one exists, confirm intent with a multiple-choice question (unless they already said "update my skill" or similar):
+Look recursively for `*-mode/SKILL.md` matching the user's handle under the project's `.agents/skills/` and `.claude/skills/`, and the user's own skill directories for their harness (`~/.agents/skills/`, plus the personal skills folder in the Paths section of the **go** skill's reference for that harness, such as `~/.claude/skills/`). Mode skills can live in a personal category directory (`.agents/skills/<handle>/`), not only at the top level. If one exists, confirm intent with a multiple-choice question (unless they already said "update my skill" or similar):
 
 - Update the existing skill (default for repeat runs)
 - Start fresh (rare, ask why before doing it)

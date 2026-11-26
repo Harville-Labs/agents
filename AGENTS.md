@@ -1,6 +1,6 @@
 # Engineering standards
 
-Rules for AI coding agents (Claude Code, OpenCode, Codex, and others) and the people reviewing their work, in every repository that adopts them. Each repository also has its own `AGENTS.md` with its commands, layout, and invariants. **A repository's file adds to these rules and can tighten them. It can't loosen them** unless an ADR in that repository says which rule it departs from and why. If you find a conflict with no ADR, follow these rules and point out the conflict.
+Rules for AI coding agents (Claude Code, OpenCode, Codex, Pi, Cursor, Antigravity, and others) and the people reviewing their work, in every repository that adopts them. Each repository also has its own `AGENTS.md` with its commands, layout, and invariants. **A repository's file adds to these rules and can tighten them. It can't loosen them** unless an ADR in that repository says which rule it departs from and why. If you find a conflict with no ADR, follow these rules and point out the conflict.
 
 Details for specific stacks and topics live in the `*-best-practices` skills, and reusable workflows in the other skills, all under [skills/](skills/). For any nontrivial task (a feature, a bug fix, a refactor, a PR), start with the [go](skills/go/SKILL.md) skill: this repo's adaptation of poteto's pstack router. Loading this file alone does not install the skills or subagents. Install the plugin for your agent harness as described in this repository's README.
 

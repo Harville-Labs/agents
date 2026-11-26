@@ -11,7 +11,7 @@ export function GET() {
   const c = catalog();
   const text = `# hl stack
 
-> Engineering rules, workflow skills, and review subagents for coding agents. It behaves the same in Claude Code, OpenCode, Codex, and Pi. The go skill routes a task to a playbook and applies the principles.
+> Engineering rules, workflow skills, and review subagents for coding agents. It behaves the same in Claude Code, OpenCode, Codex, Pi, Cursor, and Antigravity. The go skill routes a task to a playbook and applies the principles.
 
 - [Overview](${site}/): how the plugin works and which playbook fits which task.
 - [Examples](${site}/examples/): real prompts, and each step, skill, and guardrail go applies to them.

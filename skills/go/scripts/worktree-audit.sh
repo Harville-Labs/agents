@@ -71,13 +71,17 @@ fi
 
 # Transcript dirs that can name a worktree path: Claude Code keeps one dir per
 # working directory under ~/.claude/projects (the path with every
-# non-alphanumeric character turned into "-"), and Codex keeps dated session
-# files under ~/.codex/sessions. OpenCode stores sessions in SQLite, whose file
-# time says nothing about one worktree, so it is not scanned.
+# non-alphanumeric character turned into "-"), Cursor keeps one under
+# ~/.cursor/projects (the path without its leading "/", each "/" turned into
+# "-"), and Codex keeps dated session files under ~/.codex/sessions. OpenCode
+# stores sessions in SQLite and Antigravity keeps one folder per conversation,
+# not per directory, so neither says anything about one worktree.
 slugify() { printf '%s' "$1" | sed 's#[^A-Za-z0-9]#-#g'; }
+cursor_slug() { printf '%s' "$1" | sed 's#^/##; s#/#-#g'; }
 transcript_dirs() {
 	local d
 	for d in "$HOME/.claude/projects/$(slugify "$main_wt")"* "$HOME/.claude/projects/$(slugify "$1")"* \
+		"$HOME/.cursor/projects/$(cursor_slug "$main_wt")"* "$HOME/.cursor/projects/$(cursor_slug "$1")"* \
 		"$HOME/.codex/sessions"; do
 		[ -d "$d" ] && printf '%s\n' "$d"
 	done | sort -u
