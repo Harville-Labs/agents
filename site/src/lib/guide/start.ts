@@ -8,7 +8,7 @@ export const start = (n: Counts): GuideSection[] => [
     entries: [
       {
         title: [['the 30-second explanation']],
-        one: 'hl is a plugin of engineering habits for coding agents. one entry point, `go`, reads your task, picks a playbook (bug fix, feature, refactor, and so on), and pulls in the skills that playbook needs. the skills are short procedures. the principles are the reasons behind them. the agents are the helpers it delegates to. it runs the same in claude code, opencode, and codex.',
+        one: 'hl is a plugin of engineering habits for coding agents. one entry point, `go`, reads your task, picks a playbook (bug fix, feature, refactor, and so on), and pulls in the skills that playbook needs. the skills are short procedures. the principles are the reasons behind them. the agents are the helpers it delegates to. it runs the same in claude code, opencode, codex, pi, cursor, and antigravity.',
         body: [
           {
             table: [
@@ -39,6 +39,9 @@ export const start = (n: Counts): GuideSection[] => [
               ['claude code', '`/hl:go`'],
               ['opencode', '`@go`'],
               ['codex', '`$go`'],
+              ['pi', '`/skill:go`'],
+              ['cursor', '`/go`'],
+              ['antigravity', '`/go`'],
             ],
           },
         ],

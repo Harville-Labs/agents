@@ -1,8 +1,8 @@
 // OpenCode v2 server plugin: registers the skills in skills/ and the subagents in agents/.
 // OpenCode v2 doesn't read Claude Code plugin manifests, so this file is its only entry point.
 import { readdirSync, readFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { join } from 'node:path';
+import { goPath, reminder, root } from '../lib/reminder.ts';
 
 interface SkillInfo {
   id: string;
@@ -42,12 +42,6 @@ interface Document {
   body: string;
 }
 
-const root = join(dirname(fileURLToPath(import.meta.url)), '..');
-const goPath = join(root, 'skills', 'go', 'SKILL.md');
-
-// Matches the reminder that the Claude Code SessionStart hook prints, so every harness
-// starts nontrivial work the same way.
-const reminder = `For any nontrivial task, load the "go" skill (${goPath}) and follow it.`;
 
 function parse(path: string): Document {
   const text = readFileSync(path, 'utf8');

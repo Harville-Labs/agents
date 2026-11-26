@@ -23,7 +23,7 @@ This applies to OpenCode v2. Read it once per session before the first tool call
 | Its own worktree | Give each writer its own `git worktree add` and put its path in the brief. |
 | In the background | `background: true`. You are notified when it finishes, so don't poll. |
 | Resume or message a subagent | `sessionID` from its earlier result. |
-| Model | `model`, as `providerID/modelID`. Write those IDs in the `## opencode` section of `~/.config/hl/models.md`, one per size. Leave `model` out when the size has no line. |
+| Model | `model`, as `providerID/modelID`. `opencode models` lists them. Write those IDs in the `## opencode` section of `~/.config/hl/models.md`, one per size. Leave `model` out when the size has no line. |
 | Reasoning effort | A variant on the model, `providerID/modelID#variant`, where the model has variants. |
 
 ## Paths

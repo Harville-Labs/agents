@@ -24,6 +24,8 @@ How the user types a skill depends on where they run:
 | OpenCode | `@<name>`, or ask for it by name | `@go fix the flaky login test` |
 | Codex | `$<name>` | `$go fix the flaky login test` |
 | Pi | `/skill:<name>` | `/skill:go fix the flaky login test` |
+| Cursor | `/<name>`, picked from the `/` menu | `/go fix the flaky login test` |
+| Antigravity | `/<name>` | `/go fix the flaky login test` |
 
 The recipes below use the Claude Code form. Translate them for the user's harness.
 
@@ -60,7 +62,7 @@ Add the setup-models offer when the models file is missing.
 
 ## Get set up
 
-1. Install the plugin for their harness. The [README](../../README.md) has the command for Claude Code, OpenCode, Codex, and Pi.
+1. Install the plugin for their harness. The [README](../../README.md) has the command for Claude Code, OpenCode, Codex, Pi, Cursor, and Antigravity.
 2. Run [**setup-models**](../setup-models/SKILL.md). It lists the models they can use, asks for a reasoning budget, maps a model to each size (nano, small, medium, large, and the review panel), and writes `~/.config/hl/models.md`. Then it offers once each to generate a verification skill and a formal verification skill for the project.
 3. Start a real task with **go**, a goal, and a check that can pass or fail.
 

@@ -1,6 +1,6 @@
 ---
 name: setup-models
-description: Map the hl model sizes (nano, small, medium, large, and the review panel) to real models, and set the reasoning budget, for Claude Code, OpenCode, Codex, and Pi. Detects the models you can use and writes ~/.config/hl/models.md. Use for /hl:setup-models, @setup-models, $setup-models, /skill:setup-models, "configure hl models", "change my models", or a budget change.
+description: Map the hl model sizes (nano, small, medium, large, and the review panel) to real models, and set the reasoning budget, for Claude Code, OpenCode, Codex, Pi, Cursor, and Antigravity. Detects the models you can use and writes ~/.config/hl/models.md. Use for /hl:setup-models, @setup-models, $setup-models, /skill:setup-models, /setup-models, "configure hl models", "change my models", or a budget change.
 ---
 
 # Setup models
@@ -21,14 +21,7 @@ Write `~/.config/hl/models.md`, the file every hl skill reads to pick a subagent
 
 ### 1. Detect the models you can use
 
-List the models for the harness you run in. That list is the only dependable source.
-
-| Harness | How to list | Form to write |
-|---|---|---|
-| Claude Code | The values the `Agent` tool's `model` parameter accepts in this session | Exactly as the schema lists them |
-| OpenCode | `opencode models` | `provider/model`, plus `#variant` when the model has variants |
-| Codex | `codex debug models` | The model slug it prints |
-| Pi | `pi --list-models` | `provider/model` from the first two columns |
+List the models for the harness you run in. That list is the only dependable source. The Model row of the **go** skill's reference for your harness ([Claude Code](../go/references/claude-code.md), [OpenCode](../go/references/opencode.md), [Codex](../go/references/codex.md), [Pi](../go/references/pi.md), [Cursor](../go/references/cursor.md), [Antigravity](../go/references/antigravity.md)) says how to list them and the form to write.
 
 If you can't list any, ask the user to paste the ones they have. Never write a model you haven't seen in a list. `inherit` is always valid: that size runs on the session's own model.
 
@@ -47,7 +40,7 @@ Ask one multiple-choice question, naming the current budget if there is one:
 - `medium`: the middle of the ladder
 - `small`: the lowest effort that still reasons
 
-Map the label onto the harness's own effort ladder. In OpenCode the effort is part of the model's variant, so pick the variant that matches. Skills raise effort one step for the hardest work and lower it for routine work, starting from this level.
+Map the label onto the harness's own effort ladder. Where the effort is part of the model's name (an OpenCode variant, a Pi `:<thinking>` suffix, a Cursor slug suffix), pick the one that matches. Antigravity has no effort setting, so the budget only guides the model choice there. Skills raise effort one step for the hardest work and lower it for routine work, starting from this level.
 
 ### 4. Propose a model for each size
 
@@ -86,6 +79,14 @@ panel: <model>, <model>
 (same sizes)
 
 ## pi
+
+(same sizes)
+
+## cursor
+
+(same sizes)
+
+## antigravity
 
 (same sizes)
 ```

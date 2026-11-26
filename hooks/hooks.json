@@ -3,7 +3,7 @@
     "SessionStart": [
       {
         "matcher": "startup|resume|clear|compact",
-        "hooks": [{ "type": "command", "command": "cat \"${CLAUDE_PLUGIN_ROOT}/hooks/session-start.md\"" }]
+        "hooks": [{ "type": "command", "command": "cat \"${CLAUDE_PLUGIN_ROOT}/rules/AGENTS.md\"" }]
       }
     ]
   }

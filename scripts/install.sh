@@ -3,9 +3,13 @@
 #
 #   Claude Code: adds an import of this repo's AGENTS.md to ~/.claude/CLAUDE.md
 #   Codex:       copies AGENTS.md into ~/.codex/AGENTS.md (Codex has no imports)
-#   Pi:          copies AGENTS.md into ~/.pi/agent/AGENTS.md
+#   Pi:          copies AGENTS.md into ~/.pi/agent/AGENTS.md (no imports either)
+#   Antigravity: copies AGENTS.md into ~/.gemini/AGENTS.md (no imports either)
 #
-# Both edits live between marker lines, so rerunning replaces them and nothing
+# OpenCode takes the path in opencode.json, and Cursor keeps user rules in its
+# settings rather than a file, so neither is touched here.
+#
+# Every edit lives between marker lines, so rerunning replaces them and nothing
 # else in those files is touched. Skills and subagents install as a plugin
 # instead (see README).
 #
@@ -55,16 +59,19 @@ if [ "$uninstall" = 1 ]; then
   write_block "$HOME/.claude/CLAUDE.md" ''
   write_block "$HOME/.codex/AGENTS.md" ''
   write_block "$HOME/.pi/agent/AGENTS.md" ''
+  write_block "$HOME/.gemini/AGENTS.md" ''
   exit 0
 fi
 
 write_block "$HOME/.claude/CLAUDE.md" "# Engineering standards
 @$repo/AGENTS.md"
 
-# Codex and Pi can't import, so they get a copy with links made absolute. Rerun after pulling.
-codex_body=$(sed "s#](skills/#]($repo/skills/#g" "$repo/AGENTS.md")
-write_block "$HOME/.codex/AGENTS.md" "$codex_body"
-write_block "$HOME/.pi/agent/AGENTS.md" "$codex_body"
+# Codex, Pi, and Antigravity can't import, so they get a copy with links made
+# absolute. Rerun after pulling.
+copy=$(sed "s#](skills/#]($repo/skills/#g" "$repo/AGENTS.md")
+write_block "$HOME/.codex/AGENTS.md" "$copy"
+write_block "$HOME/.pi/agent/AGENTS.md" "$copy"
+write_block "$HOME/.gemini/AGENTS.md" "$copy"
 
 cat <<EOF
 

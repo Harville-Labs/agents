@@ -24,7 +24,7 @@ Read this once per session before the first tool call that the **go** skill name
 | In the background | Spawned agents run on their own. `wait_agent` blocks, so call it only when you have nothing else to do. |
 | Resume or message a subagent | `send_message` or `followup_task` to its id. `interrupt_agent` stops one. `list_agents` shows them. |
 | Context | `fork_turns` copies your recent turns into the subagent. Leave it out for a fresh subagent, which is the default in go. |
-| Model | `model`, a model ID as `codex --model` takes it. Write those IDs in the `## codex` section of `~/.config/hl/models.md`, one per size. |
+| Model | `model`, a model ID as `codex --model` takes it. `codex debug models` lists them. Write those IDs in the `## codex` section of `~/.config/hl/models.md`, one per size. |
 | Reasoning effort | `reasoning_effort`. |
 
 ## Paths
