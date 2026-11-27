@@ -14,7 +14,7 @@ Verify each finding:
 - Missing prior work goes through the literature review like any other source: search, read, add a ledger row, and update `related-work.md`.
 - A finding that the claim goes too far is fixed by narrowing the claim, not by adding words.
 
-Log each finding with its verdict and its fix.
+Log each finding with its verdict and its fix. A finding that needs a new experiment goes into `suggestions.md` with its priority. A blocking one stops the review until the user decides, as in stage 3 of the skill.
 
 ## Citation audit
 

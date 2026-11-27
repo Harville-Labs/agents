@@ -10,6 +10,7 @@
 | `references.bib` | Generated from the ledger by `citations build`. It isn't in the template until the first build. |
 | `manual.bib` | Hand-written entries for sources with no DOI. |
 | `claim.md` | The claim, the contributions, the evidence table, the limits, and the authors. |
+| `suggestions.md` | The experiments and changes the paper still needs, written after the literature review. |
 | `figures/`, `generated/tables/` | Figures and tables, made by scripts. Create these folders when you add the first one. |
 | `latexmkrc` | Builds with pdflatex and runs BibTeX. |
 

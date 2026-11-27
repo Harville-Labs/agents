@@ -301,7 +301,7 @@ export const start = (n: Counts): GuideSection[] => [
         one: 'runs write-paper with the result as a gate.',
         body: [
           {
-            p: 'an unvetted result stops the run. the agent never submits.',
+            p: 'an unvetted result or a blocking missing experiment stops the run. the agent never submits.',
           },
         ],
         keys: 'writing a paper playbook',
