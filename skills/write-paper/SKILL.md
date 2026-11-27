@@ -1,12 +1,12 @@
 ---
 name: write-paper
-description: "Turn an experiment's result into an arXiv-ready paper in the IEEE conference template: vet the result, review the literature with a checked citation ledger, outline, draft, run a reviewer panel, and package the source for arXiv. Use for /write-paper, or when asked to write up a result, experiment, or finding as a paper or preprint."
+description: "Turn an experiment's result into an arXiv-ready paper in the IEEE conference template, delivered as a PDF: vet the result, review the literature with a checked citation ledger, outline, make the figures and tables, draft, run a reviewer panel, and package the source for arXiv. Use for /write-paper, or when asked to write up a result, experiment, or finding as a paper or preprint."
 disable-model-invocation: true
 ---
 
 # Write a paper
 
-The paper argues one claim the evidence supports. Every number traces to a run, and every citation traces to a source someone read. The human authors submit it. You never submit to arXiv or any venue, because a submission is public and permanent.
+The paper argues one claim the evidence supports. Every number and figure traces to a run, and every citation traces to a source someone read. The output is `paper/paper.pdf`, which you build and look at page by page. The human authors submit it. You never submit to arXiv or any venue, because a submission is public and permanent.
 
 Most of these papers go to arXiv and nowhere else. So write for arXiv: authors named, no page limit enforced, no anonymizing. Still keep the body near eight IEEE pages, plus references and appendices, so a venue submission later needs no rewrite.
 
@@ -46,9 +46,19 @@ Write the outline in `paper/outline.md`, section by section. Give each section a
 - **Limitations.** Everything the claim does not cover, taken from `claim.md`.
 - **Conclusion.** The claim again, and what to do next. Add nothing new.
 
-## 4. Draft
+List every figure and table in the outline: the question it answers, its kind (plot, diagram, table, or image), and the data or source it comes from. Most papers need a method diagram, one plot or table per result, and a setup table.
 
-Follow `references/latex.md` for the template, numbers, figures, and builds. Write the prose with these rules:
+## 4. Make the figures and tables
+
+Follow the figures section of `references/latex.md`. Each plot and table comes from a script that reads the run artifacts, so rerunning the script redraws it. Each diagram is TikZ source or an exported PDF. Never copy a figure from another paper. Redraw it from the published numbers and cite the paper, or leave it out.
+
+When the data a figure needs is not in the artifacts, rerun or extend the experiment to get it, or drop the figure. Never draw from estimates or typed-in values. Add each figure's script and command to the evidence table in `claim.md`.
+
+Build the PDF and look at each figure on its page before you write the prose around it.
+
+## 5. Draft
+
+Follow `references/latex.md` for the template, numbers, and builds. Write the prose with these rules:
 
 - Apply the **unslop** skill to every paragraph. Sentence-level rules from the **technical-writing** skill apply, but write in the passive voice or first-person plural ("we"), as papers do.
 - Scope each claim to what was measured. "On the 60k-row dataset, export is 30% faster" is right. "Export is faster" is not.
@@ -60,16 +70,18 @@ Follow `references/latex.md` for the template, numbers, figures, and builds. Wri
 
 Write the Abstract and Introduction last, from the finished Results.
 
-## 5. Review
+Build the PDF after each section with the build script in `references/latex.md`, and run its visual check before you move on.
+
+## 6. Review
 
 Follow `references/review.md`. A reviewer panel on the `panel` models (see Models in the **go** skill) attacks the draft, and a citation audit checks the ledger against the sources. Fix every verified finding, log it, and run the review again until a round finds nothing new above the minor level.
 
-## 6. Package for arXiv
+## 7. Package for arXiv
 
-Follow the arXiv section of `references/latex.md`. It ends with `paper/paper.pdf` and `paper/arxiv.tar.gz`, which compile cleanly from a fresh folder.
+Build the final PDF with pdflatex (latexmk or the TeX Live image, not Tectonic), and run the visual check on every page. Then follow the arXiv section of `references/latex.md`. It ends with `paper/paper.pdf` and `paper/arxiv.tar.gz`, and both build cleanly from a fresh folder.
 
 If `paper/` is in a git repository, run the **go** skill's **Opening a PR** playbook for it.
 
 ## Reply
 
-Give the claim sentence, the main number with its evidence path, and the source count with how many were read in full. Give the reviewer findings fixed and those left open. List each placeholder still in the paper, and the `manual` sources a human must check by hand. Give the paths to `paper.pdf` and `arxiv.tar.gz`. Then list what the human authors must do before they submit: read the whole paper, check the manual sources, pick the arXiv license, and get an endorsement if this is their first submission in the category.
+Give the user `paper/paper.pdf` first. Give its absolute path, and open or attach it if your harness can show files. Then give the claim sentence, the main number with its evidence path, and the source count with how many were read in full. Give the reviewer findings fixed and those left open. List each placeholder still in the paper, and the `manual` sources a human must check by hand. Give the path to `arxiv.tar.gz`. Then list what the human authors must do before they submit: read the whole paper, check the manual sources, pick the arXiv license, and get an endorsement if this is their first submission in the category.

@@ -154,7 +154,7 @@ async function texFiles(dir: string): Promise<string[]> {
 		.sort();
 }
 
-async function readOrNull(path: string): Promise<string | null> {
+export async function readOrNull(path: string): Promise<string | null> {
 	try {
 		return await readFile(path, "utf8");
 	} catch (error) {
@@ -163,14 +163,13 @@ async function readOrNull(path: string): Promise<string | null> {
 	}
 }
 
-if (import.meta.main)
-	process.exit(
-		await main(process.argv.slice(2), {
-			fetch: (url, init) => fetch(url, init),
-			read: readOrNull,
-			write: (path, text) => writeFile(path, text),
-			texFiles,
-			stdout: (line) => console.log(line),
-			stderr: (line) => console.error(line),
-		}),
-	);
+export const nodeRuntime: Runtime = {
+	fetch: (url, init) => fetch(url, init),
+	read: readOrNull,
+	write: (path, text) => writeFile(path, text),
+	texFiles,
+	stdout: (line) => console.log(line),
+	stderr: (line) => console.error(line),
+};
+
+if (import.meta.main) process.exit(await main(process.argv.slice(2), nodeRuntime));
