@@ -1,0 +1,59 @@
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+\usepackage[T1]{fontenc}
+\usepackage{cite}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage[hidelinks]{hyperref}
+
+\newif\ifanycitation
+\let\citeAnyKey\cite
+\renewcommand{\cite}{\global\anycitationtrue\citeAnyKey}
+\let\nociteAnyKey\nocite
+\renewcommand{\nocite}{\global\anycitationtrue\nociteAnyKey}
+
+\input{generated/numbers}
+
+\begin{document}
+
+\title{Title States the Result}
+
+\author{\IEEEauthorblockN{First Author}
+\IEEEauthorblockA{Affiliation\\
+City, Country\\
+email@example.com}
+}
+
+\maketitle
+
+\begin{abstract}
+Problem in one sentence. What was missing. What this paper does. The main result with its number, \headline{}. What follows from it.
+\end{abstract}
+
+\begin{IEEEkeywords}
+keyword, keyword, keyword
+\end{IEEEkeywords}
+
+\section{Introduction}
+
+\section{Related Work}
+
+\section{Method}
+
+\section{Experimental Setup}
+
+\section{Results}
+
+\section{Limitations}
+
+\section{Conclusion}
+
+\section*{Acknowledgment}
+
+\ifanycitation
+\bibliographystyle{IEEEtran}
+\bibliography{references,manual}
+\fi
+
+\end{document}

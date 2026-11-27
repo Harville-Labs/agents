@@ -81,11 +81,13 @@ for file in $(git ls-files --cached --others --exclude-standard '*.md'); do
     END { exit bad }' || failed=1
 done
 
-# The OpenCode plugin, the Pi extension, and the go skill's scripts are TypeScript.
+# The OpenCode plugin, the Pi extension, and the go and write-paper skills' scripts are TypeScript.
 bun install --frozen-lockfile >/dev/null || fail "bun install failed at the repo root"
 bun run --silent typecheck || fail "TypeScript typecheck failed"
 (cd skills/go/scripts && bun install --frozen-lockfile >/dev/null && bun run --silent typecheck && bun run --silent test) ||
   fail "skills/go/scripts: typecheck or tests failed"
+(cd skills/write-paper/scripts && bun install --frozen-lockfile >/dev/null && bun run --silent typecheck && bun run --silent test) ||
+  fail "skills/write-paper/scripts: typecheck or tests failed"
 
 [ "$failed" = 0 ] && echo "ok"
 exit "$failed"

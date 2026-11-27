@@ -1,0 +1,13 @@
+{
+	"name": "write-paper-tools",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"test": "bun test",
+		"typecheck": "tsc --project tsconfig.json --noEmit --strict"
+	},
+	"devDependencies": {
+		"bun-types": "latest",
+		"typescript": "latest"
+	}
+}
