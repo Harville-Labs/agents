@@ -316,6 +316,23 @@ export const skills: GuideSection[] = [
           },
         ],
       },
+      {
+        title: [['write-paper', 'skills/write-paper/SKILL.md']],
+        mono: true,
+        one: 'turns a result into an arXiv-ready IEEE paper.',
+        say: 'every number traces to a run, every citation to a source someone read.',
+        body: [
+          {
+            ol: [
+              'vet the result. stop if it does not hold',
+              'literature review into a citation ledger. a script resolves each DOI and rejects a title that does not match',
+              'outline, then draft from generated number macros',
+              'reviewer panel on the panel models, plus an audit of every citation',
+              'package the source for arXiv. the human authors submit',
+            ],
+          },
+        ],
+      },
     ],
   },
   {

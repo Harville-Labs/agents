@@ -107,6 +107,7 @@ Type a skill as `/hl:<name>` in Claude Code, `@<name>` in OpenCode, `$<name>` in
 | [control-cli](skills/control-cli/SKILL.md), [control-ui](skills/control-ui/SKILL.md) | Drive a CLI, TUI, or browser UI the way a user does, and capture proof |
 | [create-verification-skill](skills/create-verification-skill/SKILL.md), [maintain-verification-skill](skills/maintain-verification-skill/SKILL.md), [create-formal-verification-skill](skills/create-formal-verification-skill/SKILL.md), [maintain-formal-verification-skill](skills/maintain-formal-verification-skill/SKILL.md) | Give agents a scripted or formal way to prove behavior, and keep it in line with the code |
 | [statechart](skills/statechart/SKILL.md) | Show a PM or designer a chart of what the user sees, checked by a TLA+ model |
+| [write-paper](skills/write-paper/SKILL.md) | Turn an experiment's result into an arXiv-ready IEEE paper, with a checked citation ledger and a reviewer panel |
 | [technical-writing](skills/technical-writing/SKILL.md), [update-docs](skills/update-docs/SKILL.md), [write-adr](skills/write-adr/SKILL.md), [write-agents-md](skills/write-agents-md/SKILL.md) | Write docs, decisions, and agent guides to a standard |
 | [add-dependency](skills/add-dependency/SKILL.md), [add-service](skills/add-service/SKILL.md) | Justify a package, or add a container image, deploy manifests, and the infrastructure handoff |
 | [reflect](skills/reflect/SKILL.md), [correct](skills/correct/SKILL.md), [automate-me](skills/automate-me/SKILL.md) | Turn lessons and habits into skill edits |

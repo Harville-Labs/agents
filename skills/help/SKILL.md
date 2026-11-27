@@ -113,6 +113,7 @@ The default answer is **go**, which runs most of the others when its steps need 
 | Formally verify a race, invariant, or other property that tests rarely reach | [`create-formal-verification-skill`](../create-formal-verification-skill/SKILL.md) |
 | Bring a formal verification back in line after the code it covers changed | [`maintain-formal-verification-skill`](../maintain-formal-verification-skill/SKILL.md) |
 | Show a PM or designer a chart of what the user sees, checked by a TLA+ model | [`statechart`](../statechart/SKILL.md) |
+| Write up an experiment's result as a paper or arXiv preprint | [`write-paper`](../write-paper/SKILL.md) |
 | Vet a performance number before reporting or acting on it | [`benchmark-checklist`](../benchmark-checklist/SKILL.md) |
 | Run a large or cross-cutting change, or one to review after stepping away | [`figure-it-out`](../figure-it-out/SKILL.md) |
 | Keep a decision log during a run, and review it afterward | [`show-me-your-work`](../show-me-your-work/SKILL.md) |

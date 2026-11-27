@@ -297,6 +297,16 @@ export const start = (n: Counts): GuideSection[] => [
         keys: 'eval playbook',
       },
       {
+        title: [['writing a paper', 'skills/go/playbooks/writing-a-paper.md']],
+        one: 'runs write-paper with the result as a gate.',
+        body: [
+          {
+            p: 'an unvetted result stops the run. the agent never submits.',
+          },
+        ],
+        keys: 'writing a paper playbook',
+      },
+      {
         title: [
           ['runtime', 'skills/go/playbooks/runtime-forensics.md'],
           ['trace forensics', 'skills/go/playbooks/trace-forensics.md'],
