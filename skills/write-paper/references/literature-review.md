@@ -43,9 +43,9 @@ The ledger has one row per claim a source backs. A source can have several rows.
 bun <this skill's folder>/scripts/citations.ts build paper
 ```
 
-It resolves each `doi:` and `arxiv:` source through doi.org, checks the title against the ledger, writes `references.bib`, and then runs `check`. A title mismatch means the DOI is wrong. Look the DOI up again. Never edit the title to make it match. `references.bib` is generated, so never edit it by hand.
+It resolves each `doi:` and `arxiv:` source through doi.org, checks the title against the ledger, writes `references.bib`, and then runs `check`. The ledger title must equal the resolved title apart from case, punctuation, accents, and a subtitle left off after a colon or dash. A title mismatch means the DOI is wrong. Look the DOI up again. Never edit the title to make it match. `references.bib` is generated, so never edit it by hand. Its stamp records the ledger and the entries it was built from, and `check` fails when either has changed since.
 
-`check` runs offline. It fails when a `\cite` key is missing from the ledger or from a `.bib` file, and it lists the uncited sources, the `manual` sources, and the abstract-only rows. Run it before every build of the PDF.
+`check` runs offline. It fails when `references.bib` is missing, stale, or edited by hand, when a `\cite` key is missing from the ledger or from a `.bib` file, and it lists the uncited sources, the `manual` sources, and the abstract-only rows. Run it before every build of the PDF.
 
 ## Write up the position
 

@@ -26,7 +26,7 @@ Checks the citations, builds main.tex, copies the result to paper.pdf, fails
 on undefined citations or references, missing files, and overfull lines, and
 renders each page to build/pages/ for a visual check.`;
 
-const TEXLIVE_IMAGE = "texlive/texlive:latest";
+export const TEXLIVE_IMAGE = "texlive/texlive:latest";
 const LATEXMK_ARGS = ["-interaction=nonstopmode", "-halt-on-error", "main.tex"];
 
 export function pickEngine(has: (cmd: string) => boolean): Engine | null {
@@ -47,7 +47,8 @@ export function engineCommand(engine: Engine, dir: string): { cmd: string; args:
 	}
 }
 
-export function logProblems(log: string): string[] {
+export function logProblems(rawLog: string): string[] {
+	const log = rawLog.replace(/^(.{79})\r?\n/gm, "$1");
 	const problems: string[] = [];
 	for (const m of log.matchAll(/Citation `([^']+)'[^\n]*undefined/g)) problems.push(`undefined citation ${m[1]}`);
 	for (const m of log.matchAll(/Reference `([^']+)'[^\n]*undefined/g)) problems.push(`undefined reference ${m[1]}`);
@@ -56,6 +57,8 @@ export function logProblems(log: string): string[] {
 	for (const m of log.matchAll(/Overfull \\hbox \((\d+(?:\.\d+)?)pt too wide\)[^\n]*?lines? (\d+)/g))
 		if (Number(m[1]) > 1) problems.push(`line ${m[2]} runs ${m[1]}pt into the margin`);
 	if (/Float too large for page/.test(log)) problems.push("a figure or table is taller than the page");
+	if (/There were undefined (?:references|citations)/.test(log) && !problems.some((p) => p.startsWith("undefined")))
+		problems.push("undefined references or citations. Search main.log for 'undefined'");
 	return [...new Set(problems)];
 }
 
@@ -105,14 +108,14 @@ export async function main(argv: readonly string[], rt: BuildRuntime): Promise<n
 	return 0;
 }
 
-function has(cmd: string): boolean {
+export function has(cmd: string): boolean {
 	const names = process.platform === "win32" ? [`${cmd}.exe`, `${cmd}.cmd`] : [cmd];
 	return (process.env.PATH ?? "")
 		.split(delimiter)
 		.some((dir) => dir !== "" && names.some((name) => existsSync(join(dir, name))));
 }
 
-const run: Run = (cmd, args, cwd) => {
+export const run: Run = (cmd, args, cwd) => {
 	const child = spawnSync(cmd, args, { cwd, encoding: "utf8", maxBuffer: 64 * 1024 * 1024 });
 	return { status: child.status ?? 1, output: `${child.stdout ?? ""}${child.stderr ?? ""}${child.error ? String(child.error) : ""}` };
 };

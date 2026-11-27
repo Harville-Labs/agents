@@ -30,16 +30,16 @@ function stripMarkup(text: string): string {
 export function normalizeTitle(title: string): string {
 	return stripMarkup(title)
 		.normalize("NFKD")
-		.replace(/[̀-ͯ]/g, "")
+		.replace(/\p{M}/gu, "")
 		.toLowerCase()
-		.replace(/[^a-z0-9]/g, "");
+		.replace(/[^\p{L}\p{N}]/gu, "");
 }
 
 export function titlesMatch(expected: string, resolved: string): boolean {
-	const a = normalizeTitle(expected);
-	const b = normalizeTitle(resolved);
-	if (a.length === 0 || b.length === 0) return false;
-	return a === b || a.startsWith(b) || b.startsWith(a);
+	const want = normalizeTitle(expected);
+	if (want.length === 0) return false;
+	const mainTitle = stripMarkup(resolved).split(/:|\s[-\u2013\u2014]\s/)[0];
+	return want === normalizeTitle(resolved) || want === normalizeTitle(mainTitle);
 }
 
 const LATEX_SPECIAL: Record<string, string> = {
@@ -55,8 +55,46 @@ const LATEX_SPECIAL: Record<string, string> = {
 	"^": "\\textasciicircum{}",
 };
 
-export function escapeLatex(text: string): string {
-	return stripMarkup(text).replace(/[\\{}&%$#_~^]/g, (char) => LATEX_SPECIAL[char]);
+const GREEK = "alpha beta gamma delta epsilon zeta eta theta iota kappa lambda mu nu xi omicron pi rho sigma tau upsilon phi chi psi omega".split(" ");
+
+const MATH_SYMBOLS: Record<string, string> = {
+	...Object.fromEntries(
+		GREEK.flatMap((name, i) => {
+			const lower = String.fromCodePoint(0x3b1 + i + (i >= 17 ? 1 : 0));
+			const upper = String.fromCodePoint(0x391 + i + (i >= 17 ? 1 : 0));
+			const upperName = name[0].toUpperCase() + name.slice(1);
+			const latin = ["alpha", "beta", "epsilon", "zeta", "eta", "iota", "kappa", "mu", "nu", "omicron", "rho", "tau", "chi"];
+			return [
+				[lower, name === "omicron" ? "o" : `\\${name}`],
+				[upper, latin.includes(name) ? upperName[0] : `\\${upperName}`],
+			];
+		}),
+	),
+	"\u03c2": "\\varsigma",
+	"\u2264": "\\leq",
+	"\u2265": "\\geq",
+	"\u2248": "\\approx",
+	"\u00b1": "\\pm",
+	"\u2192": "\\rightarrow",
+	"\u221e": "\\infty",
+	"\u2212": "-",
+};
+
+const ESCAPED = new RegExp(`[\\\\{}&%$#_~^${Object.keys(MATH_SYMBOLS).join("")}]`, "g");
+
+function escapeText(text: string): string {
+	return text.replace(ESCAPED, (char) =>
+		char in LATEX_SPECIAL ? LATEX_SPECIAL[char] : `\\ensuremath{${MATH_SYMBOLS[char]}}`,
+	);
+}
+
+export function escapeLatex(text: string, keepMath = false): string {
+	const clean = stripMarkup(text);
+	if (!keepMath) return escapeText(clean);
+	return clean
+		.split(/(\$[^$]+\$)/)
+		.map((part) => (/^\$[^$]+\$$/.test(part) ? part : escapeText(part)))
+		.join("");
 }
 
 function authorField(names: readonly CslName[]): string {
@@ -103,7 +141,7 @@ export function toBibtex(key: string, doi: string, csl: Csl): string {
 	const year = csl.issued?.["date-parts"]?.[0]?.[0];
 	const fields: [string, string | undefined][] = [
 		["author", csl.author && csl.author.length > 0 ? authorField(csl.author) : undefined],
-		["title", `{${escapeLatex(firstText(csl.title))}}`],
+		["title", `{${escapeLatex(firstText(csl.title), isArxivDoi(doi))}}`],
 		["journal", type === "article" ? container : undefined],
 		["booktitle", type === "inproceedings" || type === "incollection" ? container : undefined],
 		["volume", type === "article" && csl.volume !== undefined ? String(csl.volume) : undefined],

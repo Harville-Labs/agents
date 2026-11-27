@@ -62,6 +62,14 @@ describe("titlesMatch", () => {
 		expect(titlesMatch("BERT", "BERT: Pre-training of Deep Bidirectional Transformers")).toBe(true);
 	});
 
+	it("rejects a resolved title that is only the start of the ledger title", () => {
+		expect(titlesMatch("Deep Learning for Symbolic Mathematics", "Deep learning")).toBe(false);
+	});
+
+	it("tells titles apart by non-Latin letters", () => {
+		expect(titlesMatch("Toxicity of A\u03b1 oligomers", "Toxicity of A\u03b2 oligomers")).toBe(false);
+	});
+
 	it("rejects a DOI that resolves to a different paper", () => {
 		expect(titlesMatch("Attention Is All You Need", "ImageNet Classification with Deep CNNs")).toBe(false);
 	});
@@ -121,6 +129,17 @@ describe("toBibtex", () => {
 		expect(bib).not.toContain("howpublished");
 	});
 
+	it("writes Greek letters and math symbols so pdflatex can set them", () => {
+		expect(escapeLatex("A\u03b2 and \u03a9 \u2264 \u03c3")).toBe(
+			"A\\ensuremath{\\beta} and \\ensuremath{\\Omega} \\ensuremath{\\leq} \\ensuremath{\\sigma}",
+		);
+	});
+
+	it("keeps the TeX math in an arXiv title", () => {
+		const bib = toBibtex("yun", "10.48550/arXiv.2006.04862", { title: "$O(n)$ Connections are Expressive & Sparse" });
+		expect(bib).toContain("title = {{$O(n)$ Connections are Expressive \\& Sparse}},");
+	});
+
 	it("escapes every LaTeX special character", () => {
 		expect(escapeLatex("a_b #1 $5 ~x^2 {y} \\z")).toBe(
 			"a\\_b \\#1 \\$5 \\textasciitilde{}x\\textasciicircum{}2 \\{y\\} \\textbackslash{}z",
@@ -130,8 +149,8 @@ describe("toBibtex", () => {
 
 describe("citeKeys", () => {
 	it("collects keys from every cite form and skips comments", () => {
-		const tex = "As shown \\cite{a, b} and \\cite[p.~3]{c}.\n% \\cite{commented}\n50\\% \\nocite{d}\\nocite{*}";
-		expect(citeKeys(tex)).toEqual(["a", "b", "c", "d"]);
+		const tex = "As shown \\cite{a, b} and \\cite[p.~3]{c}.\n% \\cite{commented}\n50\\% \\nocite{d}\\nocite{*} \\cite {e}\\\\% \\cite{f}";
+		expect(citeKeys(tex)).toEqual(["a", "b", "c", "d", "e"]);
 	});
 });
 

@@ -98,7 +98,7 @@ Follow `references/review.md`. A reviewer panel on the `panel` models (see Model
 
 ## 8. Package for arXiv
 
-Build the final PDF with pdflatex (latexmk or the TeX Live image, not Tectonic), and run the visual check on every page. Then follow the arXiv section of `references/latex.md`. It ends with `paper/paper.pdf` and `paper/arxiv.tar.gz`, and both build cleanly from a fresh folder.
+Build the final PDF with pdflatex (latexmk or the TeX Live image, not Tectonic), and run the visual check on every page. Then follow the arXiv section of `references/latex.md`. It ends with `paper/paper.pdf` and `paper/arxiv.tar.gz`, which holds only the files pdflatex needs and builds cleanly from a fresh folder.
 
 If `paper/` is in a git repository, run the **go** skill's **Opening a PR** playbook for it.
 

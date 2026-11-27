@@ -1,11 +1,11 @@
 export function stripComments(tex: string): string {
 	return tex
 		.split("\n")
-		.map((line) => line.replace(/(^|[^\\])%.*$/, "$1"))
+		.map((line) => line.replace(/(^|[^\\])((?:\\\\)*)%.*$/, "$1$2%"))
 		.join("\n");
 }
 
-const CITE = /\\(?:no)?cite[a-zA-Z]*\*?(?:\[[^\]]*\]){0,2}\{([^}]*)\}/g;
+const CITE = /\\(?:no)?cite[a-zA-Z]*\*?\s*(?:\[[^\]]*\]\s*){0,2}\{([^}]*)\}/g;
 
 export function citeKeys(tex: string): string[] {
 	const keys = new Set<string>();

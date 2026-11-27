@@ -59,6 +59,22 @@ describe("logProblems", () => {
 		]);
 	});
 
+	it("finds an undefined reference whose log line TeX wrapped at 79 characters", () => {
+		const log = [
+			"LaTeX Warning: Reference `fig:latency-throughput-tradeoff-by-batch-size' on pag",
+			"e 1 undefined on input line 41.",
+			"",
+			"LaTeX Warning: There were undefined references.",
+		].join("\n");
+		expect(logProblems(log)).toEqual(["undefined reference fig:latency-throughput-tradeoff-by-batch-size"]);
+	});
+
+	it("fails on the undefined-references summary even when no single warning matched", () => {
+		expect(logProblems("LaTeX Warning: There were undefined references.")).toEqual([
+			"undefined references or citations. Search main.log for 'undefined'",
+		]);
+	});
+
 	it("passes a clean log", () => {
 		expect(logProblems("Output written on main.pdf (8 pages).")).toEqual([]);
 	});

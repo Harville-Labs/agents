@@ -7,14 +7,14 @@
 | `main.tex` | The paper, in `IEEEtran` conference mode. |
 | `generated/numbers.tex` | A macro for every number the prose uses, written by a script. |
 | `sources.tsv` | The citation ledger. See `literature-review.md`. |
-| `references.bib` | Generated from the ledger by `citations build`. It isn't in the template until the first build. |
+| `references.bib` | Generated from the ledger by `citations build`, with a stamp that `check` uses to reject hand edits and stale builds. It isn't in the template until the first build. |
 | `manual.bib` | Hand-written entries for sources with no DOI. |
 | `claim.md` | The claim, the contributions, the evidence table, the limits, and the authors. |
 | `suggestions.md` | The experiments and changes the paper still needs, written after the literature review. |
 | `figures/`, `generated/tables/` | Figures and tables, made by scripts. Create these folders when you add the first one. |
 | `latexmkrc` | Builds with pdflatex and runs BibTeX. |
 
-Keep IEEEtran's margins, fonts, and column layout. Don't add the IEEE copyright notice. It belongs only on a paper a venue accepted.
+`main.tex` emits the bibliography only once the paper cites something, so the template builds before any citation exists. Keep IEEEtran's margins, fonts, and column layout. Don't add the IEEE copyright notice. It belongs only on a paper a venue accepted.
 
 ## Numbers
 
@@ -59,16 +59,14 @@ When `pdftoppm` is installed, the script renders each page to `paper/build/pages
 arXiv builds the paper from its source and publishes that source, comments included. Every version stays public for good, so get v1 right.
 
 1. Build with the build script on `--engine latexmk` or `--engine docker`, which use pdflatex, as arXiv does. Another engine, such as XeLaTeX or Tectonic, can hide errors that arXiv will hit.
-2. Strip the comments and unused files:
+2. Delete any text hidden with `\iffalse` or a `comment` environment. The packer refuses it, because arXiv publishes it.
+3. Pack the paper:
 
    ```sh
-   uvx --from arxiv-latex-cleaner arxiv_latex_cleaner paper
+   bun <this skill's folder>/scripts/package.ts paper
    ```
 
-   It writes a cleaned copy to `paper_arXiv/`, next to `paper/`.
-3. Copy `main.bbl` into `paper_arXiv/`. arXiv uses the `.bbl` file and does not need the `.bib` files.
-4. Check that the copy builds on its own. Extract it into an empty folder, run `pdflatex main.tex` twice there (locally or in the same TeX Live image), and confirm that the page count and the reference list match `paper.pdf`.
-5. Pack it with `tar -czf paper/arxiv.tar.gz -C paper_arXiv .`, then delete `paper_arXiv/`.
-6. Write `paper/arxiv-metadata.md` for the form the human fills in: the title, the authors, the abstract as plain text with each macro replaced by its value, the comments line (such as "8 pages, 4 figures"), the primary category, and any cross-list categories.
+   It packs only `main.tex`, `main.bbl`, the other `.tex` files, and the PDF, PNG, and JPG files in `figures/`, with every `%` comment removed. Notes such as `claim.md`, `suggestions.md`, the ledger, the outline, and the decision log stay out. It builds the packed copy twice with pdflatex in a fresh folder, checks that its page count matches `paper.pdf`, and then writes `paper/arxiv.tar.gz` and lists its files. Read that list before you report.
+4. Write `paper/arxiv-metadata.md` for the form the human fills in: the title, the authors, the abstract as plain text with each macro replaced by its value, the comments line (such as "8 pages, 4 figures"), the primary category, and any cross-list categories.
 
 Keep figures in formats that pdflatex reads (PDF, PNG, or JPG). File names are case-sensitive on arXiv. Paths in `\includegraphics` and `\input` are relative.

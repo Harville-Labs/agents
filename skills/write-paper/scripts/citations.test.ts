@@ -1,6 +1,6 @@
 import { describe, expect, it } from "bun:test";
-import { main, type Runtime } from "./citations.ts";
-import { LEDGER_COLUMNS } from "./ledger.ts";
+import { main, type Runtime, stampBib } from "./citations.ts";
+import { LEDGER_COLUMNS, parseLedger } from "./ledger.ts";
 
 const ATTENTION = { type: "article", title: "Attention Is All You Need", publisher: "arXiv", issued: { "date-parts": [[2017]] } };
 
@@ -76,28 +76,63 @@ describe("citations build", () => {
 });
 
 describe("citations check", () => {
-	it("fails when the paper cites a key the ledger does not hold", async () => {
+	const ATTENTION_LEDGER = ledger(ATTENTION_ROW);
+	const stamped = stampBib(parseLedger(ATTENTION_LEDGER).rows, "@misc{vaswani2017, title={x}}\n");
+
+	it("fails when the paper cites a key the ledger does not hold, with or without a space before the brace", async () => {
 		const { rt, stderr } = runtime({
-			"p/sources.tsv": ledger(ATTENTION_ROW),
-			"p/references.bib": "@misc{vaswani2017, title={x}}",
-			"p/main.tex": "\\cite{vaswani2017,smith2020}",
+			"p/sources.tsv": ATTENTION_LEDGER,
+			"p/references.bib": stamped,
+			"p/main.tex": "\\cite{vaswani2017,smith2020} and \\cite {fabricated2024}",
 		});
 		expect(await main(["check", "p"], rt)).toBe(1);
 		expect(stderr).toEqual([
+			"error: main.tex: cites fabricated2024, which has no row in sources.tsv. Add a checked row; never cite from memory",
 			"error: main.tex: cites smith2020, which has no row in sources.tsv. Add a checked row; never cite from memory",
 		]);
 	});
 
-	it("fails when a ledger source was never built into references.bib", async () => {
-		const { rt, stderr } = runtime({ "p/sources.tsv": ledger(ATTENTION_ROW), "p/main.tex": "" });
+	it("fails when references.bib is missing", async () => {
+		const { rt, stderr } = runtime({ "p/sources.tsv": ATTENTION_LEDGER, "p/main.tex": "" });
 		expect(await main(["check", "p"], rt)).toBe(1);
-		expect(stderr).toEqual(["error: sources.tsv:2 (vaswani2017): not in references.bib. Run citations build"]);
+		expect(stderr).toEqual(["error: references.bib is missing. Run citations build"]);
+	});
+
+	it("rejects a references.bib that citations build did not write", async () => {
+		const { rt, stderr } = runtime({
+			"p/sources.tsv": ATTENTION_LEDGER,
+			"p/references.bib": "@misc{vaswani2017, title={x}}",
+			"p/main.tex": "",
+		});
+		expect(await main(["check", "p"], rt)).toBe(1);
+		expect(stderr[0]).toStartWith("error: references.bib was not written by citations build");
+	});
+
+	it("rejects an entry added to references.bib by hand", async () => {
+		const { rt, stderr } = runtime({
+			"p/sources.tsv": ATTENTION_LEDGER,
+			"p/references.bib": `${stamped}@article{smith2023, title={{A Paper That Does Not Exist}}}\n`,
+			"p/main.tex": "\\cite{vaswani2017}",
+		});
+		expect(await main(["check", "p"], rt)).toBe(1);
+		expect(stderr[0]).toStartWith("error: references.bib was edited by hand");
+	});
+
+	it("rejects a references.bib built from an older ledger", async () => {
+		const { rt, stderr } = runtime({
+			"p/sources.tsv": ledger(ATTENTION_ROW.replace("arxiv:1706.03762", "doi:10.9999/does.not.exist")),
+			"p/references.bib": stamped,
+			"p/main.tex": "",
+		});
+		expect(await main(["check", "p"], rt)).toBe(1);
+		expect(stderr[0]).toBe("error: references.bib is out of date with sources.tsv. Run citations build");
 	});
 
 	it("lists uncited sources and abstract-only rows without failing", async () => {
+		const abstractLedger = ledger(ATTENTION_ROW.replace(/full$/, "abstract"));
 		const { rt, stdout } = runtime({
-			"p/sources.tsv": ledger(ATTENTION_ROW.replace(/full$/, "abstract")),
-			"p/references.bib": "@misc{vaswani2017, title={x}}",
+			"p/sources.tsv": abstractLedger,
+			"p/references.bib": stampBib(parseLedger(abstractLedger).rows, "@misc{vaswani2017, title={x}}\n"),
 			"p/main.tex": "",
 		});
 		expect(await main(["check", "p"], rt)).toBe(0);

@@ -7,6 +7,12 @@
 \usepackage{booktabs}
 \usepackage[hidelinks]{hyperref}
 
+\newif\ifanycitation
+\let\citeAnyKey\cite
+\renewcommand{\cite}{\global\anycitationtrue\citeAnyKey}
+\let\nociteAnyKey\nocite
+\renewcommand{\nocite}{\global\anycitationtrue\nociteAnyKey}
+
 \input{generated/numbers}
 
 \begin{document}
@@ -45,7 +51,9 @@ keyword, keyword, keyword
 
 \section*{Acknowledgment}
 
+\ifanycitation
 \bibliographystyle{IEEEtran}
 \bibliography{references,manual}
+\fi
 
 \end{document}
